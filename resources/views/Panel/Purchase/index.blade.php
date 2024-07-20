@@ -100,8 +100,9 @@
                     if (event) {
                         $(SelectionDaller).click(function () {
                             let inputId = $(this).attr('data-inputID');
-                            let input = $('#dollar-' + inputId).val();
-                            let payment = input * dollar
+                            let input = $('#dollar-' + inputId);
+                            let inputAmount = $(input).attr('data-amount');
+                            let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
@@ -135,8 +136,7 @@
             let payment_text = $('.payment-text')
             let dollar = "{{$dollar->amount_to_rials}}"
             if (defaultInputTarget !== undefined && defaultInputTarget > 0) {
-                let amount_to_rials = defaultInputTarget / dollar
-                $(customPayment).val(amount_to_rials)
+                $(customPayment).val(defaultInputTarget)
                 eventChangeInput(false);
             }
 
@@ -153,9 +153,9 @@
                         })
                         let payment = $(customPayment).val();
                         if (payment.match(/^\d+$/)) {
-                            payment = payment * dollar
+                            let paymentResult = payment * dollar
                             $("#" + callElementTarget).val(payment)
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
                         } else {
                             $("#" + callElementTarget).val('')
                             $(payment_text).text('')
@@ -172,10 +172,11 @@
 
                     })
                     let payment = $(customPayment).val();
+                    console.log(payment);
                     if (payment.match(/^\d+$/)) {
-                        payment = payment * dollar
+                       let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
                     } else {
                         $("#" + callElementTarget).val('')
                         $(payment_text).text('')

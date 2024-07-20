@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('service_id')->nullable()->constrained('services')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('invoice_id')->constrained('invoices')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->integer('serial')->nullable();
-            $table->bigInteger('code')->nullable();
+            $table->string('serial')->nullable();
+            $table->string('code')->nullable();
             $table->enum('status',['requested','failed','finished'])->nullable();
             $table->string('description')->nullable();
             $table->timestamps();

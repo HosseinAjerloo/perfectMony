@@ -26,18 +26,39 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
+    Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
 });
 
 
 Route::get('test', function () {
-    $array = [
-        "Payer_Account" => "U47768533",
-  "PAYMENT_AMOUNT" => "1.01",
-  "PAYMENT_BATCH_NUM" => "608002561",
-  "VOUCHER_NUM" => "2711535715",
-  "VOUCHER_CODE" => "2386574385419054",
-  "VOUCHER_AMOUNT" => "1",
-    ];
-    \Illuminate\Support\Facades\Log::emergency(json_encode($array));
+    $voucher=\App\Models\Voucher::first();
+
+//    try {
+
+        $PMAccountID ='65049907';
+
+        $PMPassPhrase ='hr_hon4774';
+        $PM = new PerfectMoneyAPI($PMAccountID, $PMPassPhrase);
+
+
+        $payerAccount = 'U47768533';
+
+        $amount = 100;
+
+        $PMeVoucher = $PM->getBalance();
+        dd($PMeVoucher);
+//
+//        "Payer_Account" => "U47768533"
+//  "PAYMENT_AMOUNT" => "1.01"
+//  "PAYMENT_BATCH_NUM" => "608002561"
+//  "VOUCHER_NUM" => "2711535715"
+//  "VOUCHER_CODE" => "2386574385419054"
+//  "VOUCHER_AMOUNT" => "1"
+        return json_encode($PMbalance);
+
+//    } catch (Exception $exception) {
+//        return redirect()->route('panel.purchase.view')->withErrors(['ErrorCreatingVoucher' => 'ایجاد ووچر شما با خطا مواجه شد لطفا چند دقیقه دیگر تلاش کنید']);
+//    }
+
 });
