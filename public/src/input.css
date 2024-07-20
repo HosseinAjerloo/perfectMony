@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: vazir;
+    src: url('../src/fonts/Vazir.woff');
+    src: url('../src/fonts/Vazir.woff2');
+}
+@font-face {
+    font-family: iranSans;
+    src: url('../src/fonts/IranianSans.ttf');
+}
+@font-face {
+    font-family: yekan;
+    src: url('../src/fonts/Yekan.ttf');
+}
+body{
+    direction: rtl;
+}
+
+@layer components{
+    .menu-non-show{
+        @apply -right-full;
+    }
+    .menu-show{
+        @apply right-0
+    }
+
+    .menu-user-non-show{
+        @apply -left-full;
+    }
+    .menu-user-show{
+        @apply left-0
+    }
+    .select-dollar{
+        @apply rounded-md border-2 border-yellow-600 shadow-2xl shadow-yellow-600
+    }
+
+}

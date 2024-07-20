@@ -1,0 +1,143 @@
+@extends('Panel.layout.master')
+
+@section('message-box')
+    <div class="flex items-center justify-center flex-col space-y-3">
+        <p class="text-center text-sm py-2 sm:text-base ">
+            مبلغ ووچر پرفکت مانی درخواستی را وارد کنید یا از انتخاب سریع استفاده نمائید.
+        </p>
+        <div class="space-x-3 space-x-reverse">
+            <label for="" class="text-sm sm:text-base">$</label>
+            <input type="text"
+                   class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none Desired_amount custom_payment text-black">
+        </div>
+    </div>
+@endsection
+
+@section('container')
+    <article class="px-3 py-6">
+        <form action="{{route('panel.purchase')}}" method="post"
+              class="flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4">
+            @csrf
+            @foreach($services as $service)
+                <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
+
+                       class="dollar   transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
+                    <img src="{{asset('src/images/dollar 1.png')}}" alt=""
+                         class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 group-hover:cursor-pointer">
+                    <p class="text-sm  font-yekan font-semibold mt-2 sm:text-base">{{$service->amount.' '.$service->name}}</p>
+                    <input type="radio" id="dollar-{{$service->id}}" value="{{$service->id}}"
+                           data-amount="{{$service->amount}}" name="service" class="hidden">
+                </label>
+
+            @endforeach
+            <input type="checkbox"  name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
+            <input type="text" value="" name="custom_payment" id="custom_payment" class="text-black hidden">
+            <div class="flex items-center justify-start  max-w-max    rounded-md">
+                <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">خرید تستی</button>
+            </div>
+
+        </form>
+        <div class="text-center py-5 space-y-2 ">
+            <p class="text-yellow-600 font-semibold text-sm sm:text-base tracking-tight">
+                نرخ دلار پرفکت مانی:{{$dollar->amount_to_rials}} هزار ریال
+            </p>
+            <p class="font-semibold text-sm sm:text-base payment-text"></p>
+        </div>
+    </article>
+
+@endsection
+
+@section('content')
+
+    <article class="space-y-4 flex items-center justify-center flex-col">
+        <div class="flex items-center justify-center space-x-2 space-x-reverse text-center">
+            <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
+            <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
+        </div>
+        <div class="flex items-center justify-start  max-w-max   rounded-md">
+            <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-12 h-12">
+            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">درگاه پرداخت بانک سامان</button>
+        </div>
+        <div class="flex items-center justify-start  max-w-max    rounded-md">
+            <img src="{{asset('src/images/meliBank.png')}}" alt="" class="w-12 h-12">
+            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">درگاه پرداخت بانک سامان</button>
+        </div>
+    </article>
+@endsection
+
+@section('script-tag')
+    <script>
+        $(document).ready(function () {
+            let SelectionDaller = $(".dollar");
+            $(SelectionDaller).click(function () {
+                $(this).addClass("dollar");
+                let siblings = $(this).siblings();
+                siblings.removeClass('select-dollar');
+                $(this).addClass('select-dollar');
+                let inputId = $(this).attr('data-inputID');
+                $('#dollar-' + inputId).attr('checked', 'checked');
+            });
+            $('.Desired_amount').click(function () {
+                $(SelectionDaller).removeClass('select-dollar')
+            })
+        })
+
+        $(document).ready(function () {
+            let callElementTarget = "custom_payment";
+
+            let customPayment = $("." + callElementTarget);
+            let SelectionDaller = $(".dollar");
+            let dollar = "{{$dollar->amount_to_rials}}"
+            let payment_text = $('.payment-text')
+            $(SelectionDaller).click(function () {
+                let inputId = $(this).attr('data-inputID');
+                let input = $('#dollar-' + inputId).val();
+
+                let payment = input * dollar
+                $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                $(customPayment).val('')
+                $("#" + callElementTarget).val('')
+
+
+            });
+        })
+        $(document).ready(function () {
+            let callElement = 'Accepting_the_rules';
+            let acceptingRules = $('.' + callElement);
+            $(acceptingRules).change(function () {
+                $("#" + callElement).trigger('click')
+            })
+        })
+
+        $(document).ready(function () {
+            let callElementTarget = "custom_payment";
+
+            let customPayment = $("." + callElementTarget);
+            let payment_text = $('.payment-text')
+            let dollar = "{{$dollar->amount_to_rials}}"
+
+            $(customPayment).on('input',function () {
+
+                let SelectionDaller = $(".dollar");
+                $.each(SelectionDaller, function (index, value) {
+                    let Service = value
+                    $(Service).removeClass('select-dollar')
+                    $(Service).children('input').prop('checked', false)
+
+                })
+                let payment = $(customPayment).val();
+                if (payment.match(/^\d+$/)) {
+                    payment = payment * dollar
+                    $("#" + callElementTarget).val(payment)
+                    $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                }
+                else {
+                    $("#" + callElementTarget).val('')
+                    $(payment_text).text('')
+                    $(customPayment).val('');
+                }
+
+            })
+        })
+    </script>
+@endsection
