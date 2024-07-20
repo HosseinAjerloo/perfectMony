@@ -21,13 +21,13 @@
             @foreach($services as $service)
                 <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
 
-                       class="dollar @if(old('service')==$service->id) select-dollar @endif  transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
+                       class="dollar @if(old('service_id')==$service->id) select-dollar @endif  transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
                     <img src="{{asset('src/images/dollar 1.png')}}" alt=""
                          class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 group-hover:cursor-pointer">
                     <p class="text-sm  font-yekan font-semibold mt-2 sm:text-base">{{$service->amount.' '.$service->name}}</p>
                     <input type="radio" id="dollar-{{$service->id}}" value="{{$service->id}}"
-                           data-amount="{{$service->amount}}" name="service" class="hidden"
-                           @if(old('service')==$service->id) checked @endif >
+                           data-amount="{{$service->amount}}" name="service_id" class="hidden"
+                           @if(old('service_id')==$service->id) checked @endif >
                 </label>
 
             @endforeach
@@ -91,7 +91,7 @@
                 let SelectionDaller = $(".dollar");
                 let dollar = "{{$dollar->amount_to_rials}}"
                 let payment_text = $('.payment-text')
-                let defaultInputValue = "{{old('service')}}";
+                let defaultInputValue = "{{old('service_id')}}";
                 if (defaultInputValue !== undefined && defaultInputValue > 0) {
                     eventService(false)
                 }

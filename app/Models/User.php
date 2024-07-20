@@ -61,7 +61,7 @@ class User extends Authenticatable
     }
     public function  financeTransactions()
     {
-        return $this->hasMany(FinanceTransactions::class,'user_id');
+        return $this->hasMany(FinanceTransaction::class,'user_id');
     }
 
     public function getCreaditBalance()

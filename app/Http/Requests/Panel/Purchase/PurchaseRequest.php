@@ -23,8 +23,8 @@ class PurchaseRequest extends FormRequest
     {
         return [
             'Accepting_the_rules'=>"in:on|required",
-            "service"=>"sometimes|exists:services,id",
-            "custom_payment"=>[(request()->has('service')==false?'required':'nullable'),'sometimes']
+            "service_id"=>"sometimes|exists:services,id",
+            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes']
         ];
     }
     public function messages(): array
