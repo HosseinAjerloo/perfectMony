@@ -59,4 +59,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function  financeTransactions()
+    {
+        return $this->hasMany(FinanceTransactions::class,'user_id');
+    }
+
+    public function getCreaditBalance()
+    {
+        return $this->financeTransactions()->orderBy('id','desc')->first()->creadit_balance??0;
+    }
 }

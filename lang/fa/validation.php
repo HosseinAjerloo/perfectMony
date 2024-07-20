@@ -204,6 +204,7 @@ return [
         "national_code"=>"کد ملی",
         "address"=>"آدرس",
         "Accepting_the_rules"=>"پذیرش قوانین",
+        "service"=>"ووچر"
     ],
 
 ];

@@ -21,16 +21,17 @@
             @foreach($services as $service)
                 <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
 
-                       class="dollar   transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
+                       class="dollar @if(old('service')==$service->id) select-dollar @endif  transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
                     <img src="{{asset('src/images/dollar 1.png')}}" alt=""
                          class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 group-hover:cursor-pointer">
                     <p class="text-sm  font-yekan font-semibold mt-2 sm:text-base">{{$service->amount.' '.$service->name}}</p>
                     <input type="radio" id="dollar-{{$service->id}}" value="{{$service->id}}"
-                           data-amount="{{$service->amount}}" name="service" class="hidden">
+                           data-amount="{{$service->amount}}" name="service" class="hidden"
+                           @if(old('service')==$service->id) checked @endif >
                 </label>
 
             @endforeach
-            <input type="checkbox"  name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
+            <input type="checkbox" name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
             <input type="text" value="" name="custom_payment" id="custom_payment" class="text-black hidden">
             <div class="flex items-center justify-start  max-w-max    rounded-md">
                 <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">خرید تستی</button>
@@ -83,24 +84,41 @@
         })
 
         $(document).ready(function () {
-            let callElementTarget = "custom_payment";
 
-            let customPayment = $("." + callElementTarget);
-            let SelectionDaller = $(".dollar");
-            let dollar = "{{$dollar->amount_to_rials}}"
-            let payment_text = $('.payment-text')
-            $(SelectionDaller).click(function () {
-                let inputId = $(this).attr('data-inputID');
-                let input = $('#dollar-' + inputId).val();
+                let callElementTarget = "custom_payment";
 
-                let payment = input * dollar
-                $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                $(customPayment).val('')
-                $("#" + callElementTarget).val('')
+                let customPayment = $("." + callElementTarget);
+                let SelectionDaller = $(".dollar");
+                let dollar = "{{$dollar->amount_to_rials}}"
+                let payment_text = $('.payment-text')
+                let defaultInputValue = "{{old('service')}}";
+                if (defaultInputValue !== undefined && defaultInputValue > 0) {
+                    eventService(false)
+                }
 
+                function eventService(event = true) {
+                    if (event) {
+                        $(SelectionDaller).click(function () {
+                            let inputId = $(this).attr('data-inputID');
+                            let input = $('#dollar-' + inputId).val();
+                            let payment = input * dollar
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                            $(customPayment).val('')
+                            $("#" + callElementTarget).val('')
 
-            });
-        })
+                        });
+                    } else {
+                        let payment = defaultInputValue * dollar
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        $(customPayment).val('')
+                        $("#" + callElementTarget).val('')
+                    }
+                }
+
+                eventService();
+            }
+        )
+
         $(document).ready(function () {
             let callElement = 'Accepting_the_rules';
             let acceptingRules = $('.' + callElement);
@@ -111,33 +129,63 @@
 
         $(document).ready(function () {
             let callElementTarget = "custom_payment";
+            let defaultInputTarget = "{{old('custom_payment')}}"
 
             let customPayment = $("." + callElementTarget);
             let payment_text = $('.payment-text')
             let dollar = "{{$dollar->amount_to_rials}}"
+            if (defaultInputTarget !== undefined && defaultInputTarget > 0) {
+                let amount_to_rials = defaultInputTarget / dollar
+                $(customPayment).val(amount_to_rials)
+                eventChangeInput(false);
+            }
 
-            $(customPayment).on('input',function () {
+            function eventChangeInput(event = true) {
+                if (event) {
+                    $(customPayment).on('input', function () {
 
-                let SelectionDaller = $(".dollar");
-                $.each(SelectionDaller, function (index, value) {
-                    let Service = value
-                    $(Service).removeClass('select-dollar')
-                    $(Service).children('input').prop('checked', false)
+                        let SelectionDaller = $(".dollar");
+                        $.each(SelectionDaller, function (index, value) {
+                            let Service = value
+                            $(Service).removeClass('select-dollar')
+                            $(Service).children('input').prop('checked', false)
 
-                })
-                let payment = $(customPayment).val();
-                if (payment.match(/^\d+$/)) {
-                    payment = payment * dollar
-                    $("#" + callElementTarget).val(payment)
-                    $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        })
+                        let payment = $(customPayment).val();
+                        if (payment.match(/^\d+$/)) {
+                            payment = payment * dollar
+                            $("#" + callElementTarget).val(payment)
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        } else {
+                            $("#" + callElementTarget).val('')
+                            $(payment_text).text('')
+                            $(customPayment).val('');
+                        }
+
+                    })
+                } else {
+                    let SelectionDaller = $(".dollar");
+                    $.each(SelectionDaller, function (index, value) {
+                        let Service = value
+                        $(Service).removeClass('select-dollar')
+                        $(Service).children('input').prop('checked', false)
+
+                    })
+                    let payment = $(customPayment).val();
+                    if (payment.match(/^\d+$/)) {
+                        payment = payment * dollar
+                        $("#" + callElementTarget).val(payment)
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                    } else {
+                        $("#" + callElementTarget).val('')
+                        $(payment_text).text('')
+                        $(customPayment).val('');
+                    }
                 }
-                else {
-                    $("#" + callElementTarget).val('')
-                    $(payment_text).text('')
-                    $(customPayment).val('');
-                }
 
-            })
+            }
+
+            eventChangeInput();
         })
     </script>
 @endsection

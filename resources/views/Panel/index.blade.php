@@ -18,13 +18,13 @@
     <article class="py-5 px-3 flex flex-col items-center justify-center space-y-9">
         <div>
             <p class="text-center font-semibold">
-                <span class="text-lg font-semibold text-sky-500">$</span> موجودی شما : 0 تومان
+                <span class="text-lg font-semibold text-sky-500">$</span> موجودی شما : {{$balance}} تومان
             </p>
         </div>
 
         <div class="flex justify-center items-center flex-col  w-full sm:w-2/6 md:w-1/3 lg:w-1/4 space-y-5">
             <div class="border-2 border-2-white rounded-md py-3 px-3 f w-full text-center   bg-gray-800">
-                <a href="{{route('panel.purchase')}}" class="text-center flex items-center space-x-2 space-x-reverse">
+                <a href="{{route('panel.purchase.view')}}" class="text-center flex items-center space-x-2 space-x-reverse">
                     <img src="{{asset('src/images/list.png')}}" alt="" class="w-6 h-6">
                     <p>خرید ووچر پرفکت مانی</p>
                 </a>
