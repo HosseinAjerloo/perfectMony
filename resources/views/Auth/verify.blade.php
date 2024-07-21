@@ -29,24 +29,24 @@
 
 @section('container')
 
-    <ul class="space-y-3">
-        <li class="flex  items-center space-x-2 space-x-reverse">
-            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">
-            <p class="mb-2 text-sm ">خرید آسان و سریع ووچر پرفکت مانی</p>
-        </li>
-        <li class="flex  items-center space-x-2 space-x-reverse">
-            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">
-            <p class="mb-2 text-sm ">تحویل آنی و اتوماتیک</p>
-        </li>
-        <li class="flex  items-center space-x-2 space-x-reverse">
-            <img src="{{asset("src/images/Group 414.png")}}" alt="" class="w-9 h-9">
-            <p class="mb-2 text-sm ">پشتیبانی 24 ساعته</p>
-        </li>
-        <li class="flex  items-center space-x-2 space-x-reverse">
-            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">
-            <p class="mb-2 text-sm ">بدون نیاز به اخراز هویت</p>
-        </li>
-    </ul>
+{{--    <ul class="space-y-3">--}}
+{{--        <li class="flex  items-center space-x-2 space-x-reverse">--}}
+{{--            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">--}}
+{{--            <p class="mb-2 text-sm ">خرید آسان و سریع ووچر پرفکت مانی</p>--}}
+{{--        </li>--}}
+{{--        <li class="flex  items-center space-x-2 space-x-reverse">--}}
+{{--            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">--}}
+{{--            <p class="mb-2 text-sm ">تحویل آنی و اتوماتیک</p>--}}
+{{--        </li>--}}
+{{--        <li class="flex  items-center space-x-2 space-x-reverse">--}}
+{{--            <img src="{{asset("src/images/Group 414.png")}}" alt="" class="w-9 h-9">--}}
+{{--            <p class="mb-2 text-sm ">پشتیبانی 24 ساعته</p>--}}
+{{--        </li>--}}
+{{--        <li class="flex  items-center space-x-2 space-x-reverse">--}}
+{{--            <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-9 h-9">--}}
+{{--            <p class="mb-2 text-sm ">بدون نیاز به اخراز هویت</p>--}}
+{{--        </li>--}}
+{{--    </ul>--}}
 @endsection
 @section('script-tag')
 
