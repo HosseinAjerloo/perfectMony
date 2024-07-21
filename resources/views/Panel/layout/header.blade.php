@@ -57,7 +57,7 @@
                 <img src="{{asset('src/images/editPen.png')}}" alt="">
                 <p>ویرایش مشخصات</p>
             </a>
-            <a href="" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
+            <a href="{{route('logout')}}" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/logout.png')}}" alt="">
                 <p>خروج از حساب کاربری</p>
             </a>
