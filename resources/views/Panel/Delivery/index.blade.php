@@ -31,11 +31,11 @@
                     <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer">
                 </div>
             </div>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2 space-x-reverse">
                 <p class="text-sm font-semibold sm:text-base">
                     مبلغ ووچر:
                 </p>
-                <div class="flex items-center space-x-3 space-x-reverse pe-2">
+                <div class="flex items-center space-x-1 space-x-reverse pe-2">
                     <span class="text-sm sm:text-base">{{$payment_amount}} دلار</span>
                     <i class="fas fa-dollar-sign text-sky-500 text-lg"></i>
                 </div>
