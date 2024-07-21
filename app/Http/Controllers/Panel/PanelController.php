@@ -4,25 +4,29 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Panel\Purchase\PurchaseRequest;
+use App\Http\Traits\HasConfig;
 use App\Models\Doller;
 use App\Models\FinanceTransaction;
 use App\Models\Invoice;
 use App\Models\Service;
 use App\Models\Voucher;
+use App\Notifications\IsEmptyUserInformationNotifaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 
 class PanelController extends Controller
 {
+    use HasConfig;
     public function index()
     {
         $user = Auth::user();
-
+        $UserInformationStatus=$this->validationFiledUser();
         $balance = $user->getCreaditBalance();
-        return view('Panel.index', compact('balance'));
+        return view('Panel.index', compact('balance','UserInformationStatus'));
     }
 
     public function purchase()

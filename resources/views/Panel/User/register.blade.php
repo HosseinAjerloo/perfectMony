@@ -4,7 +4,7 @@
     <h1 class=" border-2 border-2-white rounded-md py-3 px-3 text-sm sm:text-base font-semibold  ">
         ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> لطفا مشخصات خود را وارد
         نمائید که در صورت بروز مشکل و خطا بتوانیم پشتیبانی
-        لازم را انجام دهیم (ووچر را برای شما ایمیل هم خواهیم کرد)
+        لازم را انجام دهیم
     </h1>
 @endsection
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Traits\HasConfig;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IsEmptyUserInformation
 {
+    use HasConfig;
     /**
      * Handle an incoming request.
      *
@@ -19,8 +21,7 @@ class IsEmptyUserInformation
     {
         if (Auth::check())
         {
-            $user=$request->user();
-            if ($this->validationFiledUser($user))
+            if ($this->validationFiledUser())
             {
                 return redirect(route('panel.user.completionOfInformation'));
             }
@@ -31,12 +32,5 @@ class IsEmptyUserInformation
         }
         return $next($request);
     }
-    private function validationFiledUser($user)
-    {
-        if (empty($user->name)||empty($user->family)||empty($user->national_code)||empty($user->mobile)|| empty($user->tel) || empty($user->address) || empty($user->email) )
-        {
-            return true;
-        }
-        else return false;
-    }
+
 }
