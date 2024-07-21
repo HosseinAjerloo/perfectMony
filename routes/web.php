@@ -32,7 +32,11 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
 
 Route::get('test', function () {
+
     $voucher=\App\Models\Voucher::first();
+    $payment_amount=2;
+    return view('Panel.Delivery.index', compact('voucher', 'payment_amount'));
+
 
 //    try {
 

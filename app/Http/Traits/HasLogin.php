@@ -18,9 +18,8 @@ trait HasLogin
         $inputs['code'] = $code;
         $inputs['token'] = $token;
         $otp = Otp::create($inputs);
-
         $message = 'به ساینا ارز خوش آمدین کد شما جهت ورد:' . $code;
-//        $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
+        $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
         return $otp;
     }
 }
