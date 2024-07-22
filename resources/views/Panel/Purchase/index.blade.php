@@ -70,6 +70,7 @@
 @section('script-tag')
     <script>
         $(document).ready(function () {
+
             let SelectionDaller = $(".dollar");
             $(SelectionDaller).click(function () {
                 $(this).addClass("dollar");
@@ -105,15 +106,18 @@
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                            howToBuy(payment);
+                            howToBuy(payment, false);
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
-
                         });
                     } else {
-                        let payment = defaultInputValue * dollar
+                        let input = $('#dollar-' + defaultInputValue);
+                        let inputAmount = $(input).attr('data-amount');
+
+                        let payment = inputAmount * dollar
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                        howToBuy(payment);
+                         alert(payment)
+                        howToBuy(payment, false);
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -144,6 +148,7 @@
             }
 
             function eventChangeInput(event = true) {
+
                 if (event) {
                     $(customPayment).on('input', function () {
 
@@ -159,16 +164,19 @@
                             let paymentResult = payment * dollar
                             $("#" + callElementTarget).val(payment)
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                            howToBuy(paymentResult);
+                            howToBuy(paymentResult, true);
 
                         } else {
                             $("#" + callElementTarget).val('')
                             $(payment_text).text('')
                             $(customPayment).val('');
+                            howToBuy(0, true);
+
                         }
 
                     })
                 } else {
+
                     let SelectionDaller = $(".dollar");
                     $.each(SelectionDaller, function (index, value) {
                         let Service = value
@@ -177,47 +185,86 @@
 
                     })
                     let payment = $(customPayment).val();
-                    console.log(payment);
                     if (payment.match(/^\d+$/)) {
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                        howToBuy(paymentResult);
+                        howToBuy(paymentResult, true);
                     } else {
                         $("#" + callElementTarget).val('')
                         $(payment_text).text('')
                         $(customPayment).val('');
+                        alert('ad')
+
+
                     }
                 }
 
             }
 
             eventChangeInput();
+
         })
     </script>
 
     <script>
 
-        function howToBuy(amount) {
+        function howToBuy(amount, state) {
+
             $.ajax({
                 url: "{{route('panel.howToBuy')}}",
                 type: "POST",
                 data: {_token: "{{csrf_token()}}", amount: amount},
+
                 success: function (response) {
-                    if (response) {
+
+                    test(response, state)
+                }
+            });
+
+
+        }
+
+        function test(response, state) {
+            if (response) {
+                if (state) {
+                    if ($(".custom_payment").val() !== '') {
                         $(".wallet").removeClass('hidden')
                         $(".wallet").addClass('flex')
                         $(".bank").addClass('hidden')
-
                     } else {
+                        $(".wallet").removeClass('flex')
+                        $(".wallet").addClass('hidden')
+                    }
+                } else {
+                    $(".wallet").removeClass('hidden')
+                    $(".wallet").addClass('flex')
+                    $(".bank").addClass('hidden')
+                }
+
+
+            } else {
+                if (state) {
+                    console.log(state +': sate')
+                    console.log($(".custom_payment").val()+": value")
+                    if ($(".custom_payment").val() !== '') {
                         $(".bank").removeClass('hidden')
                         $(".bank").addClass('flex')
                         $(".wallet").addClass('hidden')
+                    } else {
+                        alert('ad')
+                        $(".bank").removeClass('flex')
+                        $(".bank").addClass('hidden')
                     }
+                } else {
+                    alert('addjh')
+                    $(".bank").removeClass('hidden')
+                    $(".bank").addClass('flex')
+                    $(".wallet").addClass('hidden')
                 }
-            });
-        }
 
+            }
+        }
 
     </script>
 @endsection
