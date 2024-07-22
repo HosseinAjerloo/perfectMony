@@ -191,7 +191,7 @@ class PanelController extends Controller
 
     public function payment()
     {
-
+        dd('ad');
         $orderid = rand(100000, 999999);
         $bankRef = 13;
         $TotalPrice = 10000;
