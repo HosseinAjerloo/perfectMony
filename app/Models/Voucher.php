@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Voucher extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable=['user_id','service_id','invoice_id','serial','code','status','description'];
+    protected $fillable=['user_id','service_id','invoice_id','serial','code','status','description','service_id_custom'];
 }

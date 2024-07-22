@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use function Laravel\Prompts\alert;
 
 
 class PanelController extends Controller
@@ -120,7 +121,8 @@ class PanelController extends Controller
                     'user_id' => $user->id,
                     'invoice_id' => $invoice->id,
                     'status' => 'requested',
-                    'description' => 'ارسال در خواست به سروریس پرفکت مانی'
+                    'description' => 'ارسال در خواست به سروریس پرفکت مانی',
+                    "service_id_custom"=>$inputs['custom_payment']
                 ]
             );
             if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
@@ -172,5 +174,16 @@ class PanelController extends Controller
         }else{
             return redirect()->route('panel.index');
         }
+    }
+    public function howToBuy(Request $request)
+    {
+
+        $balance = Auth::user()->getCreaditBalance();
+        if (!is_numeric($request->amount) or $balance<$request->amount)
+        {
+                return false;
+        }
+        return true;
+
     }
 }

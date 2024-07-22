@@ -1,5 +1,6 @@
 <script src="{{asset('src/FontAwesome/js/all.js')}}"></script>
-<script src="{{asset('src/vendor/jquery-3.7.1.slim.min.js')}}"></script>
+<script src="{{asset('src/vendor/jquery-3.7.1.min.js')}}"></script>
+
 <script>
     $(document).ready(function () {
         let menuHamburger = $('.menuHamburger');

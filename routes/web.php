@@ -27,6 +27,7 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
+    Route::post('howToBuy', [App\Http\Controllers\Panel\PanelController::class, 'howToBuy'])->name('panel.howToBuy');
 
 });
 

@@ -20,17 +20,17 @@ body{
 
 @layer components{
     .menu-non-show{
-        @apply -right-full;
+        @apply -right-full
     }
     .menu-show{
         @apply right-0
     }
 
     .menu-user-non-show{
-        @apply -left-full;
+        @apply -left-full invisible
     }
     .menu-user-show{
-        @apply left-0
+        @apply left-0 visible
     }
     .select-dollar{
         @apply rounded-md border-2 border-yellow-600 shadow-2xl shadow-yellow-600

@@ -55,14 +55,15 @@
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
             <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
         </div>
-        <div class="flex items-center justify-start  max-w-max   rounded-md">
+        <div class=" items-center justify-start  max-w-max   rounded-md bank hidden">
             <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-12 h-12">
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">درگاه پرداخت بانک سامان</button>
         </div>
-        <div class="flex items-center justify-start  max-w-max    rounded-md">
-            <img src="{{asset('src/images/meliBank.png')}}" alt="" class="w-12 h-12">
-            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">درگاه پرداخت بانک سامان</button>
+        <div class=" items-center justify-start  max-w-max   rounded-md wallet hidden">
+            <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
+            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
         </div>
+
     </article>
 @endsection
 
@@ -104,6 +105,7 @@
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                            howToBuy(payment);
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
 
@@ -111,6 +113,7 @@
                     } else {
                         let payment = defaultInputValue * dollar
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        howToBuy(payment);
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -156,6 +159,8 @@
                             let paymentResult = payment * dollar
                             $("#" + callElementTarget).val(payment)
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
+                            howToBuy(paymentResult);
+
                         } else {
                             $("#" + callElementTarget).val('')
                             $(payment_text).text('')
@@ -174,9 +179,10 @@
                     let payment = $(customPayment).val();
                     console.log(payment);
                     if (payment.match(/^\d+$/)) {
-                       let paymentResult = payment * dollar
+                        let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
+                        howToBuy(paymentResult);
                     } else {
                         $("#" + callElementTarget).val('')
                         $(payment_text).text('')
@@ -188,5 +194,30 @@
 
             eventChangeInput();
         })
+    </script>
+
+    <script>
+
+        function howToBuy(amount) {
+            $.ajax({
+                url: "{{route('panel.howToBuy')}}",
+                type: "POST",
+                data: {_token: "{{csrf_token()}}", amount: amount},
+                success: function (response) {
+                    if (response) {
+                        $(".wallet").removeClass('hidden')
+                        $(".wallet").addClass('flex')
+                        $(".bank").addClass('hidden')
+
+                    } else {
+                        $(".bank").removeClass('hidden')
+                        $(".bank").addClass('flex')
+                        $(".wallet").addClass('hidden')
+                    }
+                }
+            });
+        }
+
+
     </script>
 @endsection

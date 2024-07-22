@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,8 +16,8 @@ return new class extends Migration
             $table->foreignId('service_id')->nullable()->constrained('services')->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer('service_id_custom')->nullable()->comment('در صورتی پر میشود که کاربر بخواهد از سرویس سفارشی استفاده کند');
             $table->foreignId('disscount_code_id')->nullable()->constrained('disscount_codes')->cascadeOnUpdate()->cascadeOnDelete();
-           $table->bigInteger('final_amount')->nullable();
-           $table->enum('type',['service','wallet'])->nullable();
+            $table->bigInteger('final_amount')->nullable();
+            $table->enum('type', ['service', 'wallet'])->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
