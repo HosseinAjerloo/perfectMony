@@ -223,7 +223,10 @@ class PanelController extends Controller
         return view('welcome',compact('token','url'));
 
     }
-
+    public function backWalletCharging(Request $request)
+    {
+        dd($request->all());
+    }
 
 
 
