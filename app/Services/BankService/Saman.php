@@ -25,7 +25,8 @@ class Saman implements BankInterface
             return false;
         } elseif ($res[0] == 1) {
             $token = $res[1];
-            return view('welcome',compact('token',$this->getBankUrl()));
+            $url=$this->getBankUrl();
+            return view('welcome',compact('token','url');
         }
 
     }

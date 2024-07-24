@@ -17,7 +17,8 @@ class Bank extends Model
             'terminal_id'=>13595227,
             'description'=>'درگاه پرداخت بانک سامان',
             'is_active'=>1,
-            'logo_url'=>'src/images/samanBank.png'
+            'logo_url'=>'src/images/samanBank.png',
+            'class'=>'\App\Services\BankService\Saman'
 
 
         ]
