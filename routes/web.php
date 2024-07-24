@@ -28,6 +28,8 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
     Route::post('howToBuy', [App\Http\Controllers\Panel\PanelController::class, 'howToBuy'])->name('panel.howToBuy');
+    Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
+    Route::get('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'backWalletCharging'])->name('panel.back.wallet.charging');
 
 });
 

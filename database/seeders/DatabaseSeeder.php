@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bank;
 use App\Models\Doller;
 use App\Models\Service;
 use App\Models\User;
@@ -23,6 +24,10 @@ class DatabaseSeeder extends Seeder
         foreach (Service::Services as $service)
         {
             Service::create($service);
+        }
+        foreach (Bank::Banks as $bank)
+        {
+            Bank::create($bank);
         }
 
 

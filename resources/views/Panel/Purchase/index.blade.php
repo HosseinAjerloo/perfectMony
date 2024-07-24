@@ -16,7 +16,7 @@
 @section('container')
     <article class="px-3 py-6">
         <form action="{{route('panel.purchase')}}" method="post"
-              class="flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4">
+              class="form flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4">
             @csrf
             @foreach($services as $service)
                 <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
@@ -32,10 +32,11 @@
 
             @endforeach
             <input type="checkbox" name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
-            <input type="text" value="" name="custom_payment" id="custom_payment" class="text-black hidden">
-            <div class="flex items-center justify-start  max-w-max    rounded-md">
-                <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">خرید تستی</button>
-            </div>
+            <input type="text" value="{{old('custom_payment')}}" name="custom_payment" id="custom_payment" class="text-black hidden">
+            @foreach($banks as $bank)
+                <input type="radio" class="bankId hidden" name="bank" id="bank-{{$bank->id}}" value="{{$bank->id}}"
+                       @if(old("bank")==$bank->id) checked='checked' @endif>
+            @endforeach
 
         </form>
         <div class="text-center py-5 space-y-2 ">
@@ -55,10 +56,12 @@
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
             <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
         </div>
-        <div class=" items-center justify-start  max-w-max   rounded-md bank hidden">
-            <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-12 h-12">
-            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">درگاه پرداخت بانک سامان</button>
-        </div>
+        @foreach($banks as $bank)
+            <div data-val="{{$bank->id}}" class=" items-center justify-start  max-w-max   rounded-md bank hidden">
+                <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12">
+                <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">{{$bank->name}}</button>
+            </div>
+        @endforeach
         <div class=" items-center justify-start  max-w-max   rounded-md wallet hidden">
             <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
@@ -106,7 +109,7 @@
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                            howToBuy(payment, false);
+                            howToBuy(payment);
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
                         });
@@ -116,8 +119,7 @@
 
                         let payment = inputAmount * dollar
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                         alert(payment)
-                        howToBuy(payment, false);
+                        howToBuy(payment);
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -149,9 +151,16 @@
 
             function eventChangeInput(event = true) {
 
+
+                $(customPayment).click(function () {
+                    $(".wallet").removeClass('flex')
+                    $(".wallet").addClass('hidden')
+                    $(".bank").removeClass('flex')
+                    $(".bank").addClass('hidden')
+                })
+
                 if (event) {
                     $(customPayment).on('input', function () {
-
                         let SelectionDaller = $(".dollar");
                         $.each(SelectionDaller, function (index, value) {
                             let Service = value
@@ -160,17 +169,22 @@
 
                         })
                         let payment = $(customPayment).val();
+                        let paymentResult = payment * dollar
                         if (payment.match(/^\d+$/)) {
-                            let paymentResult = payment * dollar
                             $("#" + callElementTarget).val(payment)
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                            howToBuy(paymentResult, true);
-
+                            howToBuy(paymentResult);
                         } else {
+
+                            $(".bank").removeClass('flex')
+                            $(".bank").addClass('hidden')
+                            $(".wallet").removeClass('flex')
+                            $(".wallet").addClass('hidden')
+
+
                             $("#" + callElementTarget).val('')
                             $(payment_text).text('')
                             $(customPayment).val('');
-                            howToBuy(0, true);
 
                         }
 
@@ -189,12 +203,12 @@
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                        howToBuy(paymentResult, true);
+                        howToBuy(paymentResult);
                     } else {
+                        howToBuy(0);
                         $("#" + callElementTarget).val('')
                         $(payment_text).text('')
                         $(customPayment).val('');
-                        alert('ad')
 
 
                     }
@@ -202,15 +216,16 @@
 
             }
 
+
             eventChangeInput();
+
 
         })
     </script>
 
     <script>
 
-        function howToBuy(amount, state) {
-
+        function howToBuy(amount) {
             $.ajax({
                 url: "{{route('panel.howToBuy')}}",
                 type: "POST",
@@ -218,53 +233,65 @@
 
                 success: function (response) {
 
-                    test(response, state)
+                    test(response)
                 }
             });
 
 
         }
 
-        function test(response, state) {
+        function test(response) {
+
+
             if (response) {
-                if (state) {
-                    if ($(".custom_payment").val() !== '') {
-                        $(".wallet").removeClass('hidden')
-                        $(".wallet").addClass('flex')
-                        $(".bank").addClass('hidden')
-                    } else {
-                        $(".wallet").removeClass('flex')
-                        $(".wallet").addClass('hidden')
-                    }
-                } else {
+                if ($(".custom_payment").val() !== '') {
                     $(".wallet").removeClass('hidden')
                     $(".wallet").addClass('flex')
+                    $(".bank").removeClass('flex')
                     $(".bank").addClass('hidden')
+
+                } else {
+                    $(".bank").addClass('hidden')
+                    $(".bank").removeClass('flex')
+
+                    $(".wallet").removeClass('hidden')
+                    $(".wallet").addClass('flex')
                 }
 
 
             } else {
-                if (state) {
-                    console.log(state +': sate')
-                    console.log($(".custom_payment").val()+": value")
-                    if ($(".custom_payment").val() !== '') {
-                        $(".bank").removeClass('hidden')
-                        $(".bank").addClass('flex')
-                        $(".wallet").addClass('hidden')
-                    } else {
-                        alert('ad')
-                        $(".bank").removeClass('flex')
-                        $(".bank").addClass('hidden')
-                    }
-                } else {
-                    alert('addjh')
+                if ($(".custom_payment").val() !== '') {
                     $(".bank").removeClass('hidden')
                     $(".bank").addClass('flex')
+                    $(".wallet").addClass('hidden')
+                } else {
+
+                    $(".bank").removeClass('hidden')
+                    $(".bank").addClass('flex')
+
+                    $(".wallet").removeClass('flex')
                     $(".wallet").addClass('hidden')
                 }
 
             }
         }
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".bank").click(function () {
+                $(".form").attr('action', "{{route('panel.wallet.charging')}}")
+                $(".bankId").removeAttr('checked')
+                let id = $(this).attr('data-val');
+                let bankInput = $('#bank-' + id);
+                $(bankInput).attr('checked', "checked")
+                $('.form').submit()
+
+            })
+
+            $(".wallet").click(function () {
+                $('.form').submit();
+            })
+        })
     </script>
 @endsection

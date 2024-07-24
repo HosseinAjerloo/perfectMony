@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Panel\Purchase\PurchaseRequest;
+use App\Http\Requests\Panel\WalletCharging\WalletChargingRequest;
 use App\Http\Traits\HasConfig;
+use App\Models\Bank;
 use App\Models\Doller;
 use App\Models\FinanceTransaction;
 use App\Models\Invoice;
 use App\Models\Service;
 use App\Models\Voucher;
 use App\Notifications\IsEmptyUserInformationNotifaction;
+use App\Services\BankService\Saman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
@@ -25,6 +28,7 @@ class PanelController extends Controller
 
     public function index()
     {
+
         $user = Auth::user();
         $UserInformationStatus = $this->validationFiledUser();
         $balance = $user->getCreaditBalance();
@@ -33,14 +37,14 @@ class PanelController extends Controller
 
     public function purchase()
     {
+        $banks=Bank::where('is_active',1)->get();
         $services = Service::all();
         $dollar = Doller::orderBy('id', 'desc')->first();
-        return view('Panel.Purchase.index', compact('services', 'dollar'));
+        return view('Panel.Purchase.index', compact('services', 'dollar','banks'));
     }
 
     public function store(PurchaseRequest $request)
     {
-        $this->payment();
         try {
             $inputs = $request->all();
             $dollar = Doller::orderBy('id', 'desc')->first();
@@ -189,76 +193,37 @@ class PanelController extends Controller
 
     }
 
-    public function payment()
+    public function walletCharging(WalletChargingRequest $request)
     {
-        dd('ad');
-        $orderid = rand(100000, 999999);
-        $bankRef = 13;
-        $TotalPrice = 10000;
+        $dollar = Doller::orderBy('id', 'desc')->first();
+        $inputs=$request->all();
 
-
-        $url = 'saman2.php';
-
-
-
-        $bankinfo['Bank'] = "saman";
-        $bankUrl = "https://sep.shaparak.ir/MobilePG/MobilePayment";
-        switch ($bankinfo['Bank']) {
-            case "saman" :
-
-                $res = $this->samanGetToken($bankUrl, $orderid, $TotalPrice, $url);
-                if ($res[0] == 0) {
-                    echo "<pre>";
-                    var_dump($res, $orderid, $TotalPrice, $url);
-                    echo "<pre>";
-                    die('تراکنش تکراری');
-                } elseif ($res[0] == 1) {
-                    $token = $res[1];
-
-                    return view('welcome',compact('token','bankUrl'));
-
-                }
-                break;
-            default :
-                $_SESSION['display_message'] = "بانک انتخاب شده از سوی شما جهت انجام پرداخت آنلاین نامعتبر می باشد !";
-                $_SESSION['display_message_type'] = "error";
-                header('Location:' . $url);
-                die();
-
+        if (isset($inputs['service_id'])) {
+            $service = Service::find($inputs['service_id']);
+            $voucherPrice = $dollar->amount_to_rials * $service->amount;
+        }elseif (isset($inputs['custom_payment'])) {
+            $voucherPrice = $dollar->amount_to_rials * $inputs['custom_payment'];
+        }
+        else{
+            return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
+        }
+        $bank=Bank::find($inputs['bank']);
+        $objBank=new $bank->class;
+        $objBank->setTotalPrice($voucherPrice);
+        $objBank->setBankUrl($bank->url);
+        $objBank->setTerminalId($bank->terminal_id);
+        $objBank->setUrlBack(route('panel.back.wallet.charging'));
+        $status=$objBank->payment();
+        if (!$status)
+        {
+            return redirect()->route('panel.purchase.view')->withErrors(['error'=>'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
 
 
-
     }
-    function samanGetToken($bankUrl, $orderID, $amount, $url)
-    {
 
 
-        $data = array(
-            'action' => 'Token',
-            'TerminalId' => 13595227,
-            'ResNum' => $orderID,
-            'Amount' => $amount,
-            'RedirectUrl' => $url
-        );
-        $data = json_encode($data);
 
-        $curl = curl_init($bankUrl);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data)));
-        curl_setopt($curl, CURLOPT_SSL_CIPHER_LIST, 'DEFAULT@SECLEVEL=1');
-        $result = curl_exec($curl);
-        curl_close($curl);
 
-        $result = json_decode($result);
 
-        if ($result->status == 1) {
-            $token = $result->token;
-            return array(1, $token);
-        } else {
-            return array(0, $result->errorDesc);
-        }
-    }
 }
