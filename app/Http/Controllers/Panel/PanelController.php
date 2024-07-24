@@ -222,7 +222,6 @@ class PanelController extends Controller
         $token=$status;
         return view('welcome',compact('token','url'));
 
-
     }
 
 
