@@ -218,7 +218,7 @@ class PanelController extends Controller
         {
             return redirect()->route('panel.purchase.view')->withErrors(['error'=>'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
-        $url=$objBank->getUrlBack();
+        $url=$objBank->getBankUrl();
         $token=$status;
         return view('welcome',compact('token','url'));
 

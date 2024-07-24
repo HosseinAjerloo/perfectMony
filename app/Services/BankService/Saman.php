@@ -54,6 +54,40 @@ class Saman implements BankInterface
             return array(0, $result->errorDesc);
         }
     }
+    public function backBank()
+    {
+        dd(request()->all());
+        if (isset($_POST['RefNum']) and isset($_POST['ResNum'])) {
+            $bank = "saman";
+            $refnum = make_safe($_POST['RefNum']);
+            $state = make_safe($_POST['State']);
+            $status = make_safe($_POST['Status']);
+            $orderid = make_safe($_POST['ResNum']);
+        } else {
+            die('خطا انجام شده است');
+        }
+
+
+// Get Order Info
+        switch ($bank) {
+            case "saman" :
+                $orderinfo_nobank = get_nobank_order_info($orderid);
+                if ($orderinfo_nobank['Bank'] == 'SAMAN') {
+                    $bank = "saman";
+                    $orderinfo = get_saman_order_info($orderid);
+                }
+                break;
+            default :
+                header('Location:' . URL . '/denid.php');
+                die('bank');
+        }
+
+
+        if ($orderinfo['Serial'] == '') {
+            header('Location:' . URL . '/denid.php');
+            die('no-order-info');
+        }
+    }
 
 
     private function generateData()
