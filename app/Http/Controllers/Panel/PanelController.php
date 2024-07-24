@@ -218,6 +218,7 @@ class PanelController extends Controller
         {
             return redirect()->route('panel.purchase.view')->withErrors(['error'=>'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
+        return $status;
 
 
     }
