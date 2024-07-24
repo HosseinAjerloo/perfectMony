@@ -1,13 +1,16 @@
-<script>
-    function postSamanRefId(Token, Url) {
+<form id="form">
 
-        var form = document.createElement("form");
+</form>
+<script>
+    function postSamanRefId() {
+
+        var form = document.getElementById("form");
         form.setAttribute("method", "POST");
-        form.setAttribute("action", Url);
+        form.setAttribute("action", "{{$url}}");
         form.setAttribute("target", "_self");
         var hiddenField = document.createElement("input");
         hiddenField.setAttribute("name", "Token");
-        hiddenField.setAttribute("value", Token);
+        hiddenField.setAttribute("value", "{{$token}}");
         form.appendChild(hiddenField);
 
         document.body.appendChild(form);
