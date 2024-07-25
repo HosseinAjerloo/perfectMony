@@ -34,7 +34,6 @@ Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController:
 
 
 Route::get('test', function () {
-    return view('welcome');
 //    $voucher=\App\Models\Voucher::first();
 //    $payment_amount=2;
 //    return view('Panel.Delivery.index', compact('voucher', 'payment_amount'));

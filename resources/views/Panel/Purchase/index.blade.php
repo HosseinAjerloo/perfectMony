@@ -32,11 +32,9 @@
 
             @endforeach
             <input type="checkbox" name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
-            <input type="text" value="{{old('custom_payment')}}" name="custom_payment" id="custom_payment" class="text-black hidden">
-            @foreach($banks as $bank)
-                <input type="radio" class="bankId hidden" name="bank" id="bank-{{$bank->id}}" value="{{$bank->id}}"
-                       @if(old("bank")==$bank->id) checked='checked' @endif>
-            @endforeach
+            <input type="text" value="{{old('custom_payment')}}" name="custom_payment" id="custom_payment"
+                   class="text-black hidden">
+
 
         </form>
         <div class="text-center py-5 space-y-2 ">
@@ -56,13 +54,8 @@
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
             <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
         </div>
-        @foreach($banks as $bank)
-            <div data-val="{{$bank->id}}" class=" items-center justify-start  max-w-max   rounded-md bank hidden">
-                <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12">
-                <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">{{$bank->name}}</button>
-            </div>
-        @endforeach
-        <div class=" items-center justify-start  max-w-max   rounded-md wallet hidden">
+
+        <div class=" flex items-center justify-start  max-w-max   rounded-md wallet ">
             <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
         </div>
@@ -109,7 +102,6 @@
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                            howToBuy(payment);
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
                         });
@@ -119,7 +111,6 @@
 
                         let payment = inputAmount * dollar
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
-                        howToBuy(payment);
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -151,14 +142,6 @@
 
             function eventChangeInput(event = true) {
 
-
-                $(customPayment).click(function () {
-                    $(".wallet").removeClass('flex')
-                    $(".wallet").addClass('hidden')
-                    $(".bank").removeClass('flex')
-                    $(".bank").addClass('hidden')
-                })
-
                 if (event) {
                     $(customPayment).on('input', function () {
                         let SelectionDaller = $(".dollar");
@@ -173,18 +156,10 @@
                         if (payment.match(/^\d+$/)) {
                             $("#" + callElementTarget).val(payment)
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                            howToBuy(paymentResult);
+
                         } else {
-
-                            $(".bank").removeClass('flex')
-                            $(".bank").addClass('hidden')
-                            $(".wallet").removeClass('flex')
-                            $(".wallet").addClass('hidden')
-
-
                             $("#" + callElementTarget).val('')
                             $(payment_text).text('')
-                            $(customPayment).val('');
 
                         }
 
@@ -203,13 +178,11 @@
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
                         $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
-                        howToBuy(paymentResult);
+
                     } else {
-                        howToBuy(0);
                         $("#" + callElementTarget).val('')
                         $(payment_text).text('')
                         $(customPayment).val('');
-
 
                     }
                 }
@@ -222,76 +195,12 @@
 
         })
     </script>
-
     <script>
-
-        function howToBuy(amount) {
-            $.ajax({
-                url: "{{route('panel.howToBuy')}}",
-                type: "POST",
-                data: {_token: "{{csrf_token()}}", amount: amount},
-
-                success: function (response) {
-
-                    test(response)
-                }
-            });
-
-
-        }
-
-        function test(response) {
-
-
-            if (response) {
-                if ($(".custom_payment").val() !== '') {
-                    $(".wallet").removeClass('hidden')
-                    $(".wallet").addClass('flex')
-                    $(".bank").removeClass('flex')
-                    $(".bank").addClass('hidden')
-
-                } else {
-                    $(".bank").addClass('hidden')
-                    $(".bank").removeClass('flex')
-
-                    $(".wallet").removeClass('hidden')
-                    $(".wallet").addClass('flex')
-                }
-
-
-            } else {
-                if ($(".custom_payment").val() !== '') {
-                    $(".bank").removeClass('hidden')
-                    $(".bank").addClass('flex')
-                    $(".wallet").addClass('hidden')
-                } else {
-
-                    $(".bank").removeClass('hidden')
-                    $(".bank").addClass('flex')
-
-                    $(".wallet").removeClass('flex')
-                    $(".wallet").addClass('hidden')
-                }
-
-            }
-        }
-
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".bank").click(function () {
-                $(".form").attr('action', "{{route('panel.wallet.charging')}}")
-                $(".bankId").removeAttr('checked')
-                let id = $(this).attr('data-val');
-                let bankInput = $('#bank-' + id);
-                $(bankInput).attr('checked', "checked")
-                $('.form').submit()
-
-            })
-
-            $(".wallet").click(function () {
-                $('.form').submit();
-            })
+        $(".wallet").click(function (){
+            $('.form').submit()
         })
     </script>
+
+
+
 @endsection
