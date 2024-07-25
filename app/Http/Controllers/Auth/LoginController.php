@@ -95,14 +95,26 @@ class LoginController extends Controller
         ]);
         $inputs = $request->all();
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $otp = $otp->where('created_at', ">", $expiration)->where('code', $inputs['SMS_code'])->where('token',$otp->token)->first();
+        $otp = $otp->where('created_at', ">", $expiration)->where('token',$otp->token)->first();
         if (!$otp)
+        {
             return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است و یا کد وارده صحیح نمیباشد "]);
-        $user=User::firstOrCreate(['mobile'=>$otp->mobile],[
-           'mobile'=>$otp->mobile
-        ]);
-        Auth::loginUsingId($user->id);
-        return redirect()->route('panel.index');
+        }
+        $code=$otp->where('code', $inputs['SMS_code'])->first();
+        if ($code)
+        {
+            $user=User::firstOrCreate(['mobile'=>$code->mobile],[
+                'mobile'=>$code->mobile
+            ]);
+            Auth::loginUsingId($user->id);
+            return redirect()->route('panel.index');
+
+        }
+        else{
+         return   redirect()->route('login.dologin', $otp->token)->withErrors(['expiration_at' => "کد وارد شده صحیح نمیباشد "]);;
+
+
+        }
 
     }
 
