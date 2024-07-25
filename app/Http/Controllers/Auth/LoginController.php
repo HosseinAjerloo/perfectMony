@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     use HasLogin;
+
     /**
      * Display a listing of the resource.
      */
@@ -74,7 +75,7 @@ class LoginController extends Controller
 
     public function sendCode(SendCodeWithSmsRequest $request)
     {
-        $otp=$this->generateCode($request);
+        $otp = $this->generateCode($request);
         return redirect()->route('login.dologin', $otp->token);
     }
 
@@ -82,7 +83,7 @@ class LoginController extends Controller
     public function dologin(Request $request, Otp $otp)
     {
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $otp = $otp->where('created_at', ">", $expiration)->where('token',$otp->token)->first();
+        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
         if ($otp)
             return view('Auth.verify', compact('otp'));
         return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است "]);
@@ -95,25 +96,20 @@ class LoginController extends Controller
         ]);
         $inputs = $request->all();
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $otp = $otp->where('created_at', ">", $expiration)->where('token',$otp->token)->first();
-        if (!$otp)
-        {
+        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
+        if (!$otp) {
             return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است و یا کد وارده صحیح نمیباشد "]);
         }
-        $code=$otp->where('code', $inputs['SMS_code'])->first();
-        if ($code)
-        {
-            $user=User::firstOrCreate(['mobile'=>$code->mobile],[
-                'mobile'=>$code->mobile
+        $code = $otp->where('code', $inputs['SMS_code'])->first();
+        if ($code) {
+            $user = User::firstOrCreate(['mobile' => $code->mobile], [
+                'mobile' => $code->mobile
             ]);
             Auth::loginUsingId($user->id);
             return redirect()->route('panel.index');
 
-        }
-        else{
-         return   redirect()->route('login.dologin', $otp->token)->withErrors(['expiration_at' => "کد وارد شده صحیح نمیباشد "]);;
-
-
+        } else {
+            return redirect()->route('login.dologin', $otp->token)->withErrors(['expiration_at' => "کد وارد شده صحیح نمیباشد "]);
         }
 
     }
@@ -121,21 +117,19 @@ class LoginController extends Controller
     public function resend(Request $request, Otp $otp)
     {
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $result = $otp->where('created_at', ">", $expiration)->where('token',$otp->token)->first();
-        if (!$result)
-        {
-            $request->request->add(['mobile'=>$otp->mobile]);
-            $otp=$this->generateCode($request);
+        $result = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
+        if (!$result) {
+            $request->request->add(['mobile' => $otp->mobile]);
+            $otp = $this->generateCode($request);
             return redirect()->route('login.dologin', $otp->token);
-        }
-        else
-        return  redirect()->back()->withErrors(['Code_validity'=>"کد شما منقصی نشده است و داری اعتبار میباشد"]);
+        } else
+            return redirect()->back()->withErrors(['Code_validity' => "کد شما منقصی نشده است و داری اعتبار میباشد"]);
 
     }
+
     public function logout(Request $request)
     {
-        if (Auth::check())
-        {
+        if (Auth::check()) {
             Auth::logout();
         }
         return redirect()->route('login.index');
