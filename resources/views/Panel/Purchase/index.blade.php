@@ -16,7 +16,7 @@
 @section('container')
     <article class="px-3 py-6">
         <form action="{{route('panel.purchase')}}" method="post"
-              class="form flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4">
+              class="form relative flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4 after:content-['انتخاب_سریع'] after:absolute after:text-white after:top-[-15px] after:bg-gray-950 after:px-4 sm:after:text-sm after:text-base">
             @csrf
             @foreach($services as $service)
                 <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
@@ -59,6 +59,13 @@
             <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
         </div>
+        @foreach($banks as $bank)
+            <label for="bank-{{$bank->id}}" class=" flex items-center justify-start  max-w-max   rounded-md bank cursor-pointer">
+                <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
+                <span class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md"> {{$bank->name}} </span>
+                <input type="radio" name="bank" value="{{$bank->id}}" id="bank-{{$bank->id}}" class="hidden">
+            </label>
+        @endforeach
 
     </article>
 @endsection
@@ -196,11 +203,13 @@
         })
     </script>
     <script>
-        $(".wallet").click(function (){
+        $(".wallet").click(function () {
+            $('.form').submit()
+        })
+        $(".bank").click(function () {
+            $('.form').attr('action',"{{route('panel.PurchaseThroughTheBank')}}")
             $('.form').submit()
         })
     </script>
-
-
 
 @endsection

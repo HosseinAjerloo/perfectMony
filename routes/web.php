@@ -27,13 +27,14 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
-    Route::post('howToBuy', [App\Http\Controllers\Panel\PanelController::class, 'howToBuy'])->name('panel.howToBuy');
-    Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
+    Route::post('Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'PurchaseThroughTheBank'])->name('panel.PurchaseThroughTheBank');
 });
-Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'backWalletCharging'])->name('panel.back.wallet.charging')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+//Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'backWalletCharging'])->name('panel.back.wallet.charging')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+//Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
 
 
 Route::get('test', function () {
+    return view('Panel.RechargeWallet.BackFromTheBank');
 //    $voucher=\App\Models\Voucher::first();
 //    $payment_amount=2;
 //    return view('Panel.Delivery.index', compact('voucher', 'payment_amount'));
