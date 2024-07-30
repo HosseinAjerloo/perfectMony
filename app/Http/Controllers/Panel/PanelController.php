@@ -213,7 +213,7 @@ class PanelController extends Controller
         Payment::create(
             [
                 'bank_id' => $bank->id,
-                'invoice_id' => $invoice,
+                'invoice_id' => $invoice->id,
                 'amount' => $voucherPrice,
                 'state' => 'requested'
             ]
