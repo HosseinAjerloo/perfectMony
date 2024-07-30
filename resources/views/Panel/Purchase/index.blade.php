@@ -69,6 +69,12 @@
             </label>
         @endforeach
 
+        <div type="button" class="loading hidden" >
+
+            <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>
+            لطفا منتظر بمانید
+        </div>
+
     </article>
 @endsection
 
@@ -207,6 +213,9 @@
     <script>
         $(".wallet").click(function () {
             $('.form').submit()
+            $(this).remove();
+            $(".loading").removeClass('hidden');
+            $(".bank").remove()
         })
         $(".bank").click(function () {
             let bankId = $(this).attr('data-bank');
@@ -214,6 +223,9 @@
             $(bank).attr('checked','checked')
             $('.form').attr('action',"{{route('panel.PurchaseThroughTheBank')}}")
             $('.form').submit()
+            $(this).remove();
+            $('.wallet').remove();
+            $(".loading").removeClass('hidden');
         })
     </script>
 
