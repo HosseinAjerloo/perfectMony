@@ -28,9 +28,10 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
     Route::post('Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'PurchaseThroughTheBank'])->name('panel.PurchaseThroughTheBank');
+    Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'backWalletCharging'])->name('panel.back.wallet.charging')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+    Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
+
 });
-//Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'backWalletCharging'])->name('panel.back.wallet.charging')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
-//Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
 
 
 Route::get('test', function () {
@@ -43,18 +44,18 @@ Route::get('test', function () {
 //    try {
 
 
-        $PMAccountID ='65049907';
+    $PMAccountID = '65049907';
 
-        $PMPassPhrase ='hr_hon4774';
-        $PM = new PerfectMoneyAPI($PMAccountID, $PMPassPhrase);
+    $PMPassPhrase = 'hr_hon4774';
+    $PM = new PerfectMoneyAPI($PMAccountID, $PMPassPhrase);
 
 
-        $payerAccount = 'U47768533';
+    $payerAccount = 'U47768533';
 
-        $amount = 100;
+    $amount = 100;
 
-        $PMeVoucher = $PM->getBalance();
-        dd($PMeVoucher);
+    $PMeVoucher = $PM->getBalance();
+    dd($PMeVoucher);
 //
 //        "Payer_Account" => "U47768533"
 //  "PAYMENT_AMOUNT" => "1.01"
@@ -62,7 +63,7 @@ Route::get('test', function () {
 //  "VOUCHER_NUM" => "2711535715"
 //  "VOUCHER_CODE" => "2386574385419054"
 //  "VOUCHER_AMOUNT" => "1"
-        return json_encode($PMbalance);
+    return json_encode($PMbalance);
 
 //    } catch (Exception $exception) {
 //        return redirect()->route('panel.purchase.view')->withErrors(['ErrorCreatingVoucher' => 'ایجاد ووچر شما با خطا مواجه شد لطفا چند دقیقه دیگر تلاش کنید']);
