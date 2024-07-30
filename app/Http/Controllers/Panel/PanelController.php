@@ -210,7 +210,7 @@ class PanelController extends Controller
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.back.wallet.charging'));
-        Payment::create(
+       $payment= Payment::create(
             [
                 'bank_id' => $bank->id,
                 'invoice_id' => $invoice->id,
@@ -224,6 +224,7 @@ class PanelController extends Controller
         }
         $url = $objBank->getBankUrl();
         $token = $status;
+        session()->put('payment',$payment->id);
         return view('welcome', compact('token', 'url'));
     }
 
@@ -236,7 +237,7 @@ class PanelController extends Controller
 
     public function backWalletCharging(Request $request)
     {
-
+        dd($request->all(),session()->all());
     }
 
 
