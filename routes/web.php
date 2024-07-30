@@ -34,7 +34,7 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
 
 Route::get('test', function () {
-    return view('Panel.RechargeWallet.BackFromTheBank');
+//    return view('Panel.RechargeWallet.BackFromTheBank');
 //    $voucher=\App\Models\Voucher::first();
 //    $payment_amount=2;
 //    return view('Panel.Delivery.index', compact('voucher', 'payment_amount'));

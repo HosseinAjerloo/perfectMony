@@ -34,7 +34,9 @@
             <input type="checkbox" name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
             <input type="text" value="{{old('custom_payment')}}" name="custom_payment" id="custom_payment"
                    class="text-black hidden">
-
+            @foreach($banks as $bank)
+                <input type="radio" name="bank" value="{{$bank->id}}" id="bank-{{$bank->id}}" class="hidden">
+            @endforeach
 
         </form>
         <div class="text-center py-5 space-y-2 ">
@@ -60,10 +62,10 @@
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
         </div>
         @foreach($banks as $bank)
-            <label for="bank-{{$bank->id}}" class=" flex items-center justify-start  max-w-max   rounded-md bank cursor-pointer">
+            <label data-bank="{{$bank->id}}"
+                   class=" flex items-center justify-start  max-w-max   rounded-md  cursor-pointer bank">
                 <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
                 <span class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md"> {{$bank->name}} </span>
-                <input type="radio" name="bank" value="{{$bank->id}}" id="bank-{{$bank->id}}" class="hidden">
             </label>
         @endforeach
 
@@ -207,6 +209,9 @@
             $('.form').submit()
         })
         $(".bank").click(function () {
+            let bankId = $(this).attr('data-bank');
+            let bank = $("#bank-" + bankId);
+            $(bank).attr('checked','checked')
             $('.form').attr('action',"{{route('panel.PurchaseThroughTheBank')}}")
             $('.form').submit()
         })

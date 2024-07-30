@@ -21,9 +21,10 @@ class PurchaseThroughTheBankRequest extends FormRequest
      */
     public function rules(): array
     {
+        dd(request()->all());
         return [
             'Accepting_the_rules'=>"in:on|required",
-            'bank'=>"exists:banks,id",
+            'bank'=>"required|exists:banks,id",
             "service_id"=>"sometimes|exists:services,id",
             "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes']
         ];
@@ -31,7 +32,8 @@ class PurchaseThroughTheBankRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'custom_payment.required'=>'در صورت انتخاب نکردن خرید سریع ووچر انتخاب مبلغ دلخواه الزامی است'
+            'custom_payment.required'=>'در صورت انتخاب نکردن خرید سریع ووچر انتخاب مبلغ دلخواه الزامی است',
+            'bank.required'=>'انتخاب درگاه پرداخت الزامی است'
         ];
     }
 }
