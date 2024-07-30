@@ -206,7 +206,7 @@ class PanelController extends Controller
         $inputs['type'] = 'wallet';
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice($voucherPrice);
+        $objBank->setTotalPrice(10000);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
@@ -227,8 +227,6 @@ class PanelController extends Controller
         session()->put('payment', $payment->id);
         return view('welcome', compact('token', 'url'));
     }
-
-
 
 
     public function backPurchaseThroughTheBank(Request $request)
@@ -274,9 +272,18 @@ class PanelController extends Controller
                 'invoice_id' => $invoice->id,
                 'status' => 'requested',
                 'description' => 'ارسال در خواست به سروریس پرفکت مانی',
-                "service_id_custom" => $inputs['custom_payment']
             ]
         );
+        if (isset($invoice->service_id)) {
+
+            $voucher->update([
+                'service_id' => $service->id
+            ]);
+        } else {
+            $voucher->update([
+                "service_id_custom" => $amount
+            ]);
+        }
         if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
             $voucher->update([
                 'status' => 'finished',
