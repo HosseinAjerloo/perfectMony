@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('payment_id')->nullable()->constrained('payments')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('voucher_id')->nullable()->constrained('vouchers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer('amount')->nullable();
-            $table->enum('type',['deposit','withdrawal'])->nullable();
+            $table->enum('type',['deposit','withdrawal','wallet'])->nullable();
             $table->bigInteger('creadit_balance')->default(0);
             $table->string('description')->nullable();
             $table->timestamps();

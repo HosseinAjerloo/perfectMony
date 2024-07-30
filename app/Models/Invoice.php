@@ -10,4 +10,8 @@ class Invoice extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable=['user_id','service_id','disscount_code_id','final_amount','type','service_id_custom'];
+    public function service()
+    {
+        return $this->belongsTo(Service::class,'service_id');
+    }
 }

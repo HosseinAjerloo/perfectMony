@@ -209,8 +209,8 @@ class PanelController extends Controller
         $objBank->setTotalPrice($voucherPrice);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
-        $objBank->setUrlBack(route('panel.back.wallet.charging'));
-       $payment= Payment::create(
+        $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
+        $payment = Payment::create(
             [
                 'bank_id' => $bank->id,
                 'invoice_id' => $invoice->id,
@@ -224,20 +224,94 @@ class PanelController extends Controller
         }
         $url = $objBank->getBankUrl();
         $token = $status;
-        session()->put('payment',$payment->id);
+        session()->put('payment', $payment->id);
         return view('welcome', compact('token', 'url'));
     }
 
+
+
+
+    public function backPurchaseThroughTheBank(Request $request)
+    {
+        $user = Auth::user();
+        $balance = Auth::user()->getCreaditBalance();
+        $inputs = $request->all();
+        $payment = Payment::find(session()->get('payment'));
+        $bank = $payment->bank;
+        $objBank = new $bank->class;
+        if (!$objBank->backBank()) {
+            $payment->update(
+                [
+                    'RefNum' => null,
+                    'ResNum' => $inputs['ResNum'],
+                    'status' => 0
+                ]);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+        $payment->update(
+            [
+                'RefNum' => $inputs['RefNum'],
+                'ResNum' => $inputs['ResNum'],
+                'status' => 1
+            ]);
+        $invoice = $payment->invoice;
+        $service = '';
+        $amount = '';
+        if (isset($invoice->service_id)) {
+            $service = $invoice->service;
+            $amount = $service->amount;
+        } else {
+            $amount = $invoice->service_id_custom;
+        }
+
+
+        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+
+        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
+        $voucher = Voucher::create(
+            [
+                'user_id' => $user->id,
+                'invoice_id' => $invoice->id,
+                'status' => 'requested',
+                'description' => 'ارسال در خواست به سروریس پرفکت مانی',
+                "service_id_custom" => $inputs['custom_payment']
+            ]
+        );
+        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+            $voucher->update([
+                'status' => 'finished',
+                'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
+                "serial" => $PMeVoucher['VOUCHER_NUM'],
+                'code' => $PMeVoucher['VOUCHER_CODE']
+            ]);
+            Log::emergency("panel Controller :" . json_encode($PMeVoucher));
+            FinanceTransaction::create([
+                'user_id' => $user->id,
+                'voucher_id' => $voucher->id,
+                'amount' => $payment->amount,
+                'type' => "wallet",
+                "creadit_balance" => $balance,
+                'description' => 'خرید ووچر و پرداخت اط طریق درگاه بانکی'
+            ]);
+            $payment_amount = $inputs['custom_payment'];
+            return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
+
+
+        } else {
+            $voucher->update([
+                'status' => 'failed',
+                'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
+            ]);
+            Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
+        }
+
+    }
 
     public function walletCharging(WalletChargingRequest $request)
     {
 
 
-    }
-
-    public function backWalletCharging(Request $request)
-    {
-        dd($request->all(),session()->all());
     }
 
 
