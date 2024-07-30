@@ -21,7 +21,6 @@ class PurchaseThroughTheBankRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd(request()->all());
         return [
             'Accepting_the_rules'=>"in:on|required",
             'bank'=>"required|exists:banks,id",
