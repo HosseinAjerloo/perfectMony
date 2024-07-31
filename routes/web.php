@@ -38,7 +38,7 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
 
 Route::get('test', function () {
-
+    return view('Panel.Orders.index');
     $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
     dd($client);
 
