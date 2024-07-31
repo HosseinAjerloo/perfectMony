@@ -9,19 +9,20 @@
 
 @section('container')
 
-    <section class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto">
+    <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto" method="post" action="{{route('panel.wallet.charging.store')}}">
+        @csrf
         <article class="  bg-gray-500 w-full space-y-4 p-2">
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>مبلغ:</p>
-                <p>1500000 هزار ریال</p>
+                <p>{{$inputs['price']}}  تومان</p>
             </div>
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>شماره تراکنش:</p>
-                <p>15654</p>
+                <p>{{$inputs['orderID']}}</p>
             </div>
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p> تاریخ و ساعت:</p>
-                <p>8 مرداد 1403</p>
+                <p>{{\Morilog\Jalali\Jalalian::forge(\Carbon\Carbon::now()->toDateTimeString())->format('%B %d، %Y')}}</p>
             </div>
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>وضعیت:</p>
@@ -32,9 +33,10 @@
             <button class="bg-sky-500 py-1.5 px-12 rounded-md ">پرداخت مبلغ</button>
         </div>
         <div class=" flex items-center justify-start  max-w-max  rounded-md ">
-            <button class="bg-sky-500 py-1.5 px-10 rounded-md ">بازگشت</button>
+            <a href="{{route('panel.wallet.charging')}}" class="bg-sky-500 py-1.5 px-10 rounded-md ">بازگشت</a>
         </div>
-    </section>
+        <input type="hidden" name="price" value="{{$inputs['price']}}">
+    </form>
 
 @endsection
 

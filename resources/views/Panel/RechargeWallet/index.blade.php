@@ -10,8 +10,7 @@
 @section('container')
 
 
-    <form class="flex items-center justify-center flex-col space-y-3  w-full sm:w-1/2 mx-auto" action="{{route('panel.wallet.charging.store')}}" method="POST">
-        @csrf
+    <form class="flex items-center justify-center flex-col space-y-3  w-full sm:w-1/2 mx-auto" action="{{route('panel.wallet.charging-Preview')}}" method="get">
         <p class="text-center text-sm py-2 sm:text-base ">
             مبلغ (تومان) :
         </p>

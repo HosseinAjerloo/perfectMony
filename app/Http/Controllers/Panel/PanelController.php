@@ -207,7 +207,7 @@ class PanelController extends Controller
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
         $objBank->setTotalPrice(10000);
-        $orderID=rand(100000, 999999);
+        $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
@@ -218,7 +218,7 @@ class PanelController extends Controller
                 'invoice_id' => $invoice->id,
                 'amount' => $voucherPrice,
                 'state' => 'requested',
-                'order_id'=>$orderID
+                'order_id' => $orderID
             ]
         );
         $status = $objBank->payment();
@@ -316,7 +316,7 @@ class PanelController extends Controller
                 'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
             ]);
             Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی  با پشتیبانی تماس حاصل فرمایید."]);
         }
 
     }
@@ -325,45 +325,95 @@ class PanelController extends Controller
     {
         $user = Auth::user();
         $balance = $user->getCreaditBalance();
-        $balance=numberFormat($balance);
-            return view("Panel.RechargeWallet.index",compact('balance'));
+        $balance = numberFormat($balance);
+        return view("Panel.RechargeWallet.index", compact('balance'));
     }
+
+    public function walletChargingPreview(WalletChargingRequest $request)
+    {
+        $inputs = $request->all();
+        $orderID = rand(100000, 999999);
+        $inputs['orderID'] = $orderID;
+        session()->put('orderID', $orderID);
+        return view("Panel.RechargeWallet.FinalApproval", compact('inputs'));
+    }
+
     public function walletChargingStore(WalletChargingRequest $request)
     {
-        $inputs=$request->all();
-        $inputs['price'].=0;
-        $bank=Bank::find('1');
-        $user=Auth::user();
-        $objBank = new $bank->class;
-        $objBank->setTotalPrice($inputs['price']);
-        $objBank->setBankUrl($bank->url);
-        $orderID=rand(100000, 999999);
-        $objBank->setOrderID($orderID);
-        $objBank->setTerminalId($bank->terminal_id);
-        $objBank->setUrlBack(route('panel.wallet.charging.back'));
+        if (session()->has('orderID')) {
+            $inputs = $request->all();
+            $inputs['price'] .= 0;
+            $bank = Bank::find('1');
+            $user = Auth::user();
+            $objBank = new $bank->class;
+            $objBank->setTotalPrice($inputs['price']);
+            $objBank->setBankUrl($bank->url);
 
+            $objBank->setOrderID(session()->get('orderID'));
+            $objBank->setTerminalId($bank->terminal_id);
+            $objBank->setUrlBack(route('panel.wallet.charging.back'));
+            $bank = Bank::find('1');
 
-        $payment = Payment::create(
-            [
-                'bank_id' => $bank->id,
-                'amount' => $inputs['price'],
-                'state' => 'requested',
-                'order_id'=>$orderID
+            $payment = Payment::create(
+                [
+                    'bank_id' => $bank->id,
+                    'amount' => $inputs['price'],
+                    'state' => 'requested',
+                    'order_id' => session()->get('orderID')
 
-            ]
-        );
-        $status = $objBank->payment();
-        if (!$status) {
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+                ]);
+            session()->put('payment', $payment->id);
+
+            $status = $objBank->payment();
+            if (!$status) {
+                return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+            }
+            $url = $objBank->getBankUrl();
+            $token = $status;
+            return view('welcome', compact('token', 'url'));
+        } else {
+            return redirect()->route('panel.wallet.charging')->withErrors(['error' => 'خطایی رخ داد لفا مجدد بعدا تلاش فرمایید.']);
         }
-        $url = $objBank->getBankUrl();
-        $token = $status;
-        session()->put('payment', $payment->id);
-        return view('welcome', compact('token', 'url'));
     }
+
     public function walletChargingBack(Request $request)
     {
-        dd($request->session());
+        $user = Auth::user();
+        $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
+        $inputs = $request->all();
+        $payment = Payment::find(session()->get('payment'));
+        $bank = $payment->bank;
+        $objBank = new $bank->class;
+        if (!$objBank->backBank()) {
+            $payment->update(
+                [
+                    'RefNum' => null,
+                    'ResNum' => $inputs['ResNum'],
+                    'state' => 'failed'
+
+                ]);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+        $payment->update(
+            [
+                'RefNum' => $inputs['RefNum'],
+                'ResNum' => $inputs['ResNum'],
+                'state' => 'finished'
+
+            ]);
+        if ($lastBalance) {
+            $amount = $payment->amount + $lastBalance->creadit_balance;
+        } else {
+            $amount = $payment->amount;
+        }
+        FinanceTransaction::create([
+            'user_id' => $user->id,
+            'amount' => $payment->amount,
+            'type' => "wallet",
+            "creadit_balance" => $amount,
+            'description' => 'فزایش کیف مبلغ کیف پول'
+        ]);
+        return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
     }
 
 
