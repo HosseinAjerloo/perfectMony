@@ -11,7 +11,7 @@
 
     <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto" method="post" action="{{route('panel.wallet.charging.store')}}">
         @csrf
-        <article class="  bg-gray-500 w-full space-y-4 p-2">
+        <article class="bg-gray-500 w-full space-y-4 p-2">
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>مبلغ:</p>
                 <p>{{$inputs['price']}}  تومان</p>
