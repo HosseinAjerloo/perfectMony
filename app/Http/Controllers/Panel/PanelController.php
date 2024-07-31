@@ -406,6 +406,20 @@ class PanelController extends Controller
         } else {
             $amount = $payment->amount;
         }
+
+        $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+        $back_price = $client->VerifyTransaction($payment->RefNum, $bank->terminal_id);
+        if ($back_price < 0) {
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+
+        } else {
+
+            if ($payment->amount != $inputs['Amount']) {
+                return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود به دلیل مقایر در مبلغ تراکنش']);
+
+            }
+        }
         FinanceTransaction::create([
             'user_id' => $user->id,
             'amount' => $payment->amount,
