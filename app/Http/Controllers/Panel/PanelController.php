@@ -212,7 +212,7 @@ class PanelController extends Controller
             return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
         }
         $inputs['final_amount'] = $voucherPrice;
-        $inputs['type'] = 'wallet';
+        $inputs['type'] = 'service';
         $inputs['status']='requested';
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
@@ -314,9 +314,9 @@ class PanelController extends Controller
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
                 'amount' => $payment->amount,
-                'type' => "wallet",
+                'type' => "bank",
                 "creadit_balance" => $balance,
-                'description' => 'خرید ووچر و پرداخت اط طریق درگاه بانکی'
+                'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی'
             ]);
             $invoice->update(['status'=>'finished']);
             $payment_amount = $inputs['custom_payment'];
@@ -336,6 +336,7 @@ class PanelController extends Controller
                 "creadit_balance" => $balance,
                 'description' => 'اتصال به درگاه پرفکت مانی انجام نشد لطفا در ساعات آینده مجددا تلاش فرمایید'
             ]);
+            $invoice->update(['status'=>'failed']);
             Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی  با پشتیبانی تماس حاصل فرمایید."]);
         }
@@ -444,7 +445,7 @@ class PanelController extends Controller
         FinanceTransaction::create([
             'user_id' => $user->id,
             'amount' => $payment->amount,
-            'type' => "wallet",
+            'type' => "deposit",
             "creadit_balance" => $amount,
             'description' => 'افزایش   مبلغ کیف پول'
         ]);
