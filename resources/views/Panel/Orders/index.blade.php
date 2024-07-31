@@ -29,7 +29,7 @@
                  </div>
                  <a href="" class="bg-gray-100 px-4 py-1.5 rounded-md space-x-3">
                      <i class="fa-solid fa-eye text-black"></i>
-                     <span class="text-black">مشاهده جزئیات</span>
+                     <span class="text-black">جزئیات خرید</span>
                  </a>
              </div>
          </article>
