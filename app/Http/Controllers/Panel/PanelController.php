@@ -411,7 +411,7 @@ class PanelController extends Controller
             'amount' => $payment->amount,
             'type' => "wallet",
             "creadit_balance" => $amount,
-            'description' => 'فزایش کیف مبلغ کیف پول'
+            'description' => 'افزایش   مبلغ کیف پول'
         ]);
         return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
     }

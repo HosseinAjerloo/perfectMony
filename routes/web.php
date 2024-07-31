@@ -38,6 +38,29 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
 
 Route::get('test', function () {
+
+    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+    dd($client);
+
+//    $back_price = $client->VerifyTransaction($refnum, $bankinfo['Terminal']);
+//    if ($back_price < 0) {
+//        self::update_saman_payref($orderid, $refnum);
+//        self::update_order_status($orderid, 602);
+//        return array(0, 602);
+//    } else {
+//        $order_result = mysql_query("select * from on_epayment where Serial = '$orderid' ");
+//        $order_det = parent::fetchArray($order_result);
+//
+//        if (intval($back_price) != intval($order_det['TotalPrice'])) {
+//            self::update_saman_payref($orderid, $refnum);
+//            self::update_order_status($orderid, 603);
+//            return array(0, 603);
+//        } else {
+//            self::update_saman_payref($orderid, $refnum);
+//            self::update_order_payment_success($orderid);
+//            return array(1, 0);
+//        }
+
     $user=\Illuminate\Support\Facades\Auth::user();
     dd();
 //    return view('Panel.RechargeWallet.BackFromTheBank');
