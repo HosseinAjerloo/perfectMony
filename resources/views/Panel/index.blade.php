@@ -20,7 +20,7 @@
     <article class="py-5 px-3 flex flex-col items-center justify-center space-y-9">
         <div class="bg-sky-500 px-4  rounded-md flex items-center justify-between space-x-3 space-x-reverse">
             <p class="text-center font-semibold">
-                <span class="text-lg font-semibold text-sky-500">$</span> موجودی شما : {{$balance}} تومان
+                <span class="text-lg font-semibold text-sky-500">$</span> موجودی شما : {{$balance}} ریال
             </p>
             <a href="{{route('panel.wallet.charging')}}" class="border-r pr-2 ">
                 <i class="fa-solid fa-plus w-6 h-6 mt-2"></i>

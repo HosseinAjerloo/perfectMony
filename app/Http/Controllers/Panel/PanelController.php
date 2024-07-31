@@ -366,13 +366,13 @@ class PanelController extends Controller
 
             $status = $objBank->payment();
             if (!$status) {
-                return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+                return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
             }
             $url = $objBank->getBankUrl();
             $token = $status;
             return view('welcome', compact('token', 'url'));
         } else {
-            return redirect()->route('panel.wallet.charging')->withErrors(['error' => 'خطایی رخ داد لفا مجدد بعدا تلاش فرمایید.']);
+            return redirect()->route('panel.index')->withErrors(['error' => 'خطایی رخ داد لفا مجدد بعدا تلاش فرمایید.']);
         }
     }
 
@@ -392,7 +392,7 @@ class PanelController extends Controller
                     'state' => 'failed'
 
                 ]);
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            return redirect()->route('panel.index')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
         $payment->update(
             [
