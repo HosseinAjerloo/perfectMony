@@ -315,6 +315,14 @@ class PanelController extends Controller
                 'status' => 'failed',
                 'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
             ]);
+            FinanceTransaction::create([
+                'user_id' => $user->id,
+                'voucher_id' => $voucher->id,
+                'amount' => $payment->amount,
+                'type' => "wallet",
+                "creadit_balance" => $balance,
+                'description' => 'اتصال به درگاه پرفکت مانی انجام نشد لطفا در ساعات آینده مجددا تلاش فرمایید'
+            ]);
             Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی  با پشتیبانی تماس حاصل فرمایید."]);
         }
