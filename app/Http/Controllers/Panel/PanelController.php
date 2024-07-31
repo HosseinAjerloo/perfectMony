@@ -384,16 +384,16 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        if (!$objBank->backBank()) {
-            $payment->update(
-                [
-                    'RefNum' => null,
-                    'ResNum' => $inputs['ResNum'],
-                    'state' => 'failed'
-
-                ]);
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
-        }
+//        if (!$objBank->backBank()) {
+//            $payment->update(
+//                [
+//                    'RefNum' => null,
+//                    'ResNum' => $inputs['ResNum'],
+//                    'state' => 'failed'
+//
+//                ]);
+//            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+//        }
         $payment->update(
             [
                 'RefNum' => $inputs['RefNum'],
@@ -407,7 +407,7 @@ class PanelController extends Controller
             $amount = $payment->amount;
         }
 
-        $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($payment->RefNum, $bank->terminal_id);
         if ($back_price < 0) {
