@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->foreignId('disscount_code_id')->nullable()->constrained('disscount_codes')->cascadeOnUpdate()->cascadeOnDelete();
             $table->bigInteger('final_amount')->nullable();
             $table->enum('type', ['service', 'wallet'])->nullable();
+            $table->enum('status',['requested','failed','finished'])->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
