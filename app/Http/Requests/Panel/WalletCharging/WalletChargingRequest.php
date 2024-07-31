@@ -22,16 +22,12 @@ class WalletChargingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Accepting_the_rules'=>"in:on|required",
-            'bank'=>"exists:banks,id",
-            "service_id"=>"sometimes|exists:services,id",
-            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes']
+            'price'=>'numeric|min:1000|required'
         ];
     }
-    public function messages(): array
+    public function messages()
     {
-        return [
-            'custom_payment.required'=>'در صورت انتخاب نکردن خرید سریع ووچر انتخاب مبلغ دلخواه الزامی است'
-        ];
+        return ['price.min'=>"مبلغ شارژ نباید کنتر از 1000 تومان باشد"];
     }
+
 }

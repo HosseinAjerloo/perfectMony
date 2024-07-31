@@ -207,6 +207,8 @@ class PanelController extends Controller
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
         $objBank->setTotalPrice(10000);
+        $orderID=rand(100000, 999999);
+        $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
@@ -215,7 +217,8 @@ class PanelController extends Controller
                 'bank_id' => $bank->id,
                 'invoice_id' => $invoice->id,
                 'amount' => $voucherPrice,
-                'state' => 'requested'
+                'state' => 'requested',
+                'order_id'=>$orderID
             ]
         );
         $status = $objBank->payment();
@@ -242,7 +245,9 @@ class PanelController extends Controller
                 [
                     'RefNum' => null,
                     'ResNum' => $inputs['ResNum'],
-                    'status' => 0
+                    'state' => 'failed'
+
+
                 ]);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
@@ -250,7 +255,8 @@ class PanelController extends Controller
             [
                 'RefNum' => $inputs['RefNum'],
                 'ResNum' => $inputs['ResNum'],
-                'status' => 1
+                'state' => 'finished'
+
             ]);
         $invoice = $payment->invoice;
         $service = '';
@@ -315,10 +321,49 @@ class PanelController extends Controller
 
     }
 
-    public function walletCharging(WalletChargingRequest $request)
+    public function walletCharging(Request $request)
     {
+        $user = Auth::user();
+        $balance = $user->getCreaditBalance();
+        $balance=numberFormat($balance);
+            return view("Panel.RechargeWallet.index",compact('balance'));
+    }
+    public function walletChargingStore(WalletChargingRequest $request)
+    {
+        $inputs=$request->all();
+        $inputs['price'].=0;
+        $bank=Bank::find('1');
+        $user=Auth::user();
+        $objBank = new $bank->class;
+        $objBank->setTotalPrice($inputs['price']);
+        $objBank->setBankUrl($bank->url);
+        $orderID=rand(100000, 999999);
+        $objBank->setOrderID($orderID);
+        $objBank->setTerminalId($bank->terminal_id);
+        $objBank->setUrlBack(route('panel.wallet.charging.back'));
 
 
+        $payment = Payment::create(
+            [
+                'bank_id' => $bank->id,
+                'amount' => $inputs['price'],
+                'state' => 'requested',
+                'order_id'=>$orderID
+
+            ]
+        );
+        $status = $objBank->payment();
+        if (!$status) {
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+        }
+        $url = $objBank->getBankUrl();
+        $token = $status;
+        session()->put('payment', $payment->id);
+        return view('welcome', compact('token', 'url'));
+    }
+    public function walletChargingBack(Request $request)
+    {
+        dd($request->session());
     }
 
 

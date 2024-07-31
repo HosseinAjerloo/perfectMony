@@ -16,7 +16,6 @@ class Saman implements BankInterface
 
     public function payment()
     {
-        $this->orderID = rand(100000, 999999);
 
 
 
@@ -110,6 +109,14 @@ class Saman implements BankInterface
     public function getUrlBack()
     {
         return $this->urlBack;
+    }
+    public function setOrderID($orderID)
+    {
+        $this->orderID=$orderID;
+    }
+    public function getOrderID()
+    {
+        return $this->orderID;
     }
 
 }

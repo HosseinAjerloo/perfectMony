@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Payment extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable=['bank_id','invoice_id','state','amount','RefNum','ResNum','status'];
+    protected $fillable=['bank_id','invoice_id','state','amount','RefNum','ResNum','order_id'];
 
     public function bank()
     {
