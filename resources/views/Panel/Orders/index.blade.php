@@ -4,7 +4,7 @@
 @section('container')
 
 
-    <section class="mx-auto px-4 sm:w-3/4 md:w-3/5 lg:w-2/5 space-y-3">
+    <section class="mx-auto px-4 sm:w-3/4 md:w-3/5 lg:w-2/5 space-y-5">
          <article class="border-2 rounded-md border-white p-3 space-y-3.5">
              <div class="text-sm sm:text-base flex items-center justify-between">
                  <p>شماره تراکنش: 5489</p>
