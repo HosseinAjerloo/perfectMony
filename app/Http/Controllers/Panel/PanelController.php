@@ -332,7 +332,7 @@ class PanelController extends Controller
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
                 'amount' => $payment->amount,
-                'type' => "wallet",
+                'type' => "bank",
                 "creadit_balance" => $balance,
                 "status" => 'fail',
                 'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد'
