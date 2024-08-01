@@ -49,10 +49,10 @@
 
                 <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
                     <div class="flex items-center space-x-16 space-x-reverse">
-                        <p class="text-sm sm:text-base font-semibold">کد ووجر:</p>
+                        <p class="text-sm sm:text-base font-semibold">شماره ووچر:</p>
                         <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                            <span  class="inline-block">{{$financeTransaction->voucher->code}}</span>
+                            <span  class="inline-block"> {{$financeTransaction->voucher->serial}}</span>
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         <p class="text-sm sm:text-base font-semibold">کد فعال سازی:</p>
                         <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                            <span  class="inline-block">{{$financeTransaction->voucher->serial}}</span>
+                            <span  class="inline-block">{{$financeTransaction->voucher->code}}</span>
                         </div>
                     </div>
                 </div>
