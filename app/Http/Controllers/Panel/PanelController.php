@@ -216,7 +216,7 @@ class PanelController extends Controller
         $inputs['status']='requested';
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice($voucherPrice);
+        $objBank->setTotalPrice(10000);
         $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
