@@ -103,7 +103,7 @@ class PanelController extends Controller
                 } else {
                     $voucher->update([
                         'status' => 'failed',
-                        'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
+                        'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
                     ]);
                     $invoice->update(['status'=>'failed']);
 
@@ -163,7 +163,7 @@ class PanelController extends Controller
                 } else {
                     $voucher->update([
                         'status' => 'failed',
-                        'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
+                        'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
                     ]);
                     $invoice->update(['status'=>'failed']);
 
@@ -216,7 +216,7 @@ class PanelController extends Controller
         $inputs['status']='requested';
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(10000);
+        $objBank->setTotalPrice($voucherPrice);
         $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
@@ -326,7 +326,7 @@ class PanelController extends Controller
         } else {
             $voucher->update([
                 'status' => 'failed',
-                'description' => "ارتباط با سروریس پرفکت مانی موفقیت آمیز بود. متن خطا ({$PMeVoucher['ERROR']})",
+                'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
             ]);
             FinanceTransaction::create([
                 'user_id' => $user->id,
@@ -334,9 +334,10 @@ class PanelController extends Controller
                 'amount' => $payment->amount,
                 'type' => "wallet",
                 "creadit_balance" => $balance,
-                'description' => 'اتصال به درگاه پرفکت مانی انجام نشد لطفا در ساعات آینده مجددا تلاش فرمایید'
+                "status" => 'fail',
+                'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد'
             ]);
-            $invoice->update(['status'=>'failed']);
+            $invoice->update(['status'=>'finished']);
             Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی  با پشتیبانی تماس حاصل فرمایید."]);
         }
