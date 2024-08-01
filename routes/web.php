@@ -33,14 +33,13 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::get('wallet-charging-Preview', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingPreview'])->name('panel.wallet.charging-Preview');
     Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingStore'])->name('panel.wallet.charging.store');
     Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingBack'])->name('panel.wallet.charging.back')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;
-
+    Route::get('order',[App\Http\Controllers\Panel\OrderController::class,'index'])->name('panel.order');
 });
 
 
 Route::get('test', function () {
-    return view('Panel.Orders.index');
-    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-    dd($client);
+//    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+//    dd($client);
 
 //    $back_price = $client->VerifyTransaction($refnum, $bankinfo['Terminal']);
 //    if ($back_price < 0) {
@@ -62,7 +61,6 @@ Route::get('test', function () {
 //        }
 
     $user=\Illuminate\Support\Facades\Auth::user();
-    dd();
 //    return view('Panel.RechargeWallet.BackFromTheBank');
 //    $voucher=\App\Models\Voucher::first();
 //    $payment_amount=2;
