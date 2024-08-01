@@ -38,7 +38,7 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
 
 Route::get('test', function () {
-//    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+///    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 //    dd($client);
 
 //    $back_price = $client->VerifyTransaction($refnum, $bankinfo['Terminal']);
