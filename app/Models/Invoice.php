@@ -14,4 +14,12 @@ class Invoice extends Model
     {
         return $this->belongsTo(Service::class,'service_id');
     }
+    public function voucherAmount()
+    {
+        if ($this->service_id) {
+            return $this->service->amount;
+        } else {
+            return $this->service_id_custom;
+        }
+    }
 }

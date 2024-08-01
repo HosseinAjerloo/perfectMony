@@ -48,7 +48,7 @@
                 </a>
             </div>
             <div class="border-2 border-2-white rounded-md py-3 px-3 f w-full text-center   bg-gray-800">
-                <a href="" class="text-center flex items-center space-x-2 space-x-reverse">
+                <a href="{{route('panel.order.expectation')}}" class="text-center flex items-center space-x-2 space-x-reverse">
                     <img src="{{asset('src/images/mony.png')}}" alt="" class="w-6 h-6">
                     <p>سوابق مالی</p>
                 </a>
