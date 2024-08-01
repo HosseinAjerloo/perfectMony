@@ -324,7 +324,12 @@ class PanelController extends Controller
                 'time_price_of_dollars'=>$dollar->amount_to_rials
             ]);
             $invoice->update(['status'=>'finished']);
-            $payment_amount = $inputs['custom_payment'];
+            if (isset($invoice->service_id)) {
+                $service = $invoice->service;
+                $payment_amount= $service->amount;
+            } else {
+                $payment_amount= $invoice->service_id_custom;
+            }
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
