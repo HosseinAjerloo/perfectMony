@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('status',['success','fail'])->default('success');
             $table->bigInteger('creadit_balance')->default(0);
             $table->string('description')->nullable();
+            $table->integer('time_price_of_dollars')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

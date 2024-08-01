@@ -66,6 +66,7 @@ class PanelController extends Controller
                 $inputs['final_amount'] = $voucherPrice;
                 $inputs['type'] = 'service';
                 $inputs['status']='requested';
+                $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
                 $invoice = Invoice::create($inputs);
 
                 $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
@@ -123,6 +124,7 @@ class PanelController extends Controller
                 $inputs['type'] = 'service';
                 $inputs['service_id_custom'] = $inputs['custom_payment'];
                 $inputs['status']='requested';
+                $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
                 $invoice = Invoice::create($inputs);
 
                 $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
@@ -214,9 +216,10 @@ class PanelController extends Controller
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'service';
         $inputs['status']='requested';
+        $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(10000);
+        $objBank->setTotalPrice($voucherPrice);
         $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
@@ -244,6 +247,7 @@ class PanelController extends Controller
 
     public function backPurchaseThroughTheBank(Request $request)
     {
+        $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
         $balance = Auth::user()->getCreaditBalance();
         $inputs = $request->all();
@@ -257,7 +261,6 @@ class PanelController extends Controller
                     'RefNum' => null,
                     'ResNum' => $inputs['ResNum'],
                     'state' => 'failed'
-
 
                 ]);
             $invoice->update(['status'=>'failed']);
@@ -316,7 +319,9 @@ class PanelController extends Controller
                 'amount' => $payment->amount,
                 'type' => "bank",
                 "creadit_balance" => $balance,
-                'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی'
+                'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی',
+                'payment_id'=>$payment->id,
+                'time_price_of_dollars'=>$dollar->amount_to_rials
             ]);
             $invoice->update(['status'=>'finished']);
             $payment_amount = $inputs['custom_payment'];
@@ -335,11 +340,14 @@ class PanelController extends Controller
                 'type' => "bank",
                 "creadit_balance" => $balance,
                 "status" => 'fail',
-                'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد'
+                'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد',
+                'payment_id'=>$payment->id,
+                'time_price_of_dollars'=>$dollar->amount_to_rials
+
             ]);
             $invoice->update(['status'=>'finished']);
             Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی  با پشتیبانی تماس حاصل فرمایید."]);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود  پشتیبانی تماس حاصل فرمایید."]);
         }
 
     }
@@ -430,25 +438,15 @@ class PanelController extends Controller
             $amount = $payment->amount;
         }
 
-//        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-//
-//        $back_price = $client->VerifyTransaction($payment->RefNum, $bank->terminal_id);
-//        if ($back_price < 0) {
-//            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
-//
-//        } else {
-//
-//            if ($payment->amount != $inputs['Amount']) {
-//                return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود به دلیل مقایر در مبلغ تراکنش']);
-//
-//            }
-//        }
+
         FinanceTransaction::create([
             'user_id' => $user->id,
             'amount' => $payment->amount,
             'type' => "deposit",
             "creadit_balance" => $amount,
-            'description' => 'افزایش   مبلغ کیف پول'
+            'description' => 'افزایش   مبلغ کیف پول',
+            'payment_id'=>$payment->id
+
         ]);
         return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
     }

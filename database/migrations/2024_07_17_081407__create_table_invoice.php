@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->integer('service_id_custom')->nullable()->comment('در صورتی پر میشود که کاربر بخواهد از سرویس سفارشی استفاده کند');
             $table->foreignId('disscount_code_id')->nullable()->constrained('disscount_codes')->cascadeOnUpdate()->cascadeOnDelete();
             $table->bigInteger('final_amount')->nullable();
+            $table->integer('time_price_of_dollars')->nullable();
             $table->enum('type', ['service', 'wallet'])->nullable();
             $table->enum('status',['requested','failed','finished'])->nullable();
             $table->timestamps();

@@ -34,6 +34,7 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingStore'])->name('panel.wallet.charging.store');
     Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingBack'])->name('panel.wallet.charging.back')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;
     Route::get('order',[App\Http\Controllers\Panel\OrderController::class,'index'])->name('panel.order');
+    Route::get('order/{financeTransaction}/details',[App\Http\Controllers\Panel\OrderController::class,'details'])->name('panel.order.details');
 });
 
 
