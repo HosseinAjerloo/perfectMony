@@ -70,7 +70,7 @@
                         <p class="text-sm sm:text-base font-semibold">شماره سفارش:</p>
                         <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                            <span  class="inline-block">20</span>
+                            <span  class="inline-block">{{$financeTransaction->id}}</span>
                         </div>
                     </div>
                 </div>
