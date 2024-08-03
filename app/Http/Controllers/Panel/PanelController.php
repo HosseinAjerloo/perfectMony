@@ -399,6 +399,7 @@ class PanelController extends Controller
                 ]);
 
             $status = $objBank->payment();
+            dd($objBank->payment());
             if (!$status) {
                 return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
             }
