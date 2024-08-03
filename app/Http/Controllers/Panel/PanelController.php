@@ -392,6 +392,7 @@ class PanelController extends Controller
             $bank = Bank::find('1');
 
             $payment = Payment::find(session()->get('payment'));
+            dd($payment);
             $payment = $payment->update(
                 ['bank_id' => $bank->id,
                     'amount' => $inputs['price'],
