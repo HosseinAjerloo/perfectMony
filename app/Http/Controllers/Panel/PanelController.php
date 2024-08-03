@@ -216,7 +216,7 @@ class PanelController extends Controller
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(10000);
+        $objBank->setTotalPrice(100000);
         $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
