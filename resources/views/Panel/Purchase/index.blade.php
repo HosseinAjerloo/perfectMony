@@ -41,7 +41,7 @@
         </form>
         <div class="text-center py-5 space-y-2 ">
             <p class="text-yellow-600 font-semibold text-sm sm:text-base tracking-tight">
-                نرخ دلار پرفکت مانی:{{$dollar->amount_to_rials}} هزار ریال
+                نرخ دلار پرفکت مانی:{{numberFormat($dollar->DollarRateWithAddedValue())}} هزار ریال
             </p>
             <p class="font-semibold text-sm sm:text-base payment-text"></p>
         </div>
@@ -103,6 +103,7 @@
                 let customPayment = $("." + callElementTarget);
                 let SelectionDaller = $(".dollar");
                 let dollar = "{{$dollar->amount_to_rials}}"
+                dollar=parseFloat(dollar)+(parseFloat(dollar)*commission());
                 let payment_text = $('.payment-text')
                 let defaultInputValue = "{{old('service_id')}}";
                 if (defaultInputValue !== undefined && defaultInputValue > 0) {
@@ -150,6 +151,7 @@
             let customPayment = $("." + callElementTarget);
             let payment_text = $('.payment-text')
             let dollar = "{{$dollar->amount_to_rials}}"
+            dollar=parseFloat(dollar)+(parseFloat(dollar)*commission());
             if (defaultInputTarget !== undefined && defaultInputTarget > 0) {
                 $(customPayment).val(defaultInputTarget)
                 eventChangeInput(false);
@@ -228,5 +230,10 @@
             $(".loading").removeClass('hidden');
         })
     </script>
-
+    <script>
+        function commission()
+        {
+            return 0.0199;
+        }
+    </script>
 @endsection

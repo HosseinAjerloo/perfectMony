@@ -57,15 +57,17 @@ class PanelController extends Controller
             if (isset($inputs['service_id'])) {
                 $service = Service::find($inputs['service_id']);
 
-                $voucherPrice = $dollar->amount_to_rials * $service->amount;
+                $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
+
 
                 if ($voucherPrice > $balance) {
                     return redirect()->route('panel.purchase.view')->withErrors(['Low_inventory' => "موجودی کیف پول شما کافی نیست"]);
                 }
+
                 $inputs['final_amount'] = $voucherPrice;
                 $inputs['type'] = 'service';
                 $inputs['status']='requested';
-                $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
+                $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
                 $invoice = Invoice::create($inputs);
 
                 $this->generateVoucher($service->amount);
@@ -113,7 +115,7 @@ class PanelController extends Controller
             } elseif (isset($inputs['custom_payment'])) {
 
 
-                $voucherPrice = $dollar->amount_to_rials * $inputs['custom_payment'];
+                $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
 
                 if ($voucherPrice > $balance) {
                     return redirect()->route('panel.purchase.view')->withErrors(['Low_inventory' => "موجودی کیف پول شما کافی نیست"]);
@@ -122,7 +124,7 @@ class PanelController extends Controller
                 $inputs['type'] = 'service';
                 $inputs['service_id_custom'] = $inputs['custom_payment'];
                 $inputs['status']='requested';
-                $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
+                $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
                 $invoice = Invoice::create($inputs);
 
                 $this->generateVoucher($inputs['custom_payment']);
@@ -204,20 +206,20 @@ class PanelController extends Controller
 
         if (isset($inputs['service_id'])) {
             $service = Service::find($inputs['service_id']);
-            $voucherPrice = $dollar->amount_to_rials * $service->amount;
+            $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
         } elseif (isset($inputs['custom_payment'])) {
             $inputs['service_id_custom'] = $inputs['custom_payment'];
-            $voucherPrice = $dollar->amount_to_rials * $inputs['custom_payment'];
+            $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
         } else {
             return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
         }
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'service';
         $inputs['status']='requested';
-        $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
+        $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(10000);
+        $objBank->setTotalPrice($voucherPrice);
         $orderID = rand(100000, 999999);
         $objBank->setOrderID($orderID);
         $objBank->setBankUrl($bank->url);
@@ -317,7 +319,7 @@ class PanelController extends Controller
                 "creadit_balance" => $balance,
                 'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی',
                 'payment_id'=>$payment->id,
-                'time_price_of_dollars'=>$dollar->amount_to_rials
+                'time_price_of_dollars'=>$dollar->DollarRateWithAddedValue()
             ]);
             $invoice->update(['status'=>'finished']);
             if (isset($invoice->service_id)) {
@@ -343,7 +345,7 @@ class PanelController extends Controller
                 "status" => 'fail',
                 'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد',
                 'payment_id'=>$payment->id,
-                'time_price_of_dollars'=>$dollar->amount_to_rials
+                'time_price_of_dollars'=>$dollar->DollarRateWithAddedValue()
 
             ]);
             $invoice->update(['status'=>'finished']);
