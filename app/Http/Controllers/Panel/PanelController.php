@@ -268,8 +268,7 @@ class PanelController extends Controller
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
-        dd($back_price,Payment::where("order_id",$inputs['ResNum'])->count(),($payment->amount==$back_price));
-        if ($back_price != $payment->amount and Payment::where("order_id",$inputs['ResNum'])->count()>1) {
+        if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
 
