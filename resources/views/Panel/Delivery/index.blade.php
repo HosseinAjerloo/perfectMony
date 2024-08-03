@@ -19,7 +19,7 @@
                 </p>
                 <div class=" relative">
                     <div class="flex items-center space-x-3 space-x-reverse">
-                        <span class="text-sm sm:text-base">2154</span>
+                        <span class="text-sm sm:text-base">{{$voucher->serial}}</span>
                         <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
                     </div>
 
