@@ -12,10 +12,12 @@
                     <p class="text-center">مبلغ کل:{{$transaction->amount}} ریال</p>
                 </div>
                 <div class="text-sm sm:text-base flex items-center justify-between">
-                    <div class="flex items-center space-x-2 space-x-reverse">
-                        <img src="{{asset('src/images/prl.png')}}" alt="">
-                        <p>خرید ووچر پرفکت مانی {{$transaction->voucher->voucherAmount()}} دلاری</p>
-                    </div>
+                    @if($transaction->voucher)
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <img src="{{asset('src/images/prl.png')}}" alt="">
+                            <p>خرید ووچر پرفکت مانی {{$transaction->voucher->voucherAmount()}} دلاری</p>
+                        </div>
+                    @endif
                     <p class="text-center">
                         وضعیت:
                         @if($transaction->status=='success')

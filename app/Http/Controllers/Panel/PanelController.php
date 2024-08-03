@@ -343,7 +343,7 @@ class PanelController extends Controller
                 'amount' => $payment->amount,
                 'type' => "deposit",
                 "creadit_balance" => $balance + $payment->amount,
-                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد',
+                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه منید',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
@@ -426,6 +426,12 @@ class PanelController extends Controller
 
                 ]);
             return redirect()->route('panel.index')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
+        if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
         $payment->update(
             [

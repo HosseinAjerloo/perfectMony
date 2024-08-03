@@ -16,7 +16,7 @@ class OrderController extends Controller
     {
         $user=Auth::user();
 
-        $financeTransactions=FinanceTransaction::where('user_id',$user->id)->whereNotIn('type',['deposit'])->get();
+        $financeTransactions=FinanceTransaction::where('user_id',$user->id)->get();
         return view('Panel.Orders.index',compact('financeTransactions'));
     }
     public function details(FinanceTransaction $financeTransaction)
@@ -28,7 +28,7 @@ class OrderController extends Controller
     {
 
         $user=Auth::user();
-        $invoices=Invoice::where('user_id',$user->id)->whereNotIn('status',['finished'])->cursorPaginate(5);
+        $invoices=Invoice::where('user_id',$user->id)->whereNotIn('status',['finished'])->get();
 
         return view('Panel.Orders.expectation',compact('invoices'));
     }

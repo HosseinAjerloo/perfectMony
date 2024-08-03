@@ -11,10 +11,12 @@
                 <p class="text-center">مبلغ کل:{{$financeTransaction->amount}} ریال</p>
             </div>
             <div class="text-sm sm:text-base flex items-center justify-between">
-                <div class="flex items-center space-x-2 space-x-reverse">
-                    <img src="{{asset('src/images/prl.png')}}" alt="">
-                    <p>خرید ووچر پرفکت مانی {{$financeTransaction->voucher->voucherAmount()}} دلاری</p>
-                </div>
+                @if($financeTransaction->voucher)
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <img src="{{asset('src/images/prl.png')}}" alt="">
+                        <p>خرید ووچر پرفکت مانی {{$financeTransaction->voucher->voucherAmount()}} دلاری</p>
+                    </div>
+                @endif
                 <p class="text-center">
                     نرخ دلار:
                     {{numberFormat($dollar->amount_to_rials)}}
@@ -45,25 +47,34 @@
                 @endif
                 <p class="mb-2">{{$financeTransaction->description}}</p>
             </div>
+            @if($financeTransaction->voucher)
+                <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
+                    <div class="flex items-center space-x-16 space-x-reverse">
+                        <p class="text-sm sm:text-base font-semibold">شماره ووچر:</p>
 
-            <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
-                <div class="flex items-center space-x-16 space-x-reverse">
-                    <p class="text-sm sm:text-base font-semibold">شماره ووچر:</p>
-                    <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
-                        <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                        <span class="inline-block"> {{$financeTransaction->voucher->serial}}</span>
+
+                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
+                            <span class="inline-block"> {{$financeTransaction->voucher->serial}}</span>
+                        </div>
+
                     </div>
                 </div>
-            </div>
-            <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
-                <div class="flex items-center space-x-16 space-x-reverse">
-                    <p class="text-sm sm:text-base font-semibold">کد فعال سازی:</p>
-                    <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
-                        <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                        <span class="inline-block">{{$financeTransaction->voucher->code}}</span>
+            @endif
+            @if($financeTransaction->voucher)
+                <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
+                    <div class="flex items-center space-x-16 space-x-reverse">
+                        <p class="text-sm sm:text-base font-semibold">کد فعال سازی:</p>
+
+
+                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
+                            <span class="inline-block">{{$financeTransaction->voucher->code}}</span>
+                        </div>
+
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
                 <div class="flex items-center space-x-16 space-x-reverse">
                     <p class="text-sm sm:text-base font-semibold">شماره سفارش:</p>
