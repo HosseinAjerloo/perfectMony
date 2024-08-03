@@ -334,9 +334,8 @@ class PanelController extends Controller
                 'user_id' => $user->id,
                 'voucher_id' => null,
                 'amount' => $payment->amount,
-                'type' => "bank",
+                'type' => "deposit",
                 "creadit_balance" => $balance+$payment->amount,
-                "status" => 'deposit',
                 'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
