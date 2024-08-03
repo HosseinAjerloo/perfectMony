@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('test', function () {
   $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
-    $back_price = $client->VerifyTransaction('GmshtyjwKSsrqrg0kHoB9KmDGuKHROW1quKx0FAdYC',13595227);
+    $back_price = $client->VerifyTransaction('GmshtyjwKSsrqrg0kHoB9KOf2qThM1S6q4sw3E9EMA',13595227);
     dd($back_price);
 //    if ($back_price < 0) {
 //        self::update_saman_payref($orderid, $refnum);
