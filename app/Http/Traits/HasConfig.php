@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 trait HasConfig
 {
+    protected $PMeVoucher=null;
     private function validationFiledUser()
     {
         if ($user=Auth::user()) {
@@ -21,6 +22,14 @@ trait HasConfig
             } else return false;
         }
 
+    }
+    protected function generateVoucher($amount)
+    {
+        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
+        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+            $this->PMeVoucher=$PMeVoucher;
+        }
     }
 
 }

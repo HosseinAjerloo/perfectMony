@@ -14,7 +14,7 @@ Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
 Route::get('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 
-Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::withoutMiddleware('IsEmptyUserInformation')->group(function () {
         Route::get('', [App\Http\Controllers\Panel\PanelController::class, 'index'])->name('panel.index');
         Route::prefix('user')->group(function () {
@@ -23,7 +23,6 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
 
         });
     });
-
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
@@ -33,19 +32,21 @@ Route::middleware(['auth', 'IsEmptyUserInformation'])->group(function () {
     Route::get('wallet-charging-Preview', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingPreview'])->name('panel.wallet.charging-Preview');
     Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingStore'])->name('panel.wallet.charging.store');
     Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingBack'])->name('panel.wallet.charging.back')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;
-    Route::get('orders',[App\Http\Controllers\Panel\OrderController::class,'index'])->name('panel.order');
-    Route::get('order/{financeTransaction}/details',[App\Http\Controllers\Panel\OrderController::class,'details'])->name('panel.order.details');
-    Route::get('expectation',[App\Http\Controllers\Panel\OrderController::class,'Expectation'])->name('panel.order.expectation');
-    Route::get('expectation/{invoice}/details',[App\Http\Controllers\Panel\OrderController::class,'ExpectationDetails'])->name('panel.order.expectation.details');
+    Route::middleware('IsEmptyUserInformation')->group(function (){
+        Route::get('orders',[App\Http\Controllers\Panel\OrderController::class,'index'])->name('panel.order');
+        Route::get('order/{financeTransaction}/details',[App\Http\Controllers\Panel\OrderController::class,'details'])->name('panel.order.details');
+        Route::get('expectation',[App\Http\Controllers\Panel\OrderController::class,'Expectation'])->name('panel.order.expectation');
+        Route::get('expectation/{invoice}/details',[App\Http\Controllers\Panel\OrderController::class,'ExpectationDetails'])->name('panel.order.expectation.details');
+    });
+
 
 });
 
 
 Route::get('test', function () {
-///    $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-//    dd($client);
+  $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
-//    $back_price = $client->VerifyTransaction($refnum, $bankinfo['Terminal']);
+    $back_price = $client->VerifyTransaction('GmshtyjwKSsrqrg0kHoB9KmDGuKHROW1quKx0FAdYC',13595227);
 //    if ($back_price < 0) {
 //        self::update_saman_payref($orderid, $refnum);
 //        self::update_order_status($orderid, 602);

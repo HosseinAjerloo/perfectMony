@@ -30,7 +30,6 @@ class PanelController extends Controller
 
     public function index()
     {
-
         $user = Auth::user();
         $UserInformationStatus = $this->validationFiledUser();
         $balance = $user->getCreaditBalance();
@@ -69,9 +68,8 @@ class PanelController extends Controller
                 $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
                 $invoice = Invoice::create($inputs);
 
-                $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+                $this->generateVoucher($service->amount);
 
-                $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $service->amount);
                 $voucher = Voucher::create(
                     [
                         'user_id' => $user->id,
@@ -81,14 +79,14 @@ class PanelController extends Controller
                         'description' => 'ارسال در خواست به سروریس پرفکت مانی'
                     ]
                 );
-                if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+                if (is_array($this->PMeVoucher) and isset($this->PMeVoucher['VOUCHER_NUM']) and isset($this->PMeVoucher['VOUCHER_CODE'])) {
                     $voucher->update([
                         'status' => 'finished',
                         'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
-                        "serial" => $PMeVoucher['VOUCHER_NUM'],
-                        'code' => $PMeVoucher['VOUCHER_CODE']
+                        "serial" => $this->PMeVoucher['VOUCHER_NUM'],
+                        'code' => $this->PMeVoucher['VOUCHER_CODE']
                     ]);
-                    Log::emergency("panel Controller :" . json_encode($PMeVoucher));
+                    Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
                     FinanceTransaction::create([
                         'user_id' => $user->id,
                         'voucher_id' => $voucher->id,
@@ -108,7 +106,7 @@ class PanelController extends Controller
                     ]);
                     $invoice->update(['status'=>'failed']);
 
-                    Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
+                    Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
                 }
 
@@ -127,9 +125,9 @@ class PanelController extends Controller
                 $inputs['time_price_of_dollars']=$dollar->amount_to_rials;
                 $invoice = Invoice::create($inputs);
 
-                $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+                $this->generateVoucher($inputs['custom_payment']);
 
-                $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $inputs['custom_payment']);
+
                 $voucher = Voucher::create(
                     [
                         'user_id' => $user->id,
@@ -139,14 +137,14 @@ class PanelController extends Controller
                         "service_id_custom" => $inputs['custom_payment']
                     ]
                 );
-                if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+                if (is_array($this->PMeVoucher) and isset($this->PMeVoucher['VOUCHER_NUM']) and isset($this->PMeVoucher['VOUCHER_CODE'])) {
                     $voucher->update([
                         'status' => 'finished',
                         'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
-                        "serial" => $PMeVoucher['VOUCHER_NUM'],
-                        'code' => $PMeVoucher['VOUCHER_CODE']
+                        "serial" => $this->PMeVoucher['VOUCHER_NUM'],
+                        'code' => $this->PMeVoucher['VOUCHER_CODE']
                     ]);
-                    Log::emergency("panel Controller :" . json_encode($PMeVoucher));
+                    Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
                     FinanceTransaction::create([
                         'user_id' => $user->id,
                         'voucher_id' => $voucher->id,
@@ -169,7 +167,7 @@ class PanelController extends Controller
                     ]);
                     $invoice->update(['status'=>'failed']);
 
-                    Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
+                    Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
                 }
 
@@ -283,10 +281,8 @@ class PanelController extends Controller
             $amount = $invoice->service_id_custom;
         }
 
+        $this->generateVoucher($amount);
 
-        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-
-        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
         $voucher = Voucher::create(
             [
                 'user_id' => $user->id,
@@ -305,14 +301,14 @@ class PanelController extends Controller
                 "service_id_custom" => $amount
             ]);
         }
-        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+        if (is_array($this->PMeVoucher) and isset($this->PMeVoucher['VOUCHER_NUM']) and isset($this->PMeVoucher['VOUCHER_CODE'])) {
             $voucher->update([
                 'status' => 'finished',
                 'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
-                "serial" => $PMeVoucher['VOUCHER_NUM'],
-                'code' => $PMeVoucher['VOUCHER_CODE']
+                "serial" => $this->PMeVoucher['VOUCHER_NUM'],
+                'code' => $this->PMeVoucher['VOUCHER_CODE']
             ]);
-            Log::emergency("panel Controller :" . json_encode($PMeVoucher));
+            Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
             FinanceTransaction::create([
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
@@ -351,7 +347,7 @@ class PanelController extends Controller
 
             ]);
             $invoice->update(['status'=>'finished']);
-            Log::emergency("perfectmoney error : " . $PMeVoucher['ERROR']);
+            Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود  پشتیبانی تماس حاصل فرمایید."]);
         }
 
