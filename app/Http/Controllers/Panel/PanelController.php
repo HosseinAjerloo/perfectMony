@@ -56,9 +56,7 @@ class PanelController extends Controller
 
             if (isset($inputs['service_id'])) {
                 $service = Service::find($inputs['service_id']);
-
                 $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
-
 
                 if ($voucherPrice > $balance) {
                     return redirect()->route('panel.purchase.view')->withErrors(['Low_inventory' => "موجودی کیف پول شما کافی نیست"]);
@@ -66,8 +64,8 @@ class PanelController extends Controller
 
                 $inputs['final_amount'] = $voucherPrice;
                 $inputs['type'] = 'service';
-                $inputs['status']='requested';
-                $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
+                $inputs['status'] = 'requested';
+                $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
                 $invoice = Invoice::create($inputs);
 
                 $this->generateVoucher($service->amount);
@@ -97,7 +95,7 @@ class PanelController extends Controller
                         "creadit_balance" => ($balance - $voucherPrice),
                         'description' => 'خرید ووچر و کسر مبلغ از کیف پول'
                     ]);
-                    $invoice->update(['status'=>'finished']);
+                    $invoice->update(['status' => 'finished']);
                     $payment_amount = $service->amount;
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
@@ -106,14 +104,13 @@ class PanelController extends Controller
                         'status' => 'failed',
                         'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
                     ]);
-                    $invoice->update(['status'=>'failed']);
+                    $invoice->update(['status' => 'failed']);
 
                     Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
                 }
 
             } elseif (isset($inputs['custom_payment'])) {
-
 
                 $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
 
@@ -123,8 +120,8 @@ class PanelController extends Controller
                 $inputs['final_amount'] = $voucherPrice;
                 $inputs['type'] = 'service';
                 $inputs['service_id_custom'] = $inputs['custom_payment'];
-                $inputs['status']='requested';
-                $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
+                $inputs['status'] = 'requested';
+                $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
                 $invoice = Invoice::create($inputs);
 
                 $this->generateVoucher($inputs['custom_payment']);
@@ -155,7 +152,7 @@ class PanelController extends Controller
                         "creadit_balance" => ($balance - $voucherPrice),
                         'description' => 'خرید ووچر و کسر مبلغ از کیف پول'
                     ]);
-                    $invoice->update(['status'=>'finished']);
+                    $invoice->update(['status' => 'finished']);
 
 
                     $payment_amount = $inputs['custom_payment'];
@@ -167,7 +164,7 @@ class PanelController extends Controller
                         'status' => 'failed',
                         'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
                     ]);
-                    $invoice->update(['status'=>'failed']);
+                    $invoice->update(['status' => 'failed']);
 
                     Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
@@ -215,8 +212,8 @@ class PanelController extends Controller
         }
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'service';
-        $inputs['status']='requested';
-        $inputs['time_price_of_dollars']=$dollar->DollarRateWithAddedValue();
+        $inputs['status'] = 'requested';
+        $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
         $objBank->setTotalPrice(10000);
@@ -263,7 +260,7 @@ class PanelController extends Controller
                     'state' => 'failed'
 
                 ]);
-            $invoice->update(['status'=>'failed']);
+            $invoice->update(['status' => 'failed']);
 
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
@@ -318,15 +315,15 @@ class PanelController extends Controller
                 'type' => "bank",
                 "creadit_balance" => $balance,
                 'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی',
-                'payment_id'=>$payment->id,
-                'time_price_of_dollars'=>$dollar->DollarRateWithAddedValue()
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);
-            $invoice->update(['status'=>'finished']);
+            $invoice->update(['status' => 'finished']);
             if (isset($invoice->service_id)) {
                 $service = $invoice->service;
-                $payment_amount= $service->amount;
+                $payment_amount = $service->amount;
             } else {
-                $payment_amount= $invoice->service_id_custom;
+                $payment_amount = $invoice->service_id_custom;
             }
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
@@ -344,11 +341,11 @@ class PanelController extends Controller
                 "creadit_balance" => $balance,
                 "status" => 'fail',
                 'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد',
-                'payment_id'=>$payment->id,
-                'time_price_of_dollars'=>$dollar->DollarRateWithAddedValue()
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
             ]);
-            $invoice->update(['status'=>'finished']);
+            $invoice->update(['status' => 'finished']);
             Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود  پشتیبانی تماس حاصل فرمایید."]);
         }
@@ -448,7 +445,7 @@ class PanelController extends Controller
             'type' => "deposit",
             "creadit_balance" => $amount,
             'description' => 'افزایش   مبلغ کیف پول',
-            'payment_id'=>$payment->id
+            'payment_id' => $payment->id
 
         ]);
         return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);

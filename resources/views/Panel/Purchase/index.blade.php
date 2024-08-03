@@ -117,7 +117,7 @@
                             let input = $('#dollar-' + inputId);
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(payment) + ' ریال ')
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
                         });
@@ -126,7 +126,7 @@
                         let inputAmount = $(input).attr('data-amount');
 
                         let payment = inputAmount * dollar
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + payment + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(payment) + ' ریال ')
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -172,7 +172,7 @@
                         let paymentResult = payment * dollar
                         if (payment.match(/^\d+$/)) {
                             $("#" + callElementTarget).val(payment)
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' +  Math.ceil(paymentResult) + ' ریال ')
 
                         } else {
                             $("#" + callElementTarget).val('')
@@ -194,7 +194,7 @@
                     if (payment.match(/^\d+$/)) {
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + paymentResult + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(paymentResult) + ' ریال ')
 
                     } else {
                         $("#" + callElementTarget).val('')

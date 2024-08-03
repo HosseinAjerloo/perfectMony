@@ -22,6 +22,6 @@ class Doller extends Model
     Const Commission=0.0199;
     public function DollarRateWithAddedValue()
     {
-        return (($this->amount_to_rials*Doller::Commission)+$this->amount_to_rials);
+        return ceil(($this->amount_to_rials*Doller::Commission)+$this->amount_to_rials);
     }
 }
