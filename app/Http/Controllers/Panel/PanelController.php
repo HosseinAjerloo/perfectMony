@@ -264,6 +264,10 @@ class PanelController extends Controller
 
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
+        $client = new SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+        $back_price = $client->VerifyTransaction($inputs['ResNum'], $bank->terminal_id);
+        dd($back_price);
         $payment->update(
             [
                 'RefNum' => $inputs['RefNum'],

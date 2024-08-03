@@ -28,7 +28,8 @@ class OrderController extends Controller
     {
 
         $user=Auth::user();
-        $invoices=Invoice::where('user_id',$user->id)->whereNotIn('status',['finished'])->get();
+        $invoices=Invoice::where('user_id',$user->id)->whereNotIn('status',['finished'])->cursorPaginate(5);
+
         return view('Panel.Orders.expectation',compact('invoices'));
     }
     public function ExpectationDetails(Invoice $invoice)
