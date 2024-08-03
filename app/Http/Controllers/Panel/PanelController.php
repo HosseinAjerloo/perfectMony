@@ -392,12 +392,12 @@ class PanelController extends Controller
             $bank = Bank::find('1');
 
             $payment = Payment::find(session()->get('payment'));
+            session()->put('payment', $payment->id);
             $payment = $payment->update(
                 ['bank_id' => $bank->id,
                     'amount' => $inputs['price'],
                 ]);
-            dd($payment);
-//            session()->put('payment', $payment->id);
+
             $status = $objBank->payment();
             if (!$status) {
                 return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
