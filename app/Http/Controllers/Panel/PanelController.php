@@ -216,21 +216,22 @@ class PanelController extends Controller
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(100000);
-        $orderID = rand(100000, 999999);
-        $objBank->setOrderID($orderID);
-        $objBank->setBankUrl($bank->url);
-        $objBank->setTerminalId($bank->terminal_id);
-        $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
+        $objBank->setTotalPrice(10000);
         $payment = Payment::create(
             [
                 'bank_id' => $bank->id,
                 'invoice_id' => $invoice->id,
                 'amount' => $voucherPrice,
                 'state' => 'requested',
-                'order_id' => $orderID
+
             ]
         );
+        $payment->update(['order_id' => $payment->id]);
+        $objBank->setOrderID($payment->id);
+        $objBank->setBankUrl($bank->url);
+        $objBank->setTerminalId($bank->terminal_id);
+        $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
+
         $status = $objBank->payment();
         if (!$status) {
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
@@ -267,13 +268,16 @@ class PanelController extends Controller
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
-        dd($back_price);
+        dd($back_price,Payment::where("order_id",$inputs['ResNum'])->count());
+        if ($back_price != $payment->amount and Payment::where("order_id",$inputs['ResNum'])->count()>1) {
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+
         $payment->update(
             [
                 'RefNum' => $inputs['RefNum'],
                 'ResNum' => $inputs['ResNum'],
                 'state' => 'finished'
-
             ]);
         $service = '';
         $amount = '';
@@ -339,7 +343,7 @@ class PanelController extends Controller
                 'voucher_id' => null,
                 'amount' => $payment->amount,
                 'type' => "deposit",
-                "creadit_balance" => $balance+$payment->amount,
+                "creadit_balance" => $balance + $payment->amount,
                 'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
@@ -362,15 +366,19 @@ class PanelController extends Controller
     public function walletChargingPreview(WalletChargingRequest $request)
     {
         $inputs = $request->all();
-        $orderID = rand(100000, 999999);
-        $inputs['orderID'] = $orderID;
-        session()->put('orderID', $orderID);
+        $payment = Payment::create(
+            [
+                'state' => 'requested',
+            ]);
+        $inputs['orderID'] = $payment->id;
+        session()->put('payment', $payment->id);
+
         return view("Panel.RechargeWallet.FinalApproval", compact('inputs'));
     }
 
     public function walletChargingStore(WalletChargingRequest $request)
     {
-        if (session()->has('orderID')) {
+        if (session()->has('payment')) {
             $inputs = $request->all();
             $inputs['price'] .= 0;
             $bank = Bank::find('1');
@@ -384,16 +392,12 @@ class PanelController extends Controller
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
             $bank = Bank::find('1');
 
-            $payment = Payment::create(
-                [
-                    'bank_id' => $bank->id,
+            $payment = Payment::find(session()->get('payment'));
+            $payment = $payment->update(
+                ['bank_id' => $bank->id,
                     'amount' => $inputs['price'],
-                    'state' => 'requested',
-                    'order_id' => session()->get('orderID')
-
                 ]);
             session()->put('payment', $payment->id);
-
             $status = $objBank->payment();
             if (!$status) {
                 return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
