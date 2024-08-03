@@ -105,7 +105,7 @@ class PanelController extends Controller
                         'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
                     ]);
                     $invoice->update(['status'=>'failed']);
-
+//
                     Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
                 }
