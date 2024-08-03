@@ -2,9 +2,11 @@
     <div class="menuHamburger">
         <img src="{{asset('src/images/hamburger.svg')}}" alt="">
     </div>
-    <div>
-        <img src="{{asset('src/images/Group 2631.svg')}}" alt="">
-    </div>
+    <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}" >
+        <i class="fa-solid fa-house w-6 h-6"></i>
+            <img src="{{asset('src/images/Group 2631.svg')}}" alt="">
+
+    </a>
     <div class="myProfile">
         <img src="{{asset('src/images/paneLUserIcon.png')}}" alt="">
     </div>

@@ -17,9 +17,12 @@
                 <p class="text-sm font-semibold sm:text-base">
                     شماره ووچر:
                 </p>
-                <div class="flex items-center space-x-3 space-x-reverse">
-                    <span class="text-sm sm:text-base">{{$voucher->serial}}</span>
-                    <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer">
+                <div class=" relative">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <span class="text-sm sm:text-base">2154</span>
+                        <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                    </div>
+
                 </div>
             </div>
             <div class="flex items-center justify-between">
@@ -28,7 +31,7 @@
                 </p>
                 <div class="flex items-center space-x-3 space-x-reverse">
                     <span class="text-sm sm:text-base">{{$voucher->code}}</span>
-                    <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer">
+                    <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
                 </div>
             </div>
             <div class="flex items-center space-x-2 space-x-reverse">

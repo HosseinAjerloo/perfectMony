@@ -9,7 +9,7 @@
             <article class="border-2 rounded-md border-white p-3 space-y-3.5">
                 <div class="text-sm sm:text-base flex items-center justify-between">
                     <p>شماره سفارش: {{$transaction->id}}</p>
-                    <p class="text-center">مبلغ کل:{{$transaction->amount}} ریال</p>
+                    <p class="text-center">مبلغ کل:{{numberFormat($transaction->amount)}} ریال</p>
                 </div>
                 <div class="text-sm sm:text-base flex items-center justify-between">
                     @if($transaction->voucher)

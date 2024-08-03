@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('test', function () {
-
+return view('Panel.Delivery.index');
 //    if ($back_price < 0) {
 //        self::update_saman_payref($orderid, $refnum);
 //        self::update_order_status($orderid, 602);

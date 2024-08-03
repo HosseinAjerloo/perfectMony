@@ -93,7 +93,9 @@ class PanelController extends Controller
                         'amount' => $voucherPrice,
                         'type' => "withdrawal",
                         "creadit_balance" => ($balance - $voucherPrice),
-                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول'
+                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول',
+                        'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+
                     ]);
                     $invoice->update(['status' => 'finished']);
                     $payment_amount = $service->amount;
@@ -150,7 +152,8 @@ class PanelController extends Controller
                         'amount' => $voucherPrice,
                         'type' => "withdrawal",
                         "creadit_balance" => ($balance - $voucherPrice),
-                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول'
+                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول',
+                        'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
                     ]);
                     $invoice->update(['status' => 'finished']);
 
@@ -216,12 +219,12 @@ class PanelController extends Controller
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
-        $objBank->setTotalPrice(10000);
+        $objBank->setTotalPrice($voucherPrice);
         $payment = Payment::create(
             [
                 'bank_id' => $bank->id,
                 'invoice_id' => $invoice->id,
-                'amount' => 10000,
+                'amount' => $voucherPrice,
                 'state' => 'requested',
 
             ]
@@ -315,13 +318,23 @@ class PanelController extends Controller
                 'code' => $this->PMeVoucher['VOUCHER_CODE']
             ]);
             Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
+           $financeTransaction= FinanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "deposit",
+                "creadit_balance" => $balance + $payment->amount,
+                'description' => ' افزایش کیف پول',
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+            ]);
+
             FinanceTransaction::create([
                 'user_id' => $user->id,
                 'voucher_id' => $voucher->id,
                 'amount' => $payment->amount,
-                'type' => "bank",
-                "creadit_balance" => $balance,
-                'description' => 'خرید ووچر و پرداخت از طریق درگاه بانکی',
+                'type' => "withdrawal",
+                "creadit_balance" => $financeTransaction->creadit_balance-$payment->amount,
+                'description' => 'خرید ووچر و برداشت مبلغ از کیف پول',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);

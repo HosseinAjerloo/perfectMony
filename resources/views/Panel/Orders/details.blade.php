@@ -17,11 +17,13 @@
                         <p>خرید ووچر پرفکت مانی {{$financeTransaction->voucher->voucherAmount()}} دلاری</p>
                     </div>
                 @endif
-                <p class="text-center">
-                    نرخ دلار:
-                    {{numberFormat($dollar->amount_to_rials)}}
-                    ریال
-                </p>
+                @if($financeTransaction->type!='deposit')
+                    <p class="text-center">
+                        نرخ دلار:
+                        {{numberFormat($financeTransaction->time_price_of_dollars)}}
+                        ریال
+                    </p>
+                @endif
             </div>
 
             <div class="text-sm sm:text-base flex items-center justify-between">
