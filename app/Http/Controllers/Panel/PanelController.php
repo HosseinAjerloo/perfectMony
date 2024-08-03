@@ -329,25 +329,21 @@ class PanelController extends Controller
 
 
         } else {
-            $voucher->update([
-                'status' => 'failed',
-                'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
-            ]);
+            $voucher->delete();
             FinanceTransaction::create([
                 'user_id' => $user->id,
-                'voucher_id' => $voucher->id,
+                'voucher_id' => null,
                 'amount' => $payment->amount,
                 'type' => "bank",
-                "creadit_balance" => $balance,
-                "status" => 'fail',
-                'description' => 'پرداخت با موفقیت انجام شد ارتباط با سرویس پرفکت مانی انجام نشد',
+                "creadit_balance" => $balance+$payment->amount,
+                "status" => 'deposit',
+                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
             ]);
             $invoice->update(['status' => 'finished']);
-            Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود  پشتیبانی تماس حاصل فرمایید."]);
+            return redirect()->route('panel.purchase.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }
 
     }
