@@ -26,7 +26,6 @@ class OrderController extends Controller
     }
     public function Expectation()
     {
-
         $user=Auth::user();
         $invoices=Invoice::where('user_id',$user->id)->get();
 
