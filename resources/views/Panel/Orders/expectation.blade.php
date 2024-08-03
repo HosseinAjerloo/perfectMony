@@ -11,10 +11,12 @@
                     <p class="text-center">مبلغ کل:{{$invoice->final_amount}} ریال</p>
                 </div>
                 <div class="text-sm sm:text-base flex items-center justify-between">
+                    @if($invoice->voucherAmount())
                     <div class="flex items-center space-x-2 space-x-reverse">
                         <img src="{{asset('src/images/prl.png')}}" alt="">
                         <p>خرید ووچر پرفکت مانی {{$invoice->voucherAmount()}} دلاری</p>
                     </div>
+                    @endif
                     <p class="text-center">
                         وضعیت:
                         @if($invoice->status=='finished')
