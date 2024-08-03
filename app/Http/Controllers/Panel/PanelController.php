@@ -386,7 +386,7 @@ class PanelController extends Controller
             $objBank->setTotalPrice($inputs['price']);
             $objBank->setBankUrl($bank->url);
 
-            $objBank->setOrderID(session()->get('orderID'));
+            $objBank->setOrderID(session()->get('payment'));
             $objBank->setTerminalId($bank->terminal_id);
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
             $bank = Bank::find('1');
