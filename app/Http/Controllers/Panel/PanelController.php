@@ -266,7 +266,7 @@ class PanelController extends Controller
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
-        $back_price = $client->VerifyTransaction($inputs['ResNum'], $bank->terminal_id);
+        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         dd($back_price);
         $payment->update(
             [
