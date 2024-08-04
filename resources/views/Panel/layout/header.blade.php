@@ -24,11 +24,7 @@
                 <img src="{{asset('src/images/list.png')}}" alt="" class="w-4 h-4">
                 <p class="sm:text-base "> سفارشات شما </p>
             </a>
-            <a href=""
-               class="text-sm flex  items-center px-3 py-1.5 space-x-2 space-x-reverse border-t border-white">
-                <img src="{{asset('src/images/cart.png')}}" alt="" class="w-4 h-4">
-                <p class="sm:text-base "> پرداخت های شما </p>
-            </a>
+
             <a href="{{route('panel.order')}}"
                class="text-sm flex  items-center px-3 py-1.5 space-x-2 space-x-reverse border-t border-white">
                 <img src="{{asset('src/images/mony.png')}}" alt="" class="w-4 h-4">

@@ -41,7 +41,7 @@
         </form>
         <div class="text-center py-5 space-y-2 ">
             <p class="text-yellow-600 font-semibold text-sm sm:text-base tracking-tight">
-                نرخ دلار پرفکت مانی:{{numberFormat($dollar->DollarRateWithAddedValue())}} هزار ریال
+                نرخ دلار پرفکت مانی:{{numberFormat($dollar->DollarRateWithAddedValue())}}  ریال
             </p>
             <p class="font-semibold text-sm sm:text-base payment-text"></p>
         </div>
@@ -117,7 +117,7 @@
                             let input = $('#dollar-' + inputId);
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(payment) + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' +formatNumber(Math.ceil(payment)) + ' ریال ')
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
                         });
@@ -126,7 +126,7 @@
                         let inputAmount = $(input).attr('data-amount');
 
                         let payment = inputAmount * dollar
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(payment) + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(Math.ceil(payment)) + ' ریال ')
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -172,7 +172,7 @@
                         let paymentResult = payment * dollar
                         if (payment.match(/^\d+$/)) {
                             $("#" + callElementTarget).val(payment)
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' +  Math.ceil(paymentResult) + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' +  formatNumber(Math.ceil(paymentResult)) + ' ریال ')
 
                         } else {
                             $("#" + callElementTarget).val('')
@@ -194,7 +194,7 @@
                     if (payment.match(/^\d+$/)) {
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + Math.ceil(paymentResult) + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(Math.ceil(paymentResult)) + ' ریال ')
 
                     } else {
                         $("#" + callElementTarget).val('')
@@ -234,6 +234,15 @@
         function commission()
         {
             return 0.0199;
+        }
+
+
+
+
+        function formatNumber(number) {
+            let string = number.toLocaleString('fa-IR'); // ۱۲٬۳۴۵٫۶۷۹
+            number = string.replace(/\٬/g, ",‬");
+            return number;
         }
     </script>
 @endsection
