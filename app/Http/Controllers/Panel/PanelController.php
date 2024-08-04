@@ -318,7 +318,7 @@ class PanelController extends Controller
                 'code' => $this->PMeVoucher['VOUCHER_CODE']
             ]);
             Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
-           $financeTransaction= FinanceTransaction::create([
+            $financeTransaction = FinanceTransaction::create([
                 'user_id' => $user->id,
                 'amount' => $payment->amount,
                 'type' => "deposit",
@@ -333,7 +333,7 @@ class PanelController extends Controller
                 'voucher_id' => $voucher->id,
                 'amount' => $payment->amount,
                 'type' => "withdrawal",
-                "creadit_balance" => $financeTransaction->creadit_balance-$payment->amount,
+                "creadit_balance" => $financeTransaction->creadit_balance - $payment->amount,
                 'description' => 'خرید ووچر و برداشت مبلغ از کیف پول',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
