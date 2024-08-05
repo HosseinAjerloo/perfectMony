@@ -255,7 +255,7 @@ class PanelController extends Controller
         return view('welcome', compact('token', 'url'));
     }
 
-
+//
     public function backPurchaseThroughTheBank(Request $request)
     {
         $dollar = Doller::orderBy('id', 'desc')->first();
