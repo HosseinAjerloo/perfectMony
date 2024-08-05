@@ -36,6 +36,10 @@ class PanelController extends Controller
         return view('Panel.index', compact('balance', 'UserInformationStatus'));
     }
 
+    public function contactUs()
+    {
+        return view('Panel.ContactUs.contactUs');
+    }
     public function purchase()
     {
 

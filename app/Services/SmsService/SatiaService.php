@@ -57,16 +57,6 @@ class SatiaService
                 $this->status = true;
             }
         } catch (\Exception $e) {
-            EmergencyLog::create(
-                [
-                    "user_id" => Auth::user()->id,
-                    "data" => null,
-                    "is_success" => 1,
-                    'client_ip' => request()->ip(),
-                    'group' => "پیامک",
-                    "message" => 'خطا در سرویس ارسال پیامک رخ داده است لطفا فایل لاگ مشاهده شود'
-                ]
-            );
             Log::emergency($e->getMessage());
         }
 
