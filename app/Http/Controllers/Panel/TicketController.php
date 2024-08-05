@@ -24,7 +24,6 @@ class TicketController extends Controller
         if ($ticket->user_id != $request->user()->id)
             abort(404);
         $ticket_messages = $ticket->messages()->orderBy('id', 'desc')->simplePaginate(10);
-        dd($ticket_messages);
         return view('panel.ticket.ticketChat', compact('ticket','ticket_messages'));
     }
 
