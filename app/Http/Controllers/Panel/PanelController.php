@@ -38,7 +38,7 @@ class PanelController extends Controller
 
     public function contactUs()
     {
-        return view('Panel.ContactUs.contactUs');
+        return view('Panel.ContactUs.ContactUs');
     }
 
     public  function ticketChat(Request $request,$ticket_id)
