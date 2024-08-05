@@ -41,7 +41,7 @@
         </form>
         <div class="text-center py-5 space-y-2 ">
             <p class="text-yellow-600 font-semibold text-sm sm:text-base tracking-tight">
-                نرخ دلار پرفکت مانی:{{numberFormat($dollar->DollarRateWithAddedValue())}}  ریال
+                نرخ دلار پرفکت مانی:{{numberFormat($dollar->amount_to_rials)}}  ریال
             </p>
             <p class="font-semibold text-sm sm:text-base payment-text"></p>
         </div>
@@ -102,8 +102,7 @@
 
                 let customPayment = $("." + callElementTarget);
                 let SelectionDaller = $(".dollar");
-                let dollar = "{{$dollar->amount_to_rials}}"
-                dollar=parseFloat(dollar)+(parseFloat(dollar)*commission());
+                let dollar = commission();
                 let payment_text = $('.payment-text')
                 let defaultInputValue = "{{old('service_id')}}";
                 if (defaultInputValue !== undefined && defaultInputValue > 0) {
@@ -117,7 +116,7 @@
                             let input = $('#dollar-' + inputId);
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' +formatNumber(Math.ceil(payment)) + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' +formatNumber(payment) + ' ریال ')
                             $(customPayment).val('')
                             $("#" + callElementTarget).val('')
                         });
@@ -126,7 +125,7 @@
                         let inputAmount = $(input).attr('data-amount');
 
                         let payment = inputAmount * dollar
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(Math.ceil(payment)) + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(payment) + ' ریال ')
                         $(customPayment).val('')
                         $("#" + callElementTarget).val('')
                     }
@@ -150,8 +149,7 @@
 
             let customPayment = $("." + callElementTarget);
             let payment_text = $('.payment-text')
-            let dollar = "{{$dollar->amount_to_rials}}"
-            dollar=parseFloat(dollar)+(parseFloat(dollar)*commission());
+            let dollar = commission()
             if (defaultInputTarget !== undefined && defaultInputTarget > 0) {
                 $(customPayment).val(defaultInputTarget)
                 eventChangeInput(false);
@@ -172,7 +170,7 @@
                         let paymentResult = payment * dollar
                         if (payment.match(/^\d+$/)) {
                             $("#" + callElementTarget).val(payment)
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' +  formatNumber(Math.ceil(paymentResult)) + ' ریال ')
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' +  formatNumber(paymentResult) + ' ریال ')
 
                         } else {
                             $("#" + callElementTarget).val('')
@@ -194,7 +192,7 @@
                     if (payment.match(/^\d+$/)) {
                         let paymentResult = payment * dollar
                         $("#" + callElementTarget).val(payment)
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(Math.ceil(paymentResult)) + ' ریال ')
+                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
 
                     } else {
                         $("#" + callElementTarget).val('')
@@ -233,8 +231,10 @@
     <script>
         function commission()
         {
-            return 0.0199;
+            return "{{$dollar->DollarRateWithAddedValue()}}";
         }
+
+
 
 
 

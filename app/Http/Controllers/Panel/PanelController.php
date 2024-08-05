@@ -99,6 +99,11 @@ class PanelController extends Controller
                     ]);
                     $invoice->update(['status' => 'finished']);
                     $payment_amount = $service->amount;
+                    if ($this->validationFiledUser())
+                    {
+                        $request->session()->put('voucher_id',$voucher->id);
+                        $request->session()->put('amount_voucher',$payment_amount);
+                    }
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
@@ -159,6 +164,11 @@ class PanelController extends Controller
 
 
                     $payment_amount = $inputs['custom_payment'];
+                    if ($this->validationFiledUser())
+                    {
+                        $request->session()->put('voucher_id',$voucher->id);
+                        $request->session()->put('amount_voucher',$payment_amount);
+                    }
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -344,6 +354,11 @@ class PanelController extends Controller
                 $payment_amount = $service->amount;
             } else {
                 $payment_amount = $invoice->service_id_custom;
+            }
+            if ($this->validationFiledUser())
+            {
+                $request->session()->put('voucher_id',$voucher->id);
+                $request->session()->put('amount_voucher',$payment_amount);
             }
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
