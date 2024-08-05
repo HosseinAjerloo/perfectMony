@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
         });
     });
+    Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket.chat');
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
     Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
