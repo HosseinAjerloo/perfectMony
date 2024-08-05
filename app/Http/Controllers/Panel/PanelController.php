@@ -40,6 +40,11 @@ class PanelController extends Controller
     {
         return view('Panel.ContactUs.contactUs');
     }
+
+    public  function ticketChat(Request $request,$ticket_id)
+    {
+
+    }
     public function purchase()
     {
 
