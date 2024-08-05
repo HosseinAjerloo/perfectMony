@@ -103,6 +103,11 @@ class PanelController extends Controller
                     ]);
                     $invoice->update(['status' => 'finished']);
                     $payment_amount = $service->amount;
+                    if ($this->validationFiledUser())
+                    {
+                        $request->session()->put('voucher_id',$voucher->id);
+                        $request->session()->put('amount_voucher',$payment_amount);
+                    }
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
@@ -163,6 +168,11 @@ class PanelController extends Controller
 
 
                     $payment_amount = $inputs['custom_payment'];
+                    if ($this->validationFiledUser())
+                    {
+                        $request->session()->put('voucher_id',$voucher->id);
+                        $request->session()->put('amount_voucher',$payment_amount);
+                    }
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -249,7 +259,7 @@ class PanelController extends Controller
         return view('welcome', compact('token', 'url'));
     }
 
-
+//
     public function backPurchaseThroughTheBank(Request $request)
     {
         $dollar = Doller::orderBy('id', 'desc')->first();
@@ -322,7 +332,7 @@ class PanelController extends Controller
                 'code' => $this->PMeVoucher['VOUCHER_CODE']
             ]);
             Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
-           $financeTransaction= FinanceTransaction::create([
+            $financeTransaction = FinanceTransaction::create([
                 'user_id' => $user->id,
                 'amount' => $payment->amount,
                 'type' => "deposit",
@@ -337,7 +347,7 @@ class PanelController extends Controller
                 'voucher_id' => $voucher->id,
                 'amount' => $payment->amount,
                 'type' => "withdrawal",
-                "creadit_balance" => $financeTransaction->creadit_balance-$payment->amount,
+                "creadit_balance" => $financeTransaction->creadit_balance - $payment->amount,
                 'description' => 'خرید ووچر و برداشت مبلغ از کیف پول',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
@@ -348,6 +358,11 @@ class PanelController extends Controller
                 $payment_amount = $service->amount;
             } else {
                 $payment_amount = $invoice->service_id_custom;
+            }
+            if ($this->validationFiledUser())
+            {
+                $request->session()->put('voucher_id',$voucher->id);
+                $request->session()->put('amount_voucher',$payment_amount);
             }
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
