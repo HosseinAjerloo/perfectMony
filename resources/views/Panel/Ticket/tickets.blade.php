@@ -2,9 +2,7 @@
 
 @section('message-box')
     <h1 class=" border-2 border-2-white rounded-md py-3 px-3 text-sm sm:text-base font-semibold  ">
-        ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> لطفا مشخصات خود را وارد
-        نمائید که در صورت بروز مشکل و خطا بتوانیم پشتیبانی
-        لازم را انجام دهیم
+        ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> لطفا مشکل خود را بیان کنید تا در اسرع وقت کارشناسان ما مشکل شما را بر طرف کنند.
     </h1>
 @endsection
 
@@ -20,38 +18,14 @@
             </tr>
             </thead>
             <tbody>
-
+            @foreach($tickets as $key=> $ticket)
                 <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">1</td>
-                    <td class=" w-1/3 text-center py-2"><a>عدم تحویل پرفکت مانی</a></td>
-                    <td class=" w-1/3  text-center py-2">1403/05/06 12:06:11</td>
+                    <td class=" w-1/3  text-center py-2">{{$key+1}}</td>
+                    <td class=" w-1/3 text-center py-2"><a>{{$ticket->subject}}</a></td>
+                    <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
                     <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
                 </tr>
-                <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">1</td>
-                    <td class=" w-1/3 text-center py-2"><a>عدم تحویل پرفکت مانی</a></td>
-                    <td class=" w-1/3  text-center py-2">1403/05/06 12:06:11</td>
-                    <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
-                </tr>
-                <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">1</td>
-                    <td class=" w-1/3 text-center py-2"><a>عدم تحویل پرفکت مانی</a></td>
-                    <td class=" w-1/3  text-center py-2">1403/05/06 12:06:11</td>
-                    <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
-                </tr>
-                <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">1</td>
-                    <td class=" w-1/3 text-center py-2"><a>عدم تحویل پرفکت مانی</a></td>
-                    <td class=" w-1/3  text-center py-2">1403/05/06 12:06:11</td>
-                    <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
-                </tr>
-                <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">1</td>
-                    <td class=" w-1/3 text-center py-2"><a>عدم تحویل پرفکت مانی</a></td>
-                    <td class=" w-1/3  text-center py-2">1403/05/06 12:06:11</td>
-                    <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
-                </tr>
-
+            @endforeach
 
 
             </tbody>

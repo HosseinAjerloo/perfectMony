@@ -13,7 +13,8 @@ class TicketController extends Controller
 {
     public function index()
     {
-        return view('Panel.ticket.index');
+        $tickets = Ticket::orderBy('id', 'desc')->where('user_id',\request()->user()->id)->simplePaginate(10);
+        return view('Panel.Ticket.tickets',compact('tickets'));
     }
 
     public function ticketChat(Request $request, $ticket_id)
