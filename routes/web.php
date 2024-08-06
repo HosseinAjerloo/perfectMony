@@ -42,12 +42,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
     });
+    Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket.chat');
+    Route::get('tickets', [App\Http\Controllers\Panel\TicketController::class, 'index'])->name('panel.ticket');
+    Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
 
 
 });
 
 
 Route::get('test', function () {
-
-
 });

@@ -12,7 +12,8 @@ class UserController extends Controller
 {
     public function completionOfInformation()
     {
-        return view('Panel.User.register');
+        $user=Auth::user();
+        return view('Panel.User.register',compact('user'));
     }
     public function register(RegisterRequest $request)
     {

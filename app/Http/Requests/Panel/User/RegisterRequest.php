@@ -4,6 +4,7 @@ namespace App\Http\Requests\Panel\User;
 
 use App\Rules\NationalCode;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterRequest extends FormRequest
 {
@@ -22,13 +23,13 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-
+        $user=Auth::user();
         return [
             "name"=>"required",
             "family"=>"required",
             "tel"=>"required|numeric",
-            "email"=>"required|email|unique:users,email",
-            "national_code"=>["required","unique:users,national_code","numeric",new NationalCode()],
+            "email"=>"required|email|unique:users,email,".$user->id,
+            "national_code"=>["required","unique:users,national_code,".$user->id,"numeric",new NationalCode()],
             "address"=>"required"
         ];
     }

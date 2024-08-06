@@ -36,4 +36,11 @@ body{
         @apply rounded-md border-2 border-yellow-600 shadow-2xl shadow-yellow-600
     }
 
+    tr:nth-child(even) {
+        @apply bg-gray-300;
+    }
+    tr:nth-child(odd) {
+        @apply text-white;
+    }
+
 }

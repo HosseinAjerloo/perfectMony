@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('subject')->nullable();
-            $table->timestamp('seen_at')->nullable();
+            $table->enum('status',['waiting_for_an_answer','has_been_answered','closed'])->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
