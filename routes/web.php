@@ -25,18 +25,20 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
-    Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
-    Route::post('Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'PurchaseThroughTheBank'])->name('panel.PurchaseThroughTheBank');
+    Route::middleware('LimitedPurchase')->group(function () {
+        Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
+        Route::post('Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'PurchaseThroughTheBank'])->name('panel.PurchaseThroughTheBank');
+    });
     Route::post('back/Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'backPurchaseThroughTheBank'])->name('panel.Purchase-through-the-bank')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
     Route::get('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
     Route::get('wallet-charging-Preview', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingPreview'])->name('panel.wallet.charging-Preview');
     Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingStore'])->name('panel.wallet.charging.store');
     Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingBack'])->name('panel.wallet.charging.back')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;
-    Route::middleware('IsEmptyUserInformation')->group(function (){
-        Route::get('orders',[App\Http\Controllers\Panel\OrderController::class,'index'])->name('panel.order');
-        Route::get('order/{financeTransaction}/details',[App\Http\Controllers\Panel\OrderController::class,'details'])->name('panel.order.details');
-        Route::get('expectation',[App\Http\Controllers\Panel\OrderController::class,'Expectation'])->name('panel.order.expectation');
-        Route::get('expectation/{invoice}/details',[App\Http\Controllers\Panel\OrderController::class,'ExpectationDetails'])->name('panel.order.expectation.details');
+    Route::middleware('IsEmptyUserInformation')->group(function () {
+        Route::get('orders', [App\Http\Controllers\Panel\OrderController::class, 'index'])->name('panel.order');
+        Route::get('order/{financeTransaction}/details', [App\Http\Controllers\Panel\OrderController::class, 'details'])->name('panel.order.details');
+        Route::get('expectation', [App\Http\Controllers\Panel\OrderController::class, 'Expectation'])->name('panel.order.expectation');
+        Route::get('expectation/{invoice}/details', [App\Http\Controllers\Panel\OrderController::class, 'ExpectationDetails'])->name('panel.order.expectation.details');
         Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
     });

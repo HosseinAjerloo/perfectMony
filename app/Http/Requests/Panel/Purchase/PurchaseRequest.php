@@ -24,7 +24,7 @@ class PurchaseRequest extends FormRequest
         return [
             'Accepting_the_rules'=>"in:on|required",
             "service_id"=>"sometimes|exists:services,id",
-            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes']
+            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes','numeric',"max:".env('Daily_Purchase_Limit'),'min:1']
         ];
     }
     public function messages(): array

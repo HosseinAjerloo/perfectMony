@@ -25,7 +25,7 @@ class PurchaseThroughTheBankRequest extends FormRequest
             'Accepting_the_rules'=>"in:on|required",
             'bank'=>"required|exists:banks,id",
             "service_id"=>"sometimes|exists:services,id",
-            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes']
+            "custom_payment"=>[(request()->has('service_id')==false?'required':'nullable'),'sometimes','numeric',"max:".env('Daily_Purchase_Limit'),'min:1']
         ];
     }
     public function messages(): array

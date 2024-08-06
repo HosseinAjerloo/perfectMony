@@ -6,9 +6,9 @@
             مبلغ ووچر پرفکت مانی درخواستی را وارد کنید یا از انتخاب سریع استفاده نمائید.
         </p>
         <div class="space-x-3 space-x-reverse">
-            <label for="" class="text-sm sm:text-base">$</label>
             <input type="text"
                    class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none Desired_amount custom_payment text-black">
+            <label for="" class="text-sm sm:text-base font-semibold">دلار</label>
         </div>
     </div>
 @endsection
@@ -40,9 +40,6 @@
 
         </form>
         <div class="text-center py-5 space-y-2 ">
-            <p class="text-yellow-600 font-semibold text-sm sm:text-base tracking-tight">
-                نرخ دلار پرفکت مانی:{{numberFormat($dollar->amount_to_rials)}} ریال
-            </p>
             <p class="font-semibold text-sm sm:text-base payment-text"></p>
         </div>
     </article>
@@ -117,7 +114,7 @@
                             let inputAmount = $(input).attr('data-amount');
                             let payment = inputAmount * dollar
                             $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(payment) + ' ریال ')
-                            $(customPayment).val('')
+                            $(customPayment).val(inputAmount)
                             $("#" + callElementTarget).val('')
                         });
                     } else {
@@ -167,16 +164,23 @@
 
                         })
                         let payment = $(customPayment).val();
-                        let paymentResult = payment * dollar
-                        if (payment.match(/^\d+$/)) {
-                            $("#" + callElementTarget).val(payment)
-                            $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
 
-                        } else {
-                            $("#" + callElementTarget).val('')
-                            $(payment_text).text('')
+                       if(payment<="{{env('Daily_Purchase_Limit')}}")
+                       {
+                           let paymentResult = payment * dollar
+                           if (payment.match(/^\d+$/)) {
+                               $("#" + callElementTarget).val(payment)
+                               $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
 
-                        }
+                           } else {
+                               $("#" + callElementTarget).val('')
+                               $(payment_text).text('')
+                           }
+                       }
+                       else {
+                           $(customPayment).val('')
+                           $(payment_text).text('')
+                       }
 
                     })
                 } else {
@@ -189,16 +193,23 @@
 
                     })
                     let payment = $(customPayment).val();
-                    if (payment.match(/^\d+$/)) {
-                        let paymentResult = payment * dollar
-                        $("#" + callElementTarget).val(payment)
-                        $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
+                    if(payment<="{{env('Daily_Purchase_Limit')}}")
+                    {
+                        if (payment.match(/^\d+$/)) {
+                            let paymentResult = payment * dollar
+                            $("#" + callElementTarget).val(payment)
+                            $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
 
-                    } else {
-                        $("#" + callElementTarget).val('')
+                        } else {
+                            $("#" + callElementTarget).val('')
+                            $(payment_text).text('')
+                            $(customPayment).val('');
+
+                        }
+                    }
+                    else {
+                        $(customPayment).val('')
                         $(payment_text).text('')
-                        $(customPayment).val('');
-
                     }
                 }
 

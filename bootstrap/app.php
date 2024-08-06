@@ -13,7 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
             $middleware->redirectGuestsTo(fn () => route('login.index'));
         $middleware->alias([
-            'IsEmptyUserInformation' => \App\Http\Middleware\IsEmptyUserInformation::class
+            'IsEmptyUserInformation' => \App\Http\Middleware\IsEmptyUserInformation::class,
+            'LimitedPurchase' => \App\Http\Middleware\LimitedPurchaseMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
