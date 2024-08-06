@@ -57,7 +57,6 @@ trait HasConfig
         if ($this->totalPerMonth >= env('Monthly_Purchase_Limit')) {
             return __('customePr.Monthly_Purchase_Limit');
         }
-
         return true;
 
     }

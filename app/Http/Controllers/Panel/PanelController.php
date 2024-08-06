@@ -30,7 +30,7 @@ class PanelController extends Controller
 
     public function __construct()
     {
-            return true;
+        return true;
     }
 
     public function index()
