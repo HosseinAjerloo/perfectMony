@@ -165,7 +165,7 @@
                         })
                         let payment = $(customPayment).val();
 
-                       if(payment<="{{env('Daily_Purchase_Limit')}}")
+                       if(payment<=Number("{{env('Daily_Purchase_Limit')}}"))
                        {
                            let paymentResult = payment * dollar
                            if (payment.match(/^\d+$/)) {
@@ -193,7 +193,7 @@
 
                     })
                     let payment = $(customPayment).val();
-                    if(payment<="{{env('Daily_Purchase_Limit')}}")
+                    if(payment<=Number("{{env('Daily_Purchase_Limit')}}"))
                     {
                         if (payment.match(/^\d+$/)) {
                             let paymentResult = payment * dollar
