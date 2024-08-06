@@ -10,8 +10,19 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'subject', 'status'];
+
     public function messages(): HasMany
     {
         return $this->hasMany(TicketMessage::class);
+    }
+
+    public function ticketStatus()
+    {
+        return match ($this->status) {
+            'waiting_for_an_answer' => 'درانتظارپاسخ',
+            'has_been_answered' => 'پاسخ داده شده',
+            'closed' => 'بسته شده'
+        };
     }
 }

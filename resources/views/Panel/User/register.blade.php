@@ -14,29 +14,29 @@
         @csrf
         <div class="flex justify-between items-center  w-full  space-x-2 space-x-reverse">
             <label for="" class="text-base font-yekan  ">نام:</label>
-            <input type="text" class="font-yekan py-1 px-2 rounded-md text-black outline-none" name="name" value="{{old('name')}}">
+            <input type="text" class="font-yekan py-1 px-2 rounded-md text-black outline-none" name="name" value="{{old('name',$user->name)}}">
         </div>
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse">
             <label for="" class="text-base font-yekan ">نام خانوادگی:</label>
-            <input type="text" class="font-yekan py-1 px-2   rounded-md text-black outline-none box-border" name="family" value="{{old("family")}}">
+            <input type="text" class="font-yekan py-1 px-2   rounded-md text-black outline-none box-border" name="family" value="{{old("family",$user->family)}}">
         </div>
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse ">
             <label for="" class="text-base font-yekan ">تلفن ثابت  :</label>
-            <input type="text" class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="tel" value="{{old("tel")}}">
+            <input type="text" class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="tel" value="{{old("tel",$user->tel)}}">
         </div>
 
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse">
             <label for="" class="text-base font-yekan ">ایمیل:</label>
-            <input type="text" class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="email" value="{{old('email')}}">
+            <input type="text" class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="email" value="{{old('email',$user->email)}}">
         </div>
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse">
             <label for="" class="text-base font-yekan ">کد ملی:</label>
-            <input type="text" class="font-yekan  py-1 px-2  rounded-md text-black outline-none" name="national_code" value="{{old("national_code")}}">
+            <input type="text" class="font-yekan  py-1 px-2  rounded-md text-black outline-none" name="national_code" value="{{old("national_code",$user->national_code)}}">
         </div>
 
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse ">
             <label for="" class="text-base font-yekan ">آدرس :</label>
-            <textarea class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="address">{{old('address')}}</textarea>
+            <textarea class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="address">{{old('address',$user->address)}}</textarea>
         </div>
         <div>
             <button class="text-base font-semibold bg-sky-500 px-6 py-1.5 rounded-md font-yekan">تکمیل ثبت نام</button>

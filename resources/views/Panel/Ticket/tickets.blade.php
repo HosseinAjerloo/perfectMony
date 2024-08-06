@@ -21,9 +21,9 @@
             @foreach($tickets as $key=> $ticket)
                 <tr class=" py-6 text-black text-sm sm:text-base">
                     <td class=" w-1/3  text-center py-2">{{$key+1}}</td>
-                    <td class=" w-1/3 text-center py-2"><a>{{$ticket->subject}}</a></td>
+                    <td class=" w-1/3 text-center py-2 cursor-pointer  "><a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">{{$ticket->subject}}</a></td>
                     <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
-                    <td class=" w-1/3  text-center py-2">در انتظار پاسخ</td>
+                    <td class=" w-1/3  text-center py-2">{{$ticket->ticketStatus()}}</td>
                 </tr>
             @endforeach
 
