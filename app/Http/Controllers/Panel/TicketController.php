@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\TicketMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
 
 
 class TicketController extends Controller
@@ -24,7 +25,7 @@ class TicketController extends Controller
             abort(404);
         if ($ticket->user_id != $request->user()->id)
             abort(404);
-        $ticket_messages = $ticket->messages()->simplePaginate(10);
+        $ticket_messages = $ticket->messages;
         return view('panel.ticket.ticketChat', compact('ticket','ticket_messages'));
     }
 
@@ -40,10 +41,14 @@ class TicketController extends Controller
             'user_id' =>  $ticket->user_id,
             'message' => $request->message
         ]);
+        $new_ticket->jalali_date = Jalalian::fromCarbon($new_ticket->created_at)->format('h:i Y/m/d');
         return [
             'success' => true,
             'data' => $new_ticket
         ];
     }
-
+        public function ticketAddSubmit(Request $request)
+        {
+            return redirect()->route('panel.ticket')->with(['success'=>"تیکت با موفقیت ثبت شد."]);
+        }
 }

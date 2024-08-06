@@ -4,13 +4,13 @@
     <h1 class="text-center text-sky-500">متن تیکت</h1>
     <h3 class="text-center">{{$ticket->subject}}</h3>
     <div class="md:w-1/2 mx-auto p-2">
-        <div class="h-[70vh] overflow-auto">
+        <div id="messages" class="h-[70vh] overflow-auto">
             @foreach($ticket_messages as $ticket_message)
                     <div class="mb-2 flex flex-wrap justify-center">
                         <div class="w-full">
-                            <p class="p-3 bg-cyan-800 rounded-lg rounded-bl-none w-fit {{$ticket_message->user_id ? 'float-left':''}}">{{$ticket_message->message}}</p>
+                            <p class="p-3 rounded-xl w-fit {{$ticket_message->user_id ? 'float-left rounded-bl-none bg-cyan-800':'rounded-br-none bg-cyan-600'}}">{{$ticket_message->message}}</p>
                         </div>
-                        <span class="text-xs text-gray-500">{{$ticket_message->created_at}}</span>
+                        <span class="text-xs text-gray-500">{{Morilog\Jalali\Jalalian::forge($ticket_message->created_at)->format('h:i Y/m/d')}}</span>
                     </div>
             @endforeach
         </div>
@@ -28,6 +28,10 @@
 
 @section('script-tag')
     <script>
+        const messages = $('#messages');
+        $(document).ready(function() {
+            messages.animate({ scrollTop: messages.prop("scrollHeight") }, 200);
+        });
         $('#send_message').on('click',(e)=>{
             const message = $('#input_message').val();
             if(!message)
@@ -40,6 +44,15 @@
                 success: function(response){
                     if(response.success){
                         console.log(response.data);
+                        $('#input_message').val('');
+                        const client_new_message = ' <div class="mb-2 flex flex-wrap justify-center">'+
+                            '<div class="w-full">'+
+                            '<p class="p-3 bg-cyan-800 rounded-xl rounded-bl-none w-fit float-left">'+ response.data.message +'</p>'+
+                            '</div>'+
+                        '<span class="text-xs text-gray-500">'+ response.data.jalali_date +'</span>'+
+                    '</div>';
+                        $('#messages').append(client_new_message);
+                        messages.animate({ scrollTop: messages.prop("scrollHeight") }, 500);
                     }
                 }
             });
