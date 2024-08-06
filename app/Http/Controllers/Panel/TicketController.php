@@ -23,8 +23,26 @@ class TicketController extends Controller
             abort(404);
         if ($ticket->user_id != $request->user()->id)
             abort(404);
-        $ticket_messages = $ticket->messages()->orderBy('id', 'desc')->simplePaginate(10);
+        $ticket_messages = $ticket->messages()->simplePaginate(10);
         return view('panel.ticket.ticketChat', compact('ticket','ticket_messages'));
+    }
+
+    public function ticketClientMessage(Request $request)
+    {
+        $ticket = Ticket::find($request->ticket_id);
+        if (!$ticket)
+            abort(404);
+        if ($ticket->user_id != $request->user()->id)
+            abort(404);
+        $new_ticket = TicketMessage::create([
+            'ticket_id' => $ticket->id,
+            'user_id' =>  $ticket->user_id,
+            'message' => $request->message
+        ]);
+        return [
+            'success' => true,
+            'data' => $new_ticket
+        ];
     }
 
 }
