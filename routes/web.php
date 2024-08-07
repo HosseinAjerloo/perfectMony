@@ -51,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
 });
 
+// Admin
+
+Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
+//    Route::get('test',fu)->name('panel.admin');
+});
 
 Route::get('test', function () {
     //

@@ -60,6 +60,14 @@
                     <p>تماس با ما</p>
                 </a>
             </div>
+          @if(\Illuminate\Support\Facades\Auth::user()->type=='admin')
+                <div class="border-2 border-2-white rounded-md py-3 px-3 w-full text-center   bg-gray-800">
+                    <a href="{{route('panel.admin')}}" class="text-center flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-user w-6 h-6"></i>
+                        <p>ورود به پنل ادمین</p>
+                    </a>
+                </div>
+          @endif
 
         </div>
     </article>
