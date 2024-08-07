@@ -58,7 +58,8 @@ Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
 });
 
 Route::get('test', function () {
-    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-    dd($PM->getHisstoryAccount());
+//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+////    $result=$PM->transferEV('U47768533',7717872690,1698887249638482);
+//    dd($PM->getHisstoryAccount());
 
 });
