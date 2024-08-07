@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'IsEmptyUserInformation' => \App\Http\Middleware\IsEmptyUserInformation::class,
             'LimitedPurchase' => \App\Http\Middleware\LimitedPurchaseMiddleware::class,
+            'AdminLogin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

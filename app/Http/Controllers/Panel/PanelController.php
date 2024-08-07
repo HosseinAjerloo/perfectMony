@@ -240,6 +240,7 @@ class PanelController extends Controller
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'service';
         $inputs['status'] = 'requested';
+        $inputs['bank_id'] =$bank->id;
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
@@ -397,10 +398,11 @@ class PanelController extends Controller
 
     public function walletCharging(Request $request)
     {
+        $banks = Bank::where('is_active', 1)->get();
         $user = Auth::user();
         $balance = $user->getCreaditBalance();
         $balance = numberFormat($balance);
-        return view("Panel.RechargeWallet.index", compact('balance'));
+        return view("Panel.RechargeWallet.index", compact('balance','banks'));
     }
 
     public function walletChargingPreview(WalletChargingRequest $request)
@@ -418,11 +420,21 @@ class PanelController extends Controller
 
     public function walletChargingStore(WalletChargingRequest $request)
     {
+
         if (session()->has('payment')) {
             $inputs = $request->all();
             $inputs['price'] .= 0;
-            $bank = Bank::find('1');
+            $bank = Bank::find($inputs['bank_id']);
             $user = Auth::user();
+
+            $inputs['final_amount'] = $inputs['price'];
+            $inputs['type'] = 'wallet';
+            $inputs['status'] = 'requested';
+            $inputs['bank_id'] =$bank->id;
+            $inputs['user_id']=$user->id;
+            $invoice = Invoice::create($inputs);
+
+
             $objBank = new $bank->class;
             $objBank->setTotalPrice($inputs['price']);
             $objBank->setBankUrl($bank->url);
@@ -430,10 +442,10 @@ class PanelController extends Controller
             $objBank->setOrderID(session()->get('payment'));
             $objBank->setTerminalId($bank->terminal_id);
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
-            $bank = Bank::find('1');
 
             $payment = Payment::find(session()->get('payment'));
             session()->put('payment', $payment->id);
+            session()->put('invoice', $invoice->id);
             $payment = $payment->update(
                 ['bank_id' => $bank->id,
                     'amount' => $inputs['price'],
@@ -459,6 +471,7 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
+        $invoice=Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
             $payment->update(
                 [
@@ -467,6 +480,7 @@ class PanelController extends Controller
                     'state' => 'failed'
 
                 ]);
+            $invoice->update(['status' => 'failed']);
             return redirect()->route('panel.index')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
@@ -474,6 +488,7 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            $invoice->update(['status' => 'failed']);
         }
         $payment->update(
             [
@@ -482,6 +497,7 @@ class PanelController extends Controller
                 'state' => 'finished'
 
             ]);
+        $invoice->update(['status' => 'finished']);
         if ($lastBalance) {
             $amount = $payment->amount + $lastBalance->creadit_balance;
         } else {

@@ -165,22 +165,20 @@
                         })
                         let payment = $(customPayment).val();
 
-                       if(payment<=Number("{{env('Daily_Purchase_Limit')}}"))
-                       {
-                           let paymentResult = payment * dollar
-                           if (payment.match(/^\d+$/)) {
-                               $("#" + callElementTarget).val(payment)
-                               $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
+                        if (payment <= Number("{{env('Daily_Purchase_Limit')}}")) {
+                            let paymentResult = payment * dollar
+                            if (payment.match(/^\d+$/)) {
+                                $("#" + callElementTarget).val(payment)
+                                $(payment_text).text(' مبلغ قابل پرداخت: ' + formatNumber(paymentResult) + ' ریال ')
 
-                           } else {
-                               $("#" + callElementTarget).val('')
-                               $(payment_text).text('')
-                           }
-                       }
-                       else {
-                           $(customPayment).val('')
-                           $(payment_text).text('')
-                       }
+                            } else {
+                                $("#" + callElementTarget).val('')
+                                $(payment_text).text('')
+                            }
+                        } else {
+                            $(customPayment).val('')
+                            $(payment_text).text('')
+                        }
 
                     })
                 } else {
@@ -193,8 +191,7 @@
 
                     })
                     let payment = $(customPayment).val();
-                    if(payment<=Number("{{env('Daily_Purchase_Limit')}}"))
-                    {
+                    if (payment <= Number("{{env('Daily_Purchase_Limit')}}")) {
                         if (payment.match(/^\d+$/)) {
                             let paymentResult = payment * dollar
                             $("#" + callElementTarget).val(payment)
@@ -206,8 +203,7 @@
                             $(customPayment).val('');
 
                         }
-                    }
-                    else {
+                    } else {
                         $(customPayment).val('')
                         $(payment_text).text('')
                     }

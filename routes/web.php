@@ -51,7 +51,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
 });
 
+// Admin
+
+Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
+    Route::get('/',[App\Http\Controllers\Admin\AdminController::class,'index'])->name('panel.admin');
+});
 
 Route::get('test', function () {
-    //
+//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+////    $result=$PM->transferEV('U47768533',7717872690,1698887249638482);
+//    dd($PM->getHisstoryAccount());
+
 });

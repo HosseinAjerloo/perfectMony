@@ -22,7 +22,8 @@ class WalletChargingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price'=>'numeric|min:1000|required'
+            'price'=>'numeric|min:1000|required',
+            'bank_id'=>"required|exists:banks,id",
         ];
     }
     public function messages()

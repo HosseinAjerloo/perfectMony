@@ -36,6 +36,7 @@
             <a href="{{route('panel.wallet.charging')}}" class="bg-sky-500 py-1.5 px-10 rounded-md ">بازگشت</a>
         </div>
         <input type="hidden" name="price" value="{{$inputs['price']}}">
+        <input type="hidden" name="bank_id"  class="hidden bank" value="{{$inputs['bank_id']}}">
     </form>
 
 @endsection
