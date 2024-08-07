@@ -49,6 +49,16 @@ class TicketController extends Controller
     }
         public function ticketAddSubmit(Request $request)
         {
+            $ticket = Ticket::create([
+                'user_id' => $request->user()->id,
+                'subject' => $request->subject,
+                'status' => 'waiting_for_an_answer'
+            ]);
+            TicketMessage::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => $request->user()->id,
+                'message' => $request->message
+            ]);
             return redirect()->route('panel.ticket')->with(['success'=>"تیکت با موفقیت ثبت شد."]);
         }
 }
