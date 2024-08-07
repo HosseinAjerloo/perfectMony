@@ -398,10 +398,11 @@ class PanelController extends Controller
 
     public function walletCharging(Request $request)
     {
+        $banks = Bank::where('is_active', 1)->get();
         $user = Auth::user();
         $balance = $user->getCreaditBalance();
         $balance = numberFormat($balance);
-        return view("Panel.RechargeWallet.index", compact('balance'));
+        return view("Panel.RechargeWallet.index", compact('balance','banks'));
     }
 
     public function walletChargingPreview(WalletChargingRequest $request)
@@ -419,10 +420,11 @@ class PanelController extends Controller
 
     public function walletChargingStore(WalletChargingRequest $request)
     {
+
         if (session()->has('payment')) {
             $inputs = $request->all();
             $inputs['price'] .= 0;
-            $bank = Bank::find('1');
+            $bank = Bank::find($inputs['bank_id']);
             $user = Auth::user();
 
             $inputs['final_amount'] = $inputs['price'];
@@ -440,7 +442,6 @@ class PanelController extends Controller
             $objBank->setOrderID(session()->get('payment'));
             $objBank->setTerminalId($bank->terminal_id);
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
-            $bank = Bank::find('1');
 
             $payment = Payment::find(session()->get('payment'));
             session()->put('payment', $payment->id);
