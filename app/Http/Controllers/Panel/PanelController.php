@@ -429,6 +429,7 @@ class PanelController extends Controller
             $inputs['type'] = 'wallet';
             $inputs['status'] = 'requested';
             $inputs['bank_id'] =$bank->id;
+            $inputs['user_id']=$user->id;
             $invoice = Invoice::create($inputs);
 
 
