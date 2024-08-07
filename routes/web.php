@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
 // Admin
 
 Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
-//    Route::get('test',fu)->name('panel.admin');
+    Route::get('/',[App\Http\Controllers\Admin\AdminController::class,'index'])->name('panel.admin');
 });
 
 Route::get('test', function () {
