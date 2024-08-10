@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Panel;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Morilog\Jalali\Jalalian;
-
 
 class TicketController extends Controller
 {
@@ -17,18 +15,6 @@ class TicketController extends Controller
         $tickets = Ticket::orderBy('id', 'desc')->where('user_id',\request()->user()->id)->simplePaginate(10);
         return view('Panel.Ticket.tickets',compact('tickets'));
     }
-
-    public function ticketChat(Ticket $ticket)
-    {
-        //$ticket = Ticket::find($ticket_id);
-        if (!$ticket)
-            abort(404);
-        if ($ticket->user_id != $request->user()->id)
-            abort(404);
-        $ticket_messages = $ticket->messages;
-        return view('panel.ticket.ticketChat', compact('ticket','ticket_messages'));
-    }
-
     public function ticketMessage(Request $request)
     {
         $ticket = Ticket::find($request->ticket_id);
@@ -47,18 +33,5 @@ class TicketController extends Controller
             'data' => $new_ticket
         ];
     }
-        public function ticketAddSubmit(Request $request)
-        {
-            $ticket = Ticket::create([
-                'user_id' => $request->user()->id,
-                'subject' => $request->subject,
-                'status' => 'waiting_for_an_answer'
-            ]);
-            TicketMessage::create([
-                'ticket_id' => $ticket->id,
-                'user_id' => $request->user()->id,
-                'message' => $request->message
-            ]);
-            return redirect()->route('panel.ticket')->with(['success'=>"تیکت با موفقیت ثبت شد."]);
-        }
+
 }

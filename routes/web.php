@@ -45,8 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket.chat');
     Route::get('tickets', [App\Http\Controllers\Panel\TicketController::class, 'index'])->name('panel.ticket');
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
-    Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket-chat');
-    Route::post('ticket-client-message', [App\Http\Controllers\Panel\TicketController::class, 'ticketClientMessage'])->name('panel.ticket-client-message');
+    Route::get('ticket-chat/{ticket}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket-chat');
+    Route::post('ticket-client-message', [App\Http\Controllers\Panel\TicketController::class, 'ticketMessage'])->name('panel.ticket-client-message');
     Route::view('ticket-add','Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
 });
@@ -55,6 +55,9 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
     Route::get('/',[App\Http\Controllers\Admin\AdminController::class,'index'])->name('panel.admin');
+    Route::get('tickets', [App\Http\Controllers\Admin\TicketController::class, 'index'])->name('panel.admin.tickets');
+    Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Admin\TicketController::class, 'ticketChat'])->name('panel.admin.ticket-chat');
+    Route::post('ticket-message', [App\Http\Controllers\Admin\TicketController::class, 'ticketMessage'])->name('panel.admin.ticket-message');
 });
 
 Route::get('test', function () {
