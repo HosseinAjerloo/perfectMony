@@ -47,19 +47,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
     Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket-chat');
     Route::post('ticket-client-message', [App\Http\Controllers\Panel\TicketController::class, 'ticketClientMessage'])->name('panel.ticket-client-message');
-    Route::view('ticket-add','Panel.Ticket.addTicket')->name('panel.ticket-add');
+    Route::view('ticket-add', 'Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
 });
 
 // Admin
 
-Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
-    Route::get('/',[App\Http\Controllers\Admin\AdminController::class,'index'])->name('panel.admin');
+Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('panel.admin');
 });
 
 Route::get('test', function () {
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 ////    $result=$PM->transferEV('U47768533',7717872690,1698887249638482);
-//    dd($PM->getHisstoryAccount());
+    dd($PM->getHisstoryAccount());
 
 });
