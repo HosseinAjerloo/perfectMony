@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Transmission extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable=['user_id','finance_id','payee_account','payment_batch_num','voucher_num','voucher_amount'];
+    protected $fillable=['user_id','finance_id','payee_account_name','payee_account','payer_account','payment_amount','payment_batch_num'];
     public function financeTransaction()
     {
         $this->belongsTo(FinanceTransaction::class,'finance_id');

@@ -38,19 +38,17 @@ trait HasConfig
         }
     }
 
-    protected function transmission($transmission)
+    protected function transmission($transmission, $amount)
     {
         $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-        $PMeVoucher = $PM->transferEV($transmission, $this->voucherNume, $this->voucherCode);
-        dd($this->voucherNume,$this->voucherCode,$PMeVoucher);
-        if (isset($this->voucherNume) and isset($this->voucherCode)) {
-
-            if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account']))
-                return $PMeVoucher;
-            else
-                return false;
+        $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), $transmission, $amount);
+        if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
+            return $PMeVoucher;
+        } else {
+            Log::emergency('The transfer did not take place, the reason for its failure: ' . json_encode($PMeVoucher));
+            return false;
         }
-        return false;
+
     }
 
     protected function purchaseConditions()

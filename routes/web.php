@@ -67,7 +67,7 @@ Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
 
 Route::get('test', function () {
     $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-    $result=$PM->transferEV('U48638003',6746652757,1698887249638482);
+    $result=$PM->transferFund('U47768533','U39143683',1);
     dd($result);
 
 });
