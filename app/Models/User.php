@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->financeTransactions()->orderBy('id','desc')->first()->creadit_balance??0;
     }
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class,'user_id');
+    }
 }

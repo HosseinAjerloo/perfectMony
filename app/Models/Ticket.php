@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = ['user_id', 'subject', 'status'];
 
@@ -24,5 +25,9 @@ class Ticket extends Model
             'has_been_answered' => 'پاسخ داده شده',
             'closed' => 'بسته شده'
         };
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
     }
 }

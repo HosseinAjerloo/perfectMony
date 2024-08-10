@@ -19,6 +19,10 @@ class FinanceTransaction extends Model
     {
         return $this->belongsTo(Voucher::class, 'voucher_id');
     }
+    public function transmission()
+    {
+        return $this->hasOne(Transmission::class,'finance_id');
+    }
 
     public function scopePurchaseLimit(Builder $query, $Date = null, $mount = null): void
     {

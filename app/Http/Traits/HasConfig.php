@@ -38,6 +38,21 @@ trait HasConfig
         }
     }
 
+    protected function transmission($transmission)
+    {
+        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+        $PMeVoucher = $PM->transferEV($transmission, $this->voucherNume, $this->voucherCode);
+        dd($this->voucherNume,$this->voucherCode,$PMeVoucher);
+        if (isset($this->voucherNume) and isset($this->voucherCode)) {
+
+            if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account']))
+                return $PMeVoucher;
+            else
+                return false;
+        }
+        return false;
+    }
+
     protected function purchaseConditions()
     {
         $today = Carbon::now()->toDateString();
