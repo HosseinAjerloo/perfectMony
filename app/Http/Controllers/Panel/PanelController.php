@@ -239,7 +239,7 @@ class PanelController extends Controller
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'service';
         $inputs['status'] = 'requested';
-        $inputs['bank_id'] =$bank->id;
+        $inputs['bank_id'] = $bank->id;
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
@@ -296,7 +296,8 @@ class PanelController extends Controller
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            $invoice->update(['status' => 'failed']);
+            return redirect()->route('panel.error', $payment->id);
         }
 
         $payment->update(
@@ -384,7 +385,7 @@ class PanelController extends Controller
                 'amount' => $payment->amount,
                 'type' => "deposit",
                 "creadit_balance" => $balance + $payment->amount,
-                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه منید',
+                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید',
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
@@ -401,7 +402,7 @@ class PanelController extends Controller
         $user = Auth::user();
         $balance = $user->getCreaditBalance();
         $balance = numberFormat($balance);
-        return view("Panel.RechargeWallet.index", compact('balance','banks'));
+        return view("Panel.RechargeWallet.index", compact('balance', 'banks'));
     }
 
     public function walletChargingPreview(WalletChargingRequest $request)
@@ -411,6 +412,7 @@ class PanelController extends Controller
             [
                 'state' => 'requested',
             ]);
+        $payment->update(['order_id'=>$payment->id]);
         $inputs['orderID'] = $payment->id;
         session()->put('payment', $payment->id);
 
@@ -429,8 +431,8 @@ class PanelController extends Controller
             $inputs['final_amount'] = $inputs['price'];
             $inputs['type'] = 'wallet';
             $inputs['status'] = 'requested';
-            $inputs['bank_id'] =$bank->id;
-            $inputs['user_id']=$user->id;
+            $inputs['bank_id'] = $bank->id;
+            $inputs['user_id'] = $user->id;
             $invoice = Invoice::create($inputs);
 
 
@@ -470,7 +472,7 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        $invoice=Invoice::find(session()->get('invoice'));
+        $invoice = Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
             $payment->update(
                 [
@@ -484,10 +486,10 @@ class PanelController extends Controller
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
-        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
+        $back_price = $client->VerifyTransaction(100, $bank->terminal_id);
         if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
             $invoice->update(['status' => 'failed']);
+            return redirect()->route('panel.error', $payment->id);
         }
         $payment->update(
             [
@@ -514,6 +516,15 @@ class PanelController extends Controller
 
         ]);
         return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
+    }
+
+    public function error(Request $request, Payment $payment)
+    {
+        $user = Auth::user();
+        if ($payment->invoice->user->id==$user->id)
+            return view('bank.bankErrorPage', compact('payment'));
+        else
+            return redirect()->route('panel.index');
     }
 
 

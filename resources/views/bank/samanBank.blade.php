@@ -1,4 +1,3 @@
-@dd('adaddhr')
 <script>
     function postSamanRefId(Token, Url) {
 

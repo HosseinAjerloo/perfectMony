@@ -10,15 +10,21 @@ class Invoice extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'service_id', 'disscount_code_id', 'final_amount', 'type', 'service_id_custom', 'status', 'time_price_of_dollars','bank_id'];
+    protected $fillable = ['user_id', 'service_id', 'disscount_code_id', 'final_amount', 'type', 'service_id_custom', 'status', 'time_price_of_dollars', 'bank_id'];
 
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
+
     public function bank()
     {
         return $this->belongsTo(Bank::class, 'bank_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function voucherAmount()

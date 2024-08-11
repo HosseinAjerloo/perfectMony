@@ -17,6 +17,7 @@ Route::get('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'
 Route::middleware(['auth'])->group(function () {
     Route::withoutMiddleware('IsEmptyUserInformation')->group(function () {
         Route::get('', [App\Http\Controllers\Panel\PanelController::class, 'index'])->name('panel.index');
+        Route::get('error/{payment}', [App\Http\Controllers\Panel\PanelController::class, 'error'])->name('panel.error');
         Route::prefix('user')->group(function () {
             Route::get('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'completionOfInformation'])->name('panel.user.completionOfInformation');
             Route::post('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'register'])->name('panel.user.register');
@@ -78,7 +79,6 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
-//    return view('errors.404');
 //    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 //    $result=$PM->getHisstoryAccount();
 //    dd(end($result));
