@@ -70,6 +70,6 @@ Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
 Route::get('test', function () {
     $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
     $result=$PM->getHisstoryAccount();
-    dd($result);
+    dd(end($result));
 
 });
