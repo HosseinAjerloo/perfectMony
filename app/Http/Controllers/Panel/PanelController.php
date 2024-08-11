@@ -412,7 +412,7 @@ class PanelController extends Controller
             [
                 'state' => 'requested',
             ]);
-        $payment->update(['order_id'=>$payment->id]);
+        $payment->update(['order_id' => $payment->id]);
         $inputs['orderID'] = $payment->id;
         session()->put('payment', $payment->id);
 
@@ -451,7 +451,7 @@ class PanelController extends Controller
                 [
                     'bank_id' => $bank->id,
                     'amount' => $inputs['price'],
-                    'invoice_id'=>$invoice->id
+                    'invoice_id' => $invoice->id
 
                 ]);
 
@@ -489,7 +489,7 @@ class PanelController extends Controller
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
-        $back_price = $client->VerifyTransaction(100, $bank->terminal_id);
+        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
             return redirect()->route('panel.error', $payment->id);
@@ -524,7 +524,7 @@ class PanelController extends Controller
     public function error(Request $request, Payment $payment)
     {
         $user = Auth::user();
-        if ($payment->invoice->user->id==$user->id)
+        if ($payment->invoice->user->id == $user->id)
             return view('bank.bankErrorPage', compact('payment'));
         else
             return redirect()->route('panel.index');

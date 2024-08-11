@@ -219,7 +219,7 @@ class TransmissionController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
-            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            return redirect()->route('panel.error', $payment->id);
         }
 
         $payment->update(
