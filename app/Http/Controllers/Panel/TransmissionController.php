@@ -138,7 +138,8 @@ class TransmissionController extends Controller
 
     }
 
-    public function transferFromThePaymentGateway(TransmissionRequest $request){
+    public function transferFromThePaymentGateway(TransmissionRequest $request)
+    {
         $dollar = Doller::orderBy('id', 'desc')->first();
         $inputs = $request->all();
         $user = Auth::user();
@@ -153,13 +154,13 @@ class TransmissionController extends Controller
             $inputs['service_id_custom'] = $inputs['custom_payment'];
             $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
         } else {
-            return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
+            return redirect()->route('panel.transmission.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
         }
 
         $inputs['final_amount'] = $voucherPrice;
         $inputs['type'] = 'transmission';
         $inputs['status'] = 'requested';
-        $inputs['bank_id'] =$bank->id;
+        $inputs['bank_id'] = $bank->id;
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
 
         $invoice = Invoice::create($inputs);
@@ -182,15 +183,114 @@ class TransmissionController extends Controller
 
         $status = $objBank->payment();
         if (!$status) {
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
         $url = $objBank->getBankUrl();
         $token = $status;
+        session()->put('transmission', $inputs['transmission']);
         session()->put('payment', $payment->id);
         return view('welcome', compact('token', 'url'));
     }
+
     public function transferFromThePaymentGatewayBack(Request $request)
     {
-        dd($request->all());
+        dd(session()->get('transmission'));
+        $dollar = Doller::orderBy('id', 'desc')->first();
+        $user = Auth::user();
+        $balance = Auth::user()->getCreaditBalance();
+        $inputs = $request->all();
+        $payment = Payment::find(session()->get('payment'));
+        $bank = $payment->bank;
+        $objBank = new $bank->class;
+        $invoice = $payment->invoice;
+        if (!$objBank->backBank()) {
+            $payment->update(
+                [
+                    'RefNum' => null,
+                    'ResNum' => $inputs['ResNum'],
+                    'state' => 'failed'
+
+                ]);
+            $invoice->update(['status' => 'failed']);
+
+            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
+        if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+            $invoice->update(['status' => 'failed']);
+            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+        }
+
+        $payment->update(
+            [
+                'RefNum' => $inputs['RefNum'],
+                'ResNum' => $inputs['ResNum'],
+                'state' => 'finished'
+            ]);
+
+        if (isset($invoice->service_id)) {
+            $service = $invoice->service;
+            $amount = $service->amount;
+        } else {
+            $amount = $invoice->service_id_custom;
+        }
+
+
+        $transition = $this->transmission(session()->get('transmission'), $amount);
+        if (is_array($transition)) {
+
+            $financeTransaction = FinanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "deposit",
+                "creadit_balance" => $balance + $payment->amount,
+                'description' => ' افزایش کیف پول',
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+            ]);
+
+            $finance = FinanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "withdrawal",
+                "creadit_balance" => $financeTransaction->creadit_balance - $payment->amount,
+                'description' => 'انتقال ووچر و برداشت مبلغ از کیف پول',
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+            ]);
+
+            Transmission::create(
+                [
+                    'user_id' => $user->id,
+                    'finance_id' => $finance->id,
+                    'payee_account_name' => $transition['Payee_Account_Name'],
+                    'payee_account' => $transition['Payee_Account'],
+                    'payer_account' => $transition['Payer_Account'],
+                    'payment_amount' => $transition['PAYMENT_AMOUNT'],
+                    'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
+                ]
+            );
+
+            $invoice->update(['status' => 'finished']);
+
+
+        } else {
+
+            FinanceTransaction::create([
+                'user_id' => $user->id,
+                'voucher_id' => null,
+                'amount' => $payment->amount,
+                'type' => "deposit",
+                "creadit_balance" => $balance + $payment->amount,
+                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود جهت انتقال ووچر اقدام نمایید',
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+
+            ]);
+            $invoice->update(['status' => 'finished']);
+            return redirect()->route('panel.transmission.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
+        }
     }
 }
