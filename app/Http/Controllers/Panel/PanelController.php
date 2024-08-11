@@ -487,6 +487,7 @@ class PanelController extends Controller
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction(100, $bank->terminal_id);
+        dd($back_price,$payment->amount);
         if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
             return redirect()->route('panel.error', $payment->id);
