@@ -67,6 +67,10 @@ Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
     Route::post('ticket-message', [App\Http\Controllers\Admin\TicketController::class, 'ticketMessage'])->name('panel.admin.ticket-message');
 });
 
+
+Route::fallback(function () {
+    abort(404);
+});
 Route::get('test', function () {
 //    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 //    $result=$PM->getHisstoryAccount();
