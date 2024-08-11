@@ -18,7 +18,8 @@
         </div>
 
         <div class="mt-3.5 sm:mt-8">
-            <a href="{{route('panel.index')}}" class="text-base font-semibold bg-sky-500 px-6 py-1.5 rounded-md font-yekan">صفحه اصلی ساینا ارز</a>
+            <a href="{{route('panel.index')}}"
+               class="text-base font-semibold bg-sky-500 px-6 py-1.5 rounded-md font-yekan">صفحه اصلی ساینا ارز</a>
         </div>
 
     </article>

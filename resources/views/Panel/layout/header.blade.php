@@ -4,7 +4,9 @@
     </div>
     <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}" >
         <i class="fa-solid fa-house w-6 h-6"></i>
-            <img src="{{asset('src/images/Group 2631.svg')}}" alt="">
+            <h1 class="font-bold text-2xl italic">Saina Arz</h1>
+            <img src="{{asset('src/images/logo.svg')}}" alt="">
+
 
     </a>
     <div class="myProfile">

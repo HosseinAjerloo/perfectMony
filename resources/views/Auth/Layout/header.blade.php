@@ -3,6 +3,6 @@
         <p class="font-semibold text-lg text-white ">ساینا ارز</p>
     </div>
     <div>
-        <img src="{{asset('src/images/Group 2631.svg')}}" alt="">
+        <img src="{{asset('src/images/logo.svg')}}" alt="">
     </div>
 </header>
