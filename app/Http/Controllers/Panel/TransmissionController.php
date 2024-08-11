@@ -217,7 +217,7 @@ class TransmissionController extends Controller
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
-        if ($back_price != $payment->amount and Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+        if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
             return redirect()->route('panel.error', $payment->id);
         }
