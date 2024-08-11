@@ -25,9 +25,18 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
     Route::get('purchase', [App\Http\Controllers\Panel\PanelController::class, 'purchase'])->name('panel.purchase.view');
+
+
+    Route::get('transmission', [App\Http\Controllers\Panel\TransmissionController::class, 'index'])->name('panel.transmission.view');
+
     Route::middleware('LimitedPurchase')->group(function () {
         Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
         Route::post('Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'PurchaseThroughTheBank'])->name('panel.PurchaseThroughTheBank');
+        Route::post('transmission', [App\Http\Controllers\Panel\TransmissionController::class, 'store'])->name('panel.transmission');
+        Route::post('voucher-transfer-through-bank', [App\Http\Controllers\Panel\TransmissionController::class, 'transferFromThePaymentGateway'])->name('panel.transferFromThePaymentGateway');
+        Route::post('back/voucher-transfer-through-bank', [App\Http\Controllers\Panel\TransmissionController::class, 'transferFromThePaymentGatewayBack'])->name('panel.back.transferFromThePaymentGateway')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+
+
     });
     Route::post('back/Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'backPurchaseThroughTheBank'])->name('panel.Purchase-through-the-bank')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
     Route::get('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
@@ -49,19 +58,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('ticket-chat/{ticket}', [App\Http\Controllers\Panel\TicketController::class, 'ticketChat'])->name('panel.ticket-chat');
     Route::post('ticket-client-message', [App\Http\Controllers\Panel\TicketController::class, 'ticketMessage'])->name('panel.ticket-client-message');
-    Route::view('ticket-add','Panel.Ticket.addTicket')->name('panel.ticket-add');
+    Route::view('ticket-add', 'Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
-    Route::get('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'index'])->name('panel.transmission.view');
-    Route::post('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'store'])->name('panel.transmission');
-    Route::post('voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGateway'])->name('panel.transferFromThePaymentGateway');
-    Route::post('back/voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGatewayBack'])->name('panel.back.transferFromThePaymentGateway')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;;
+
 });
 
 // Admin
 
 
-Route::prefix('admin')->middleware(['auth','AdminLogin'])->group(function (){
-    Route::get('/',[App\Http\Controllers\Admin\AdminController::class,'index'])->name('panel.admin');
+Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('panel.admin');
     Route::get('tickets', [App\Http\Controllers\Admin\TicketController::class, 'index'])->name('panel.admin.tickets');
     Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Admin\TicketController::class, 'ticketChat'])->name('panel.admin.ticket-chat');
     Route::post('ticket-message', [App\Http\Controllers\Admin\TicketController::class, 'ticketMessage'])->name('panel.admin.ticket-message');

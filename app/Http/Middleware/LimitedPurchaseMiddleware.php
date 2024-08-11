@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Filters\PurchaseConditions;
 use App\Http\Traits\HasConfig;
 use Closure;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class LimitedPurchaseMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $statusPurchase = $this->purchaseConditions();
+        $filters=new PurchaseConditions();
+        $statusPurchase = $filters->filters();
 
         if (is_bool($statusPurchase)) {
             return $next($request);

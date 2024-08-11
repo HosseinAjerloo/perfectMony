@@ -62,7 +62,6 @@ class PanelController extends Controller
 
     public function store(PurchaseRequest $request)
     {
-        $this->purchaseConditions();
         try {
             $inputs = request()->all();
             $dollar = Doller::orderBy('id', 'desc')->first();
