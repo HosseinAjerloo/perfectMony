@@ -273,6 +273,7 @@ class TransmissionController extends Controller
                 ]
             );
 
+            return redirect()->route('panel.index')->with(['success' => 'ووچر شما با موفقیت انتقال داده شد']);
 
 
         } else {
