@@ -194,7 +194,6 @@ class TransmissionController extends Controller
 
     public function transferFromThePaymentGatewayBack(Request $request)
     {
-        dd(session()->get('transmission'));
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
         $balance = Auth::user()->getCreaditBalance();
@@ -239,6 +238,7 @@ class TransmissionController extends Controller
 
 
         $transition = $this->transmission(session()->get('transmission'), $amount);
+        $invoice->update(['status' => 'finished']);
         if (is_array($transition)) {
 
             $financeTransaction = FinanceTransaction::create([
@@ -273,7 +273,6 @@ class TransmissionController extends Controller
                 ]
             );
 
-            $invoice->update(['status' => 'finished']);
 
 
         } else {
@@ -289,7 +288,6 @@ class TransmissionController extends Controller
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
             ]);
-            $invoice->update(['status' => 'finished']);
             return redirect()->route('panel.transmission.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }
     }
