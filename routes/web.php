@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
     Route::get('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'index'])->name('panel.transmission.view');
     Route::post('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'store'])->name('panel.transmission');
+    Route::post('voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGateway'])->name('panel.transferFromThePaymentGateway');
+    Route::post('back/voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGatewayBack'])->name('panel.back.transferFromThePaymentGateway');
 });
 
 // Admin

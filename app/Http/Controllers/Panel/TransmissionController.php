@@ -10,6 +10,7 @@ use App\Models\Bank;
 use App\Models\Doller;
 use App\Models\FinanceTransaction;
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Transmission;
 use App\Models\Voucher;
@@ -135,5 +136,61 @@ class TransmissionController extends Controller
             return redirect()->route('panel.transmission.view')->withErrors(['error' => "عملیات انتقال ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
         }
 
+    }
+
+    public function transferFromThePaymentGateway(TransmissionRequest $request){
+        $dollar = Doller::orderBy('id', 'desc')->first();
+        $inputs = $request->all();
+        $user = Auth::user();
+        $bank = Bank::find($inputs['bank']);
+        $inputs['user_id'] = $user->id;
+        $inputs['description'] = " انتقال ووچر از طریق $bank->name";
+
+        if (isset($inputs['service_id'])) {
+            $service = Service::find($inputs['service_id']);
+            $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
+        } elseif (isset($inputs['custom_payment'])) {
+            $inputs['service_id_custom'] = $inputs['custom_payment'];
+            $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
+        } else {
+            return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
+        }
+
+        $inputs['final_amount'] = $voucherPrice;
+        $inputs['type'] = 'transmission';
+        $inputs['status'] = 'requested';
+        $inputs['bank_id'] =$bank->id;
+        $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
+
+        $invoice = Invoice::create($inputs);
+        $objBank = new $bank->class;
+        $objBank->setTotalPrice($voucherPrice);
+        $payment = Payment::create(
+            [
+                'bank_id' => $bank->id,
+                'invoice_id' => $invoice->id,
+                'amount' => $voucherPrice,
+                'state' => 'requested',
+
+            ]
+        );
+        $payment->update(['order_id' => $payment->id]);
+        $objBank->setOrderID($payment->id);
+        $objBank->setBankUrl($bank->url);
+        $objBank->setTerminalId($bank->terminal_id);
+        $objBank->setUrlBack(route('panel.back.transferFromThePaymentGateway'));
+
+        $status = $objBank->payment();
+        if (!$status) {
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+        }
+        $url = $objBank->getBankUrl();
+        $token = $status;
+        session()->put('payment', $payment->id);
+        return view('welcome', compact('token', 'url'));
+    }
+    public function transferFromThePaymentGatewayBack(Request $request)
+    {
+        dd($request->all());
     }
 }
