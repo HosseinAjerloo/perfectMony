@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'index'])->name('panel.transmission.view');
     Route::post('transmission',[App\Http\Controllers\Panel\TransmissionController::class,'store'])->name('panel.transmission');
     Route::post('voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGateway'])->name('panel.transferFromThePaymentGateway');
-    Route::post('back/voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGatewayBack'])->name('panel.back.transferFromThePaymentGateway');
+    Route::post('back/voucher-transfer-through-bank',[App\Http\Controllers\Panel\TransmissionController::class,'transferFromThePaymentGatewayBack'])->name('panel.back.transferFromThePaymentGateway')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;;
 });
 
 // Admin
