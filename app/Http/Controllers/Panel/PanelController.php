@@ -480,7 +480,6 @@ class PanelController extends Controller
             }
             $url = $objBank->getBankUrl();
             $token = $status;
-            session()->put('payment', $payment->id);
             Log::emergency(PHP_EOL . 'Connection with the bank payment gateway to charge the wallet '
                 . PHP_EOL .
                 'Name of the bank: ' . $bank->name
