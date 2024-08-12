@@ -39,6 +39,7 @@
         $(document).ready(function (){
            $(".bank").click(function (){
                 $("#form").submit();
+
            }) ;
         });
     </script>

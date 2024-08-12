@@ -240,7 +240,8 @@
             $(bank).attr('checked', 'checked')
             $('.form').attr('action', "{{route('panel.transferFromThePaymentGateway')}}")
             $('.form').submit()
-            $(this).remove();
+            $(".bank").remove();
+
             $('.wallet').remove();
             $(".loading").removeClass('hidden');
         })

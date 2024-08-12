@@ -232,6 +232,7 @@
             $('.form').submit()
             $(this).remove();
             $('.wallet').remove();
+            $(".bank").remove();
             $(".loading").removeClass('hidden');
         })
     </script>
