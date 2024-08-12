@@ -12,25 +12,22 @@ class Saman implements BankInterface
     protected $action;
     protected $terminalId;
     protected $orderID;
-    protected $data=[];
+    protected $data = [];
 
     public function payment()
     {
 
 
+        $res = $this->GetToken();
 
-        $res=$this->GetToken();
-
-        if ($res)
-        {
+        if ($res) {
             if ($res[0] == 0) {
                 return false;
             } elseif ($res[0] == 1) {
                 $token = $res[1];
                 return $token;
             }
-        }
-        else{
+        } else {
             return false;
         }
 
@@ -52,29 +49,27 @@ class Saman implements BankInterface
         curl_close($curl);
 
         $result = json_decode($result);
-        if ($result)
-        {
+        if ($result) {
             if ($result->status == 1) {
                 $token = $result->token;
                 return array(1, $token);
             } else {
                 return array(0, $result->errorDesc);
             }
-        }
-        else{
+        } else {
             return false;
         }
 
 
     }
+
     public function backBank()
     {
-        $refNum=request()->input('RefNum');
-        $resNum=request()->input('ResNum');
+        $refNum = request()->input('RefNum');
+        $resNum = request()->input('ResNum');
         if (isset($refNum) and isset($resNum)) {
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -90,26 +85,32 @@ class Saman implements BankInterface
         );
 
     }
+
     public function setTotalPrice($price)
     {
-        $this->totalPrice=$price;
+        $this->totalPrice = $price;
     }
+
     public function getTotalPrice()
     {
         return $this->totalPrice;
     }
+
     public function setBankUrl($url)
     {
-        $this->bannkUrl=$url;
+        $this->bannkUrl = $url;
     }
+
     public function getBankUrl()
     {
         return $this->bannkUrl;
     }
+
     public function setTerminalId($terminalId)
     {
-        $this->terminalId=$terminalId;
+        $this->terminalId = $terminalId;
     }
+
     public function getTerminalId()
     {
         return $this->terminalId;
@@ -118,19 +119,49 @@ class Saman implements BankInterface
 
     public function setUrlBack($urlBack)
     {
-        $this->urlBack=$urlBack;
+        $this->urlBack = $urlBack;
     }
+
     public function getUrlBack()
     {
         return $this->urlBack;
     }
+
     public function setOrderID($orderID)
     {
-        $this->orderID=$orderID;
+        $this->orderID = $orderID;
     }
+
     public function getOrderID()
     {
         return $this->orderID;
+    }
+
+    public function samanTransactionStatus($ErrorCode)
+    {
+
+        $return_value = match ($ErrorCode) {
+            1 => "کاربر انصراف داده است",
+            2 => "پرداخت با موفقیت انجام شد",
+            3 => "پرداخت انجام نشد",
+            4 =>"کاربر در بازه زمانی تعیین شده پاسخی ارسال نکرده است",
+            5 =>"پارامترهای ارسالی نامعتبر است",
+            8 =>"آدرس سرور پذیرنده نامعتبر است (در پرداخت های بر پایه توکن)",
+            10 =>"توکن ارسال شده یافت نشد",
+            11=>"با این شماره ترمینال فقط تراکنش های توکنی قابل پرداخت هستند",
+            12=>"شماره ترمینال ارسال شده یافت نشد",
+            43=>"قبلاً درخواست Verify شده است !",
+            502=>"ناتواني در اتصال به سرور بانک جهت تاييد تراکنش !",
+            504=>"رسيد ديجيتالي برگشت داده شده توسط بانک خالي مي باشد !",
+            505=>"رسيد ديجيتالي برگشت داده شده توسط بانک تکراري مي باشد !",
+            602=>"در عمليات تاييد تراکنش از سمت بانک خطايي رخ داده است !",
+            603=>"مبلغ پرداخت شده صحيح نمي باشد !",
+            909=>"ناتوانی در ذخیره کردن کد بانک",
+
+        };
+        return $return_value;
+
+
     }
 
 }
