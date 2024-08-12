@@ -175,7 +175,7 @@ class TransmissionController extends Controller
 
             ]
         );
-        $payment->update(['order_id' => $payment->id]);
+        $payment->update(['order_id' => $payment->id+Payment::transactionNumber]);
         $objBank->setOrderID($payment->id);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);

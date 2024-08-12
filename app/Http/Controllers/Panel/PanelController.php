@@ -16,6 +16,7 @@ use App\Models\Service;
 use App\Models\Voucher;
 use App\Notifications\IsEmptyUserInformationNotifaction;
 use App\Services\BankService\Saman;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
@@ -253,7 +254,7 @@ class PanelController extends Controller
 
             ]
         );
-        $payment->update(['order_id' => $payment->id]);
+        $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
         $objBank->setOrderID($payment->id);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
@@ -266,12 +267,22 @@ class PanelController extends Controller
         $url = $objBank->getBankUrl();
         $token = $status;
         session()->put('payment', $payment->id);
+        Log::emergency('Connection with the bank payment gateway '
+            . PHP_EOL .
+            'Name of the bank: ' . $bank->name
+            . PHP_EOL .
+            'payment price: ' . $voucherPrice
+            . PHP_EOL .
+            'payment date: ' . Carbon::now()->toDateTimeString()
+        );
         return view('welcome', compact('token', 'url'));
     }
 
 //
     public function backPurchaseThroughTheBank(Request $request)
     {
+        Log::emergency("Return from the bank and the bank's response to the purchase of the service " . json_encode($request->all()));
+
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
         $balance = Auth::user()->getCreaditBalance();
@@ -412,7 +423,7 @@ class PanelController extends Controller
             [
                 'state' => 'requested',
             ]);
-        $payment->update(['order_id' => $payment->id]);
+        $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
         $inputs['orderID'] = $payment->id;
         session()->put('payment', $payment->id);
 
@@ -461,6 +472,15 @@ class PanelController extends Controller
             }
             $url = $objBank->getBankUrl();
             $token = $status;
+            session()->put('payment', $payment->id);
+            Log::emergency('Connection with the bank payment gateway to charge the wallet '
+                . PHP_EOL .
+                'Name of the bank: ' . $bank->name
+                . PHP_EOL .
+                'payment price: ' . $invoice['price']
+                . PHP_EOL .
+                'payment date: ' . Carbon::now()->toDateTimeString()
+            );
             return view('welcome', compact('token', 'url'));
         } else {
             return redirect()->route('panel.index')->withErrors(['error' => 'خطایی رخ داد لفا مجدد بعدا تلاش فرمایید.']);
@@ -469,6 +489,10 @@ class PanelController extends Controller
 
     public function walletChargingBack(Request $request)
     {
+
+        Log::emergency(" Back from the bank and the bank's response to charging the wallet " . json_encode($request->all()));
+
+
         $user = Auth::user();
         $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
         $inputs = $request->all();
