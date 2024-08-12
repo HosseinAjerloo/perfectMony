@@ -190,7 +190,7 @@ class TransmissionController extends Controller
         $token = $status;
         session()->put('transmission', $inputs['transmission']);
         session()->put('payment', $payment->id);
-        Log::emergency(PHP_EOL . 'Connect to the bank to transfer the voucher '
+        Log::channel('bankLog')->emergency(PHP_EOL . 'Connect to the bank to transfer the voucher '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
             . PHP_EOL .
@@ -213,7 +213,7 @@ class TransmissionController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        Log::emergency(PHP_EOL . " Bank return response from voucher transfer " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+        Log::channel('bankLog')->emergency(PHP_EOL . " Bank return response from voucher transfer " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
             'user ID :' . $user->id
             . PHP_EOL
@@ -236,7 +236,7 @@ class TransmissionController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
-            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
+            Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
                 PHP_EOL .
                 'user Id: ' . $user->id
