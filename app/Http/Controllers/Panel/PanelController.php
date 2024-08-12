@@ -267,7 +267,7 @@ class PanelController extends Controller
         $url = $objBank->getBankUrl();
         $token = $status;
         session()->put('payment', $payment->id);
-        Log::emergency(PHP_EOL . 'Connection with the bank payment gateway '
+        Log::channel('bankLog')->emergency(PHP_EOL . 'Connection with the bank payment gateway '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
             . PHP_EOL .
@@ -292,7 +292,7 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        Log::emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+        Log::channel('bankLog')->emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
             'user ID :' . $user->id
             . PHP_EOL
@@ -315,7 +315,7 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
-            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
+            Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
                 PHP_EOL .
                 'user Id: ' . $user->id
@@ -485,7 +485,7 @@ class PanelController extends Controller
             }
             $url = $objBank->getBankUrl();
             $token = $status;
-            Log::emergency(PHP_EOL . 'Connection with the bank payment gateway to charge the wallet '
+            Log::channel('bankLog')->emergency(PHP_EOL . 'Connection with the bank payment gateway to charge the wallet '
                 . PHP_EOL .
                 'Name of the bank: ' . $bank->name
                 . PHP_EOL .
@@ -515,7 +515,7 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        Log::emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+        Log::channel('bankLog')->emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
             'user ID :' . $user->id
             . PHP_EOL
@@ -537,7 +537,7 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
-            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
+            Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
                 . PHP_EOL .
                 'user ID :' . $user->id
