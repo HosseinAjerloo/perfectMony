@@ -255,7 +255,7 @@ class PanelController extends Controller
             ]
         );
         $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
-        $objBank->setOrderID($payment->id+Payment::transactionNumber);
+        $objBank->setOrderID($payment->id + Payment::transactionNumber);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
@@ -267,13 +267,15 @@ class PanelController extends Controller
         $url = $objBank->getBankUrl();
         $token = $status;
         session()->put('payment', $payment->id);
-        Log::emergency(PHP_EOL.'Connection with the bank payment gateway '
+        Log::emergency(PHP_EOL . 'Connection with the bank payment gateway '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
             . PHP_EOL .
             'payment price: ' . $voucherPrice
             . PHP_EOL .
             'payment date: ' . Carbon::now()->toDateTimeString()
+            . PHP_EOL .
+            'user ID: ' . $user->id
         );
         return view('welcome', compact('token', 'url'));
     }
@@ -289,8 +291,9 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        Log::emergency(PHP_EOL."Return from the bank and the bank's response to the purchase of the service " . json_encode($request->all()).PHP_EOL.
-            'Bank message: '.$objBank->samanTransactionStatus($request->input('Status')));
+        Log::emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+            'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
+            'user ID :' . $user->id);
         $invoice = $payment->invoice;
         if (!$objBank->backBank()) {
             $payment->update(
@@ -302,13 +305,17 @@ class PanelController extends Controller
                 ]);
             $invoice->update(['status' => 'failed']);
 
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
+            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
+                'Bank message: ' . $objBank->samanVerifyTransaction($back_price).
+            PHP_EOL.
+            'user Id: '.$user->id);
             return redirect()->route('panel.error', $payment->id);
         }
 
@@ -453,7 +460,7 @@ class PanelController extends Controller
             $objBank->setTotalPrice($inputs['price']);
             $objBank->setBankUrl($bank->url);
 
-            $objBank->setOrderID($payment->id+Payment::transactionNumber);
+            $objBank->setOrderID($payment->id + Payment::transactionNumber);
             $objBank->setTerminalId($bank->terminal_id);
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
 
@@ -474,14 +481,18 @@ class PanelController extends Controller
             $url = $objBank->getBankUrl();
             $token = $status;
             session()->put('payment', $payment->id);
-            Log::emergency(PHP_EOL.'Connection with the bank payment gateway to charge the wallet '
+            Log::emergency(PHP_EOL . 'Connection with the bank payment gateway to charge the wallet '
                 . PHP_EOL .
                 'Name of the bank: ' . $bank->name
                 . PHP_EOL .
                 'payment price: ' . $invoice['price']
                 . PHP_EOL .
                 'payment date: ' . Carbon::now()->toDateTimeString()
+                . PHP_EOL .
+                'user ID: ' . $user->id
             );
+
+
             return view('welcome', compact('token', 'url'));
         } else {
             return redirect()->route('panel.index')->withErrors(['error' => 'خطایی رخ داد لفا مجدد بعدا تلاش فرمایید.']);
@@ -492,16 +503,15 @@ class PanelController extends Controller
     {
 
 
-
-
         $user = Auth::user();
         $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
         $inputs = $request->all();
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
-        Log::emergency(PHP_EOL." Back from the bank and the bank's response to charging the wallet " . json_encode($request->all()).PHP_EOL.
-            'Bank message: '.$objBank->samanTransactionStatus($request->input('Status')));
+        Log::emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+            'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
+            'user ID :' . $user->id);
         $invoice = Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
             $payment->update(
@@ -512,13 +522,17 @@ class PanelController extends Controller
 
                 ]);
             $invoice->update(['status' => 'failed']);
-            return redirect()->route('panel.index')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            return redirect()->route('panel.index')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
+            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
+                'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
+                . PHP_EOL .
+                'user ID :' . $user->id);
             return redirect()->route('panel.error', $payment->id);
         }
         $payment->update(
