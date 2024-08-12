@@ -255,7 +255,7 @@ class PanelController extends Controller
             ]
         );
         $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
-        $objBank->setOrderID($payment->id);
+        $objBank->setOrderID($payment->id+Payment::transactionNumber);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
@@ -435,6 +435,7 @@ class PanelController extends Controller
 
         if (session()->has('payment')) {
             $inputs = $request->all();
+            $payment = Payment::find(session()->get('payment'));
             $inputs['price'] .= 0;
             $bank = Bank::find($inputs['bank_id']);
             $user = Auth::user();
@@ -451,11 +452,10 @@ class PanelController extends Controller
             $objBank->setTotalPrice($inputs['price']);
             $objBank->setBankUrl($bank->url);
 
-            $objBank->setOrderID(session()->get('payment'));
+            $objBank->setOrderID($payment->id+Payment::transactionNumber);
             $objBank->setTerminalId($bank->terminal_id);
             $objBank->setUrlBack(route('panel.wallet.charging.back'));
 
-            $payment = Payment::find(session()->get('payment'));
             session()->put('payment', $payment->id);
             session()->put('invoice', $invoice->id);
             $payment = $payment->update(

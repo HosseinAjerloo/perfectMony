@@ -20,11 +20,18 @@ class Saman implements BankInterface
 
 
         $res=$this->GetToken();
-        if ($res[0] == 0) {
+
+        if ($res)
+        {
+            if ($res[0] == 0) {
+                return false;
+            } elseif ($res[0] == 1) {
+                $token = $res[1];
+                return $token;
+            }
+        }
+        else{
             return false;
-        } elseif ($res[0] == 1) {
-            $token = $res[1];
-            return $token;
         }
 
     }
@@ -45,13 +52,20 @@ class Saman implements BankInterface
         curl_close($curl);
 
         $result = json_decode($result);
-
-        if ($result->status == 1) {
-            $token = $result->token;
-            return array(1, $token);
-        } else {
-            return array(0, $result->errorDesc);
+        if ($result)
+        {
+            if ($result->status == 1) {
+                $token = $result->token;
+                return array(1, $token);
+            } else {
+                return array(0, $result->errorDesc);
+            }
         }
+        else{
+            return false;
+        }
+
+
     }
     public function backBank()
     {
