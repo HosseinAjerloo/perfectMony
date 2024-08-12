@@ -14,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Transmission;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -189,6 +190,17 @@ class TransmissionController extends Controller
         $token = $status;
         session()->put('transmission', $inputs['transmission']);
         session()->put('payment', $payment->id);
+        Log::emergency(PHP_EOL . 'Connect to the bank to transfer the voucher '
+            . PHP_EOL .
+            'Name of the bank: ' . $bank->name
+            . PHP_EOL .
+            'payment price: ' . $voucherPrice
+            . PHP_EOL .
+            'payment date: ' . Carbon::now()->toDateTimeString()
+            . PHP_EOL .
+            'user ID: ' . $user->id
+            . PHP_EOL
+        );
         return view('welcome', compact('token', 'url'));
     }
 
@@ -201,6 +213,11 @@ class TransmissionController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
+        Log::emergency(PHP_EOL . " Bank return response from voucher transfer " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+            'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
+            'user ID :' . $user->id
+            . PHP_EOL
+        );
         $invoice = $payment->invoice;
         if (!$objBank->backBank()) {
             $payment->update(
@@ -212,13 +229,19 @@ class TransmissionController extends Controller
                 ]);
             $invoice->update(['status' => 'failed']);
 
-            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود']);
+            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود'.$objBank->samanTransactionStatus($request->input('Status'))]);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
+            Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
+                'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
+                PHP_EOL .
+                'user Id: ' . $user->id
+                . PHP_EOL
+            );
             return redirect()->route('panel.error', $payment->id);
         }
 
