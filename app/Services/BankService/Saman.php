@@ -139,7 +139,7 @@ class Saman implements BankInterface
 
     public function samanTransactionStatus($ErrorCode)
     {
-
+        $ErrorCode=$ErrorCode!=null?(int)$ErrorCode:500;
         $return_value = match ($ErrorCode) {
             1 => "کاربر انصراف داده است",
             2 => "پرداخت با موفقیت انجام شد",
@@ -157,6 +157,7 @@ class Saman implements BankInterface
             602=>"در عمليات تاييد تراکنش از سمت بانک خطايي رخ داده است !",
             603=>"مبلغ پرداخت شده صحيح نمي باشد !",
             909=>"ناتوانی در ذخیره کردن کد بانک",
+            default=>"کد بانک بالیست اررور های موجود همسان نبود کد بانکی: ".$ErrorCode
 
         };
         return $return_value;

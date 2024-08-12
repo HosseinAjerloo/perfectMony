@@ -267,7 +267,7 @@ class PanelController extends Controller
         $url = $objBank->getBankUrl();
         $token = $status;
         session()->put('payment', $payment->id);
-        Log::emergency('Connection with the bank payment gateway '
+        Log::emergency(PHP_EOL.'Connection with the bank payment gateway '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
             . PHP_EOL .
@@ -281,7 +281,6 @@ class PanelController extends Controller
 //
     public function backPurchaseThroughTheBank(Request $request)
     {
-        Log::emergency("Return from the bank and the bank's response to the purchase of the service " . json_encode($request->all()));
 
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
@@ -290,6 +289,8 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
+        Log::emergency(PHP_EOL."Return from the bank and the bank's response to the purchase of the service " . json_encode($request->all()).PHP_EOL.
+            'Bank message: '.$objBank->samanTransactionStatus($request->input('Status')));
         $invoice = $payment->invoice;
         if (!$objBank->backBank()) {
             $payment->update(
@@ -473,7 +474,7 @@ class PanelController extends Controller
             $url = $objBank->getBankUrl();
             $token = $status;
             session()->put('payment', $payment->id);
-            Log::emergency('Connection with the bank payment gateway to charge the wallet '
+            Log::emergency(PHP_EOL.'Connection with the bank payment gateway to charge the wallet '
                 . PHP_EOL .
                 'Name of the bank: ' . $bank->name
                 . PHP_EOL .
@@ -490,7 +491,7 @@ class PanelController extends Controller
     public function walletChargingBack(Request $request)
     {
 
-        Log::emergency(" Back from the bank and the bank's response to charging the wallet " . json_encode($request->all()));
+
 
 
         $user = Auth::user();
@@ -499,6 +500,8 @@ class PanelController extends Controller
         $payment = Payment::find(session()->get('payment'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
+        Log::emergency(PHP_EOL." Back from the bank and the bank's response to charging the wallet " . json_encode($request->all()).PHP_EOL.
+            'Bank message: '.$objBank->samanTransactionStatus($request->input('Status')));
         $invoice = Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
             $payment->update(
