@@ -9,7 +9,7 @@
 
 @section('container')
 
-    <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto" method="post"
+    <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto from" method="post"
           action="{{route('panel.wallet.charging.store')}}">
         @csrf
         <article class="bg-gray-500 w-full space-y-4 p-2">
@@ -56,6 +56,7 @@
                     $(this).remove();
                     $(".back").remove();
                     $(".loading").removeClass('hidden');
+                    $(".from").submit();
                 })
         })
     </script>
