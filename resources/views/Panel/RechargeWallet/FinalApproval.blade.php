@@ -9,12 +9,13 @@
 
 @section('container')
 
-    <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto" method="post" action="{{route('panel.wallet.charging.store')}}">
+    <form class="flex items-center justify-center flex-col p-3 space-y-4 w-5/4  md:w-4/6 lg:w-2/6 mx-auto" method="post"
+          action="{{route('panel.wallet.charging.store')}}">
         @csrf
         <article class="bg-gray-500 w-full space-y-4 p-2">
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>مبلغ:</p>
-                <p>{{$inputs['price']}}  تومان</p>
+                <p>{{$inputs['price']}} تومان</p>
             </div>
             <div class="flex items-center justify-between text-sm sm:text-base">
                 <p>شماره تراکنش:</p>
@@ -30,13 +31,18 @@
             </div>
         </article>
         <div class=" flex items-center justify-start  max-w-max  rounded-md ">
-            <button class="bg-sky-500 py-1.5 px-12 rounded-md ">پرداخت مبلغ</button>
+            <button class="bg-sky-500 py-1.5 px-12 rounded-md submit" >پرداخت مبلغ</button>
         </div>
-        <div class=" flex items-center justify-start  max-w-max  rounded-md ">
+        <div class=" flex items-center justify-start  max-w-max  rounded-md back">
             <a href="{{route('panel.wallet.charging')}}" class="bg-sky-500 py-1.5 px-10 rounded-md ">بازگشت</a>
         </div>
         <input type="hidden" name="price" value="{{$inputs['price']}}">
-        <input type="hidden" name="bank_id"  class="hidden bank" value="{{$inputs['bank_id']}}">
+        <input type="hidden" name="bank_id" class="hidden bank" value="{{$inputs['bank_id']}}">
+        <div type="button" class="loading hidden">
+
+            <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>
+            لطفا منتظر بمانید
+        </div>
     </form>
 
 @endsection
@@ -44,6 +50,13 @@
 
 
 @section('script-tag')
-
-
+    <script>
+        $(document).ready(function () {
+                $('.submit').click(function (){
+                    $(this).remove();
+                    $(".back").remove();
+                    $(".loading").removeClass('hidden');
+                })
+        })
+    </script>
 @endsection
