@@ -489,12 +489,12 @@ class PanelController extends Controller
                 . PHP_EOL .
                 'Name of the bank: ' . $bank->name
                 . PHP_EOL .
-                'payment price: ' . $invoice['price']
+                'payment price: ' . $inputs['price']
                 . PHP_EOL .
                 'payment date: ' . Carbon::now()->toDateTimeString()
                 . PHP_EOL .
                 'user ID: ' . $user->id
-                .PHP_EOL
+                . PHP_EOL
 
             );
 
@@ -518,7 +518,7 @@ class PanelController extends Controller
         Log::emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
             'user ID :' . $user->id
-            .PHP_EOL
+            . PHP_EOL
         );
         $invoice = Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
@@ -541,7 +541,7 @@ class PanelController extends Controller
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
                 . PHP_EOL .
                 'user ID :' . $user->id
-                .PHP_EOL
+                . PHP_EOL
             );
             return redirect()->route('panel.error', $payment->id);
         }
