@@ -31,7 +31,7 @@
             </div>
         </article>
         <div class=" flex items-center justify-start  max-w-max  rounded-md ">
-            <button class="bg-sky-500 py-1.5 px-12 rounded-md submit" >پرداخت مبلغ</button>
+            <button class="bg-sky-500 py-1.5 px-12 rounded-md submit" type="submit">پرداخت مبلغ</button>
         </div>
         <div class=" flex items-center justify-start  max-w-max  rounded-md back">
             <a href="{{route('panel.wallet.charging')}}" class="bg-sky-500 py-1.5 px-10 rounded-md ">بازگشت</a>
