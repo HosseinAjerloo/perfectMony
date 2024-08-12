@@ -276,6 +276,7 @@ class PanelController extends Controller
             'payment date: ' . Carbon::now()->toDateTimeString()
             . PHP_EOL .
             'user ID: ' . $user->id
+            . PHP_EOL
         );
         return view('welcome', compact('token', 'url'));
     }
@@ -293,7 +294,9 @@ class PanelController extends Controller
         $objBank = new $bank->class;
         Log::emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
-            'user ID :' . $user->id);
+            'user ID :' . $user->id
+            . PHP_EOL
+        );
         $invoice = $payment->invoice;
         if (!$objBank->backBank()) {
             $payment->update(
@@ -313,9 +316,11 @@ class PanelController extends Controller
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed']);
             Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
-                'Bank message: ' . $objBank->samanVerifyTransaction($back_price).
-            PHP_EOL.
-            'user Id: '.$user->id);
+                'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
+                PHP_EOL .
+                'user Id: ' . $user->id
+                . PHP_EOL
+            );
             return redirect()->route('panel.error', $payment->id);
         }
 
@@ -489,6 +494,8 @@ class PanelController extends Controller
                 'payment date: ' . Carbon::now()->toDateTimeString()
                 . PHP_EOL .
                 'user ID: ' . $user->id
+                .PHP_EOL
+
             );
 
 
@@ -510,7 +517,9 @@ class PanelController extends Controller
         $objBank = new $bank->class;
         Log::emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
             'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
-            'user ID :' . $user->id);
+            'user ID :' . $user->id
+            .PHP_EOL
+        );
         $invoice = Invoice::find(session()->get('invoice'));
         if (!$objBank->backBank()) {
             $payment->update(
@@ -531,7 +540,9 @@ class PanelController extends Controller
             Log::emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
                 . PHP_EOL .
-                'user ID :' . $user->id);
+                'user ID :' . $user->id
+                .PHP_EOL
+            );
             return redirect()->route('panel.error', $payment->id);
         }
         $payment->update(
