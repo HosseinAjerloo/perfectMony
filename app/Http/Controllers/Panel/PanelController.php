@@ -437,7 +437,7 @@ class PanelController extends Controller
                 'state' => 'requested',
             ]);
         $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
-        $inputs['orderID'] = $payment->id+Payment::transactionNumber;
+        $inputs['orderID'] = $payment->id + Payment::transactionNumber;
         session()->put('payment', $payment->id);
 
         return view("Panel.RechargeWallet.FinalApproval", compact('inputs'));

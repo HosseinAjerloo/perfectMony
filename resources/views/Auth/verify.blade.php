@@ -19,8 +19,8 @@
                 <input type="text" class="py-1 rounded-md outline-none text-black" name="SMS_code">
             </div>
             <button id="resend" class="px-16 py-2 bg-sky-500 rounded-md sm:text-base font-semibold box-content text-sm "
-                    disabled></button>
-            <button id="login" class="px-20 py-2 bg-sky-500 rounded-md text-base font-semibold box-content ">ورود
+                    disabled type="button"></button>
+            <button id="login" class="px-20 py-2 bg-sky-500 rounded-md text-base font-semibold box-content " type="submit">ورود
             </button>
         </form>
     </article>
