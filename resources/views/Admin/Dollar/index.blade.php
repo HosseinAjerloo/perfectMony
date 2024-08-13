@@ -7,7 +7,7 @@
                   class=" w-full text-center">
                 <label  class="border-2 border-2-white rounded-md bg-gray-800  py-3 px-3 text-center flex justify-between items-center space-x-2 space-x-reverse">
                     قیمت دلار
-                    <input type="number" name="dollar_price" value=" {{numberFormat($dollar_price)}} " class="text-black p-2">
+                    <input type="number" name="dollar_price" value="{{$dollar_price}}" class="text-black p-2">
                     ریال
                 </label>
                 <button class="bg-sky-500 m-2 py-1.5 px-2 rounded-md rounded-md">ثبت قیمت دلار</button>
