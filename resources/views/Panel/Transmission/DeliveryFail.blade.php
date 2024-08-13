@@ -23,14 +23,8 @@
             </section>
         </div>
 
-        <form class="flex items-center justify-between">
+        <div class="flex items-center justify-between">
 
-            @if($invoice->service_id)
-                <input type="hidden" name="service_id" value="{{$invoice->service_id}}">
-            @else
-                <input type="hidden" name="service_id_custom" value="{{$invoice->service_id_custom}}">
-            @endif
-            <input type="hidden" name="invoice_id" value="{{$invoice->id}}">
             <div
                 class="bg-rose-500 rounded-md font-semibold py-1 w-1/3 flex items-center justify-center cursor-pointer">
                 <a href="{{route('panel.transmission.view')}}" class="text-sm" >تلاش مجدد</a>
@@ -40,7 +34,7 @@
             </div>
 
 
-        </form>
+        </div>
 
     </section>
 

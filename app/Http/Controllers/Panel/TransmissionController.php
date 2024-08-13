@@ -83,7 +83,7 @@ class TransmissionController extends Controller
 
                 } else {
                     $invoice->update(['status' => 'failed']);
-                    return redirect()->route('panel.transfer.fail', $invoice);
+                    return redirect()->route('panel.transfer.fail');
                 }
 
 
@@ -128,7 +128,7 @@ class TransmissionController extends Controller
 
                 } else {
                     $invoice->update(['status' => 'failed']);
-                    return redirect()->route('panel.transfer.fail', $invoice);
+                    return redirect()->route('panel.transfer.fail');
                 }
             } else {
                 return redirect()->route('panel.transmission.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
@@ -285,7 +285,7 @@ class TransmissionController extends Controller
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);
 
-            Transmission::create(
+            $transitionDelivery=Transmission::create(
                 [
                     'user_id' => $user->id,
                     'finance_id' => $finance->id,
@@ -296,9 +296,7 @@ class TransmissionController extends Controller
                     'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                 ]
             );
-
-            return redirect()->route('panel.index')->with(['success' => 'ووچر شما با موفقیت انتقال داده شد']);
-
+            return redirect()->route('panel.transfer.information', $transitionDelivery);
 
         } else {
 
@@ -313,7 +311,7 @@ class TransmissionController extends Controller
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
             ]);
-            return redirect()->route('panel.transmission.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
+            return redirect()->route('panel.transfer.fail');
         }
     }
 

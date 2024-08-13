@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('transmission', [App\Http\Controllers\Panel\TransmissionController::class, 'index'])->name('panel.transmission.view');
     Route::get('remittance-transfer-information/{transitionDelivery}',[App\Http\Controllers\Panel\TransmissionController::class,'information'])->name('panel.transfer.information');
-    Route::get('transmission-fail/{invoice}',[App\Http\Controllers\Panel\TransmissionController::class,'transmissionFail'])->name('panel.transfer.fail');
+    Route::get('transmission-fail',[App\Http\Controllers\Panel\TransmissionController::class,'transmissionFail'])->name('panel.transfer.fail');
 
     Route::middleware('LimitedPurchase')->group(function () {
         Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
@@ -84,6 +84,7 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
+//    return view('Panel.Transmission.DeliveryFaild');
 
     return view('Panel.Transmission.DeliveryOfTheTransferNumber');
 //    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
