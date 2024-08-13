@@ -14,7 +14,7 @@
                     <div class=" flex items-center justify-start  max-w-max   rounded-md wallet ">
                         <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-6 h-6 ">
                     </div>
-                    <p class="text-sm">مبلغ به کیف پول شما اضافه شده است</p>
+                    <p class="text-sm">در صورت کم شدن مبلغ به کیف پول شما اضافه خواهد شد.</p>
                 </div>
                 <p>
                     لطفا چند دقیقه دیگر تلاش نمایید و تسویه حواله خود را با
@@ -24,8 +24,16 @@
         </div>
 
         <form class="flex items-center justify-between">
-            <div class="bg-rose-500 rounded-md font-semibold py-1 w-1/3 flex items-center justify-center cursor-pointer">
-                <button class="text-sm">تلاش مجدد</button>
+
+            @if($invoice->service_id)
+                <input type="hidden" name="service_id" value="{{$invoice->service_id}}">
+            @else
+                <input type="hidden" name="service_id_custom" value="{{$invoice->service_id_custom}}">
+            @endif
+            <input type="hidden" name="invoice_id" value="{{$invoice->id}}">
+            <div
+                class="bg-rose-500 rounded-md font-semibold py-1 w-1/3 flex items-center justify-center cursor-pointer">
+                <a href="{{route('panel.transmission.view')}}" class="text-sm" >تلاش مجدد</a>
             </div>
             <div class="bg-sky-500 rounded-md font-semibold py-1  px-2 flex items-center justify-center cursor-pointer">
                 <a class="text-sm" href="{{route('panel.ticket')}}">تیکت به پشتیبانی</a>

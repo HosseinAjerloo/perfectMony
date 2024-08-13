@@ -9,7 +9,7 @@
                 <div class="sm:space-x-3 sm:space-x-reverse sm:space-y-0 space-y-3  w-full flex flex-col sm:flex-row  text-center items-center">
                     <label for="" class="text-sm sm:text-base font-semibold inline-block w-2/4 ">آدرس حساب مقصد</label>
                     <input type="text"
-                           class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none  transmission text-black w-3/4 inline-block">
+                           class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none  transmission text-black w-3/4 inline-block" value="{{old('transmission')}}">
                 </div>
                 <div class="sm:space-x-3 sm:space-x-reverse sm:space-y-0 space-y-3 w-full flex flex-col sm:flex-row  text-center items-center">
                     <label for="" class="text-sm sm:text-base font-semibold inline-block w-2/4 ">مبلغ حواله</label>
@@ -42,7 +42,7 @@
             <input type="checkbox" name="Accepting_the_rules" id="Accepting_the_rules" class="hidden">
             <input type="text" value="{{old('custom_payment')}}" name="custom_payment" id="custom_payment"
                    class="text-black hidden">
-            <input type="text" value="{{old('custom_payment')}}" name="transmission" id="transmission"
+            <input type="text" value="{{old('transmission')}}" name="transmission" id="transmission"
                    class="text-black hidden">
             @foreach($banks as $bank)
                 <input type="radio" name="bank" value="{{$bank->id}}" id="bank-{{$bank->id}}" class="hidden">

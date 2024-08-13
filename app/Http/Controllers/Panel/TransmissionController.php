@@ -34,6 +34,7 @@ class TransmissionController extends Controller
 
     public function store(TransmissionRequest $request)
     {
+
         try {
             $inputs = request()->all();
 
@@ -67,7 +68,7 @@ class TransmissionController extends Controller
                         'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
                     ]);
                     $invoice->update(['status' => 'finished']);
-                    $transitionDelivery=Transmission::create(
+                    $transitionDelivery = Transmission::create(
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
@@ -78,11 +79,11 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    return redirect()->route('panel.transfer.information',$transitionDelivery);
+                    return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
                     $invoice->update(['status' => 'failed']);
-                    return redirect()->route('panel.transmission.view')->withErrors(['error' => "عملیات انتقال ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
+                    return redirect()->route('panel.transfer.fail', $invoice);
                 }
 
 
@@ -112,7 +113,7 @@ class TransmissionController extends Controller
                     ]);
                     $invoice->update(['status' => 'finished']);
 
-                    $transitionDelivery= Transmission::create(
+                    $transitionDelivery = Transmission::create(
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
@@ -123,11 +124,11 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    return redirect()->route('panel.transfer.information',$transitionDelivery);
+                    return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
                     $invoice->update(['status' => 'failed']);
-                    return redirect()->route('panel.transmission.view')->withErrors(['error' => "عملیات انتقال ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
+                    return redirect()->route('panel.transfer.fail', $invoice);
                 }
             } else {
                 return redirect()->route('panel.transmission.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
@@ -176,8 +177,8 @@ class TransmissionController extends Controller
 
             ]
         );
-        $payment->update(['order_id' => $payment->id+Payment::transactionNumber]);
-        $objBank->setOrderID($payment->id+Payment::transactionNumber);
+        $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
+        $objBank->setOrderID($payment->id + Payment::transactionNumber);
         $objBank->setBankUrl($bank->url);
         $objBank->setTerminalId($bank->terminal_id);
         $objBank->setUrlBack(route('panel.back.transferFromThePaymentGateway'));
@@ -229,7 +230,7 @@ class TransmissionController extends Controller
                 ]);
             $invoice->update(['status' => 'failed']);
 
-            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود'.$objBank->samanTransactionStatus($request->input('Status'))]);
+            return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
 
@@ -316,9 +317,20 @@ class TransmissionController extends Controller
         }
     }
 
-    public function information(Request $request,Transmission $transitionDelivery)
+    public function information(Request $request, Transmission $transitionDelivery)
     {
-        return view('Panel.Transmission.DeliveryOfTheTransferNumber',compact('transitionDelivery'));
+        $transitionDelivery = $transitionDelivery->where('user_id', Auth::user()->id)->where("id", $transitionDelivery->id)->first();
+        if ($transitionDelivery)
+            return view('Panel.Transmission.DeliveryOfTheTransferNumber', compact('transitionDelivery'));
+        else
+            abort(404);
+    }
+
+    public function transmissionFail(Request $request, Invoice $invoice)
+    {
+        $invoice = $invoice->where("user_id", Auth::user()->id)->orderBy('id', 'desc')->first();
+
+        return view('Panel.Transmission.DeliveryFail',compact('invoice'));
 
     }
 }
