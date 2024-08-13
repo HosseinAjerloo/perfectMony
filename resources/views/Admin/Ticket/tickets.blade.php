@@ -1,9 +1,7 @@
 @extends('Panel.layout.master')
 
 @section('message-box')
-    <h1 class=" border-2 border-2-white rounded-md py-3 px-3 text-sm sm:text-base font-semibold  ">
-        ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> لطفا مشکل خود را بیان کنید تا در اسرع وقت کارشناسان ما مشکل شما را بر طرف کنند.
-    </h1>
+
 @endsection
 
 @section('container')
@@ -23,18 +21,63 @@
                 <th class=" w-1/3 py-3 font-bold">جزئیات</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tickets_body">
             @foreach($tickets as $key=> $ticket)
-                <tr class=" py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">{{$key+1}}</td>
-                    <td class=" w-1/3 text-center py-2 cursor-pointer  "><a href="{{route('panel.admin.tickets',$ticket->id)}}" class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">{{$ticket->subject}}</a></td>
+                <tr class="py-6 text-black text-sm sm:text-base">
+                    <td class=" w-1/3  text-center py-2">{{$ticket->id}}</td>
+                    <td class=" w-1/3 text-center py-2 cursor-pointer  "><a
+                            href="{{route('panel.admin.ticket-chat',$ticket->id)}}"
+                            class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">{{$ticket->subject}}</a>
+                    </td>
                     <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
                     <td class=" w-1/3  text-center py-2">{{$ticket->ticketStatus()}}</td>
                 </tr>
             @endforeach
-
-
             </tbody>
         </table>
     </div>
+@endsection
+
+@section('script-tag')
+    <script>
+        var current_page = {{$tickets->currentPage()}};
+        var has_more = "{{$tickets->hasMorePages()}}";
+        var requesting = false;
+        $(window).on("scroll", (e) => {
+            var scrollHeight = $(document).height();
+            var scrollPosition = $(window).height() + $(window).scrollTop();
+            if ((scrollHeight - scrollPosition) < 1) {
+                 if(has_more && !requesting)
+                    get_next_page();
+            }
+        });
+
+        function get_next_page() {
+            requesting =true;
+            $.ajax({
+                type: "GET",
+                url: "{{route('panel.admin.ticket-page')}}",
+                data: {'page': ++current_page},
+                success: function (response) {
+                    if (response.success) {
+                        has_more = response.has_more;
+                        var content = '';
+                        for(var i = 0; i < response.data.data.length;i++){
+                            content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">'+
+                                '<td class=" w-1/3  text-center py-2">'+response.data.data[i].id+'</td>'+
+                            '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a '+
+                                ' href="{{route('panel.admin.ticket-chat',$ticket->id)}}"'+
+                                ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">'+response.data.data[i].subject+'</a>'+
+                            '</td>'+
+                            '<td class=" w-1/3  text-center py-2">'+response.data.data[i].date+'</td>'+
+                            '<td class=" w-1/3  text-center py-2">'+response.data.data[i].status+'</td>'+
+                        '</tr>';
+                        }
+                        $('#tickets_body').append(content);
+                    }
+                    requesting = false;
+                }
+            });
+        }
+    </script>
 @endsection

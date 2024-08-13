@@ -43,7 +43,6 @@
                 data: {'ticket_id':{{$ticket->id}},'message':message},
                 success: function(response){
                     if(response.success){
-                        console.log(response.data);
                         $('#input_message').val('');
                         const client_new_message = ' <div class="mb-2 flex flex-wrap justify-center">'+
                             '<div class="w-full">'+
