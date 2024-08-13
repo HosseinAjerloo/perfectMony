@@ -67,7 +67,7 @@ class TransmissionController extends Controller
                         'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
                     ]);
                     $invoice->update(['status' => 'finished']);
-                    Transmission::create(
+                    $transitionDelivery=Transmission::create(
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
@@ -78,7 +78,7 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    return redirect()->route('panel.index')->with(['success' => 'ووچر شما با موفقیت انتقال داده شد']);
+                    return redirect()->route('panel.transfer.information',$transitionDelivery);
 
                 } else {
                     $invoice->update(['status' => 'failed']);
@@ -112,7 +112,7 @@ class TransmissionController extends Controller
                     ]);
                     $invoice->update(['status' => 'finished']);
 
-                    Transmission::create(
+                    $transitionDelivery= Transmission::create(
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
@@ -123,7 +123,7 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    return redirect()->route('panel.index')->with(['success' => 'ووچر شما با موفقیت انتقال داده شد']);
+                    return redirect()->route('panel.transfer.information',$transitionDelivery);
 
                 } else {
                     $invoice->update(['status' => 'failed']);
@@ -314,5 +314,11 @@ class TransmissionController extends Controller
             ]);
             return redirect()->route('panel.transmission.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }
+    }
+
+    public function information(Request $request,Transmission $transitionDelivery)
+    {
+        return view('Panel.Transmission.DeliveryOfTheTransferNumber',compact('transitionDelivery'));
+
     }
 }
