@@ -82,7 +82,7 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
-    return view('Panel.Transmission.DeliveryOfTheTransferNumber');
+    return view('Panel.Transmission.DeliveryFaild');
 //    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 //    $result=$PM->getHisstoryAccount();
 //    dd(end($result));
