@@ -121,7 +121,7 @@ class PanelController extends Controller
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
                     $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
-                    $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
+                    $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
@@ -188,7 +188,7 @@ class PanelController extends Controller
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
                     $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
-                    $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
+                    $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -412,7 +412,7 @@ class PanelController extends Controller
                 $request->session()->put('amount_voucher', $payment_amount);
             }
             $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
-            $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
+            $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -430,7 +430,7 @@ class PanelController extends Controller
 
             ]);
             $message = "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید" ;
-            $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
+            $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
             $invoice->update(['status' => 'finished','description'=>'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید']);
             return redirect()->route('panel.purchase.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }
