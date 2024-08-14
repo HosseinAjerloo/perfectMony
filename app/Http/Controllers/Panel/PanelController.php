@@ -120,7 +120,7 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
-                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . PHP_EOL.route('panel.order.expectation.details',$invoice);
                     $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
@@ -187,7 +187,7 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
-                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" .PHP_EOL. route('panel.order.expectation.details',$invoice);
                     $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
@@ -411,7 +411,7 @@ class PanelController extends Controller
                 $request->session()->put('voucher_id', $voucher->id);
                 $request->session()->put('amount_voucher', $payment_amount);
             }
-            $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+            $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" .PHP_EOL. route('panel.order.expectation.details',$invoice);
             $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
