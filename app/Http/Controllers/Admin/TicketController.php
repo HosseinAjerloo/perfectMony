@@ -36,7 +36,7 @@ class TicketController extends Controller
         if (!$ticket)
             abort(404);
         $ticket_messages = TicketMessage::where('ticket_id',$ticket_id)->get();
-        return view('Admin.Ticket.TicketChat', compact('ticket', 'ticket_messages'));
+        return view('Admin.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
     public function ticketMessage(Request $request)
     {
