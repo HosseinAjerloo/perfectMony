@@ -16,6 +16,7 @@ use App\Models\Service;
 use App\Models\Voucher;
 use App\Notifications\IsEmptyUserInformationNotifaction;
 use App\Services\BankService\Saman;
+use App\Services\SmsService\SatiaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,8 @@ class PanelController extends Controller
     public function store(PurchaseRequest $request)
     {
         try {
+            $satiaService=new SatiaService();
+
             $inputs = request()->all();
             $dollar = Doller::orderBy('id', 'desc')->first();
             $balance = Auth::user()->getCreaditBalance();
@@ -117,6 +120,8 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
+                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+                    $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
@@ -182,6 +187,8 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
+                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+                    $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -287,6 +294,7 @@ class PanelController extends Controller
 //
     public function backPurchaseThroughTheBank(Request $request)
     {
+        $satiaService=new SatiaService();
 
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
@@ -403,6 +411,8 @@ class PanelController extends Controller
                 $request->session()->put('voucher_id', $voucher->id);
                 $request->session()->put('amount_voucher', $payment_amount);
             }
+            $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . route('panel.order.expectation.details',$invoice);
+            $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -419,6 +429,8 @@ class PanelController extends Controller
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
             ]);
+            $message = "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید" ;
+            $satiaService->send($message, $inputs['mobile'], '30006928', 'New137', '140101101');
             $invoice->update(['status' => 'finished','description'=>'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید']);
             return redirect()->route('panel.purchase.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }
