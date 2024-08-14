@@ -55,6 +55,8 @@ class TransmissionController extends Controller
                 $inputs['type'] = 'transmission';
                 $inputs['status'] = 'requested';
                 $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
+                $inputs['description'] = 'انتقال کارت هدیه پرفکت مانی';
+
                 $invoice = Invoice::create($inputs);
 
                 $transition = $this->transmission($inputs['transmission'], $service->amount);
@@ -82,7 +84,7 @@ class TransmissionController extends Controller
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
-                    $invoice->update(['status' => 'failed']);
+                    $invoice->update(['status' => 'failed', 'description' => 'انتقال کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول شما متوقف شد.']);
                     return redirect()->route('panel.transfer.fail');
                 }
 
@@ -99,6 +101,7 @@ class TransmissionController extends Controller
                 $inputs['service_id_custom'] = $inputs['custom_payment'];
                 $inputs['status'] = 'requested';
                 $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
+                $inputs['description'] = 'انتقال کارت هدیه پرفکت مانی';
                 $invoice = Invoice::create($inputs);
 
                 $transition = $this->transmission($inputs['transmission'], $inputs['custom_payment']);
@@ -127,7 +130,7 @@ class TransmissionController extends Controller
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
-                    $invoice->update(['status' => 'failed']);
+                    $invoice->update(['status' => 'failed', 'description' => 'انتقال کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول شما متوقف شد.']);
                     return redirect()->route('panel.transfer.fail');
                 }
             } else {
@@ -164,6 +167,8 @@ class TransmissionController extends Controller
         $inputs['status'] = 'requested';
         $inputs['bank_id'] = $bank->id;
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
+        $inputs['description'] = ' انتقال کارت هدیه پرفکت مانی از طریق ' . $bank->name;
+
 
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
@@ -185,6 +190,8 @@ class TransmissionController extends Controller
 
         $status = $objBank->payment();
         if (!$status) {
+            $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش انتقال کارت هدیه پرفکت مانی  شما لغو شد "]);
+
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
         $url = $objBank->getBankUrl();
@@ -228,7 +235,7 @@ class TransmissionController extends Controller
                     'state' => 'failed'
 
                 ]);
-            $invoice->update(['status' => 'failed']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
 
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
@@ -236,7 +243,8 @@ class TransmissionController extends Controller
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            $invoice->update(['status' => 'failed']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
                 PHP_EOL .
@@ -285,7 +293,7 @@ class TransmissionController extends Controller
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);
 
-            $transitionDelivery=Transmission::create(
+            $transitionDelivery = Transmission::create(
                 [
                     'user_id' => $user->id,
                     'finance_id' => $finance->id,
@@ -299,6 +307,7 @@ class TransmissionController extends Controller
             return redirect()->route('panel.transfer.information', $transitionDelivery);
 
         } else {
+            $invoice->update(['status' => 'finished', 'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود جهت انتقال ووچر اقدام نمایید']);
 
             FinanceTransaction::create([
                 'user_id' => $user->id,
@@ -328,7 +337,7 @@ class TransmissionController extends Controller
     {
         $invoice = $invoice->where("user_id", Auth::user()->id)->orderBy('id', 'desc')->first();
 
-        return view('Panel.Transmission.DeliveryFail',compact('invoice'));
+        return view('Panel.Transmission.DeliveryFail', compact('invoice'));
 
     }
 }
