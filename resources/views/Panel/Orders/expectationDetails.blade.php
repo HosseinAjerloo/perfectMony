@@ -69,11 +69,11 @@
                     @if($invoice->bank_id)
 
                         <p>{{$invoice->bank->name}}</p>
-                        @if($invoice->status!='finished')
+{{--                        @if($invoice->status!='finished')--}}
 
-                            <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">
-                            <p>پشتیبانی بانک سامان : 6422-021</p>
-                        @endif
+{{--                            <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">--}}
+{{--                            <p>پشتیبانی بانک سامان : 6422-021</p>--}}
+{{--                        @endif--}}
 
                     @else
 
