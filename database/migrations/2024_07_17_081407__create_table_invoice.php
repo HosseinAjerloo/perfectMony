@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->integer('time_price_of_dollars')->nullable();
             $table->enum('type', ['service', 'wallet','transmission'])->nullable();
             $table->enum('status',['requested','failed','finished'])->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

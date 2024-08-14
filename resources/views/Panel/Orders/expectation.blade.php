@@ -11,12 +11,21 @@
                     <p class="text-center">مبلغ کل:{{numberFormat($invoice->final_amount)}} ریال</p>
                 </div>
                 <div class="text-sm sm:text-base flex items-center justify-between">
-                    @if($invoice->voucherAmount())
                     <div class="flex items-center space-x-2 space-x-reverse">
-                        <img src="{{asset('src/images/prl.png')}}" alt="">
-                        <p>خرید ووچر پرفکت مانی {{$invoice->voucherAmount()}} دلاری</p>
+                        @switch($invoice->type)
+                            @case('service')
+                            @case('transmission')
+                                <img src="{{asset('src/images/prl.png')}}" alt="">
+                                <p>{{$invoice->persianType()}}</p>
+                                @break
+                            @case('service')
+                            @case('wallet')
+                                <i class="fa-solid fa-wallet"></i>
+                                <p>{{$invoice->persianType()}}</p>
+                                @break
+                            @default
+                        @endswitch
                     </div>
-                    @endif
                     <p class="text-center">
                         وضعیت:
                         @if($invoice->status=='finished')
@@ -32,14 +41,14 @@
                     <div class="flex items-center space-x-2 space-x-reverse">
 
                         <p>تاریخ ثبت سفارش:</p>
-                        <p>{{\Morilog\Jalali\Jalalian::forge($invoice->created_at)->format('%A, %d %B %y')}}</p>
+                        <p>{{\Morilog\Jalali\Jalalian::forge($invoice->created_at)->format('%A, %d %B %y ساعت:  h:i:s')}}</p>
                     </div>
 
-                        <a href="{{route('panel.order.expectation.details',$invoice->id)}}"
-                           class="bg-gray-100 px-4 py-1.5 rounded-md space-x-3">
-                            <i class="fa-solid fa-eye text-black"></i>
-                            <span class="text-black">جزئیات</span>
-                        </a>
+                    <a href="{{route('panel.order.expectation.details',$invoice->id)}}"
+                       class="bg-gray-100 px-4 py-1.5 rounded-md space-x-3">
+                        <i class="fa-solid fa-eye text-black"></i>
+                        <span class="text-black">جزئیات</span>
+                    </a>
 
 
                 </div>

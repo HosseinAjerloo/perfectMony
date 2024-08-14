@@ -10,7 +10,7 @@ class Invoice extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'service_id', 'disscount_code_id', 'final_amount', 'type', 'service_id_custom', 'status', 'time_price_of_dollars', 'bank_id'];
+    protected $fillable = ['user_id', 'service_id', 'disscount_code_id', 'final_amount', 'type', 'service_id_custom', 'status', 'time_price_of_dollars', 'bank_id','description'];
 
     public function service()
     {
@@ -36,5 +36,15 @@ class Invoice extends Model
         } else {
             return false;
         }
+    }
+    public function persianType()
+    {
+            return match ($this->type)
+            {
+                "service"=>"خرید کارت هدیه پرفکت مانی",
+                "wallet"=>"افزایش کیف پول",
+                "transmission"=>"انتقال حواله کارت هدیه پرفکت مانی",
+                default =>''
+            };
     }
 }

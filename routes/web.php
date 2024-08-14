@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 
@@ -51,9 +52,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('order/{financeTransaction}/details', [App\Http\Controllers\Panel\OrderController::class, 'details'])->name('panel.order.details');
         Route::get('expectation', [App\Http\Controllers\Panel\OrderController::class, 'Expectation'])->name('panel.order.expectation');
         Route::get('expectation/{invoice}/details', [App\Http\Controllers\Panel\OrderController::class, 'ExpectationDetails'])->name('panel.order.expectation.details');
-        Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
     });
+        Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
 
     Route::get('tickets', [App\Http\Controllers\Panel\TicketController::class, 'index'])->name('panel.ticket');
@@ -84,6 +85,8 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
+
+
 //    return view('Panel.Transmission.DeliveryFaild');
 
     return view('Panel.Transmission.DeliveryOfTheTransferNumber');

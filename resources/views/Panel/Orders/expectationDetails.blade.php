@@ -10,18 +10,30 @@
                 <p class="text-center">مبلغ کل:{{numberFormat($invoice->final_amount)}} ریال</p>
             </div>
             <div class="text-sm sm:text-base flex items-center justify-between">
-                @if($invoice->voucherAmount())
-                    <div class="flex items-center space-x-2 space-x-reverse">
-                        <img src="{{asset('src/images/prl.png')}}" alt="">
-                        <p>خرید ووچر پرفکت مانی {{$invoice->voucherAmount()}} دلاری</p>
-                    </div>
-                @endif
-                @if($invoice->type=='wallet')
-                    <div class="flex items-center space-x-2 space-x-reverse">
-                        <i class="fa-solid fa-wallet"></i>
-                        <p> افزایش مبلغ کیف پول</p>
-                    </div>
-                @endif
+
+
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    @switch($invoice->type)
+                        @case('service')
+                        @case('transmission')
+                            <img src="{{asset('src/images/prl.png')}}" alt="">
+                            <p>
+                                {{$invoice->persianType()}}
+                                @if($invoice->voucherAmount())
+                                    {{$invoice->voucherAmount()}} دلاری
+                                @endif
+                            </p>
+                            @break
+                        @case('service')
+                        @case('wallet')
+                            <i class="fa-solid fa-wallet"></i>
+                            <p>{{$invoice->persianType()}}</p>
+                            @break
+                        @default
+                    @endswitch
+
+                </div>
+
                 <p class="text-center">
                     وضعیت:
                     @if($invoice->status=='finished')
@@ -36,10 +48,21 @@
                 <div class="flex items-center space-x-2 space-x-reverse">
 
                     <p>تاریخ ثبت سفارش:</p>
-                    <p>{{\Morilog\Jalali\Jalalian::forge($invoice->created_at)->format('%A, %d %B %y')}}</p>
+                    <p>{{\Morilog\Jalali\Jalalian::forge($invoice->created_at)->format('%A, %d %B %y ساعت:  h:i:s')}}</p>
                 </div>
 
             </div>
+
+            @if($invoice->description)
+                <div class="text-sm sm:text-base flex items-center justify-between">
+                    <div class="flex items-center space-x-2 space-x-reverse">
+
+                        <p>توضیحات:</p>
+                        <p>{{$invoice->description}}</p>
+                    </div>
+
+                </div>
+            @endif
             @if($invoice->bank_id)
                 <div class="text-sm sm:text-base flex items-center justify-between">
                     <div class="flex items-center space-x-2 space-x-reverse">
