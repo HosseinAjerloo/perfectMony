@@ -85,16 +85,6 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
-    $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-    $back_price = $client->VerifyTransaction('GmshtyjwKSuLZPKXzCN96Z5mqGXkO+bz/zy4gsy6Bd', 12965791);
-    dd($back_price);
 
-
-//    return view('Panel.Transmission.DeliveryFaild');
-
-    return view('Panel.Transmission.DeliveryOfTheTransferNumber');
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    $result=$PM->getHisstoryAccount();
-//    dd(end($result));
 
 });
