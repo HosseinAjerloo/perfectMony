@@ -45,9 +45,9 @@
                     </div>
 
                     <a href="{{route('panel.order.expectation.details',$invoice->id)}}"
-                       class="bg-gray-100 px-4 py-1.5 rounded-md space-x-3">
+                       class="bg-gray-100 px-4 py-1.5 rounded-md  text-center flex items-center justify-center space-x-2 space-x-reverse">
                         <i class="fa-solid fa-eye text-black"></i>
-                        <span class="text-black">جزئیات</span>
+                        <span class="text-black text-sm">جزئیات</span>
                     </a>
 
 

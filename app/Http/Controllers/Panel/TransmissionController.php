@@ -14,6 +14,7 @@ use App\Models\Payment;
 use App\Models\Service;
 use App\Models\Transmission;
 use App\Models\Voucher;
+use App\Services\SmsService\SatiaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,7 @@ class TransmissionController extends Controller
 
     public function store(TransmissionRequest $request)
     {
+        $satiaService=new SatiaService();
 
         try {
             $inputs = request()->all();
@@ -81,6 +83,8 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
+                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
@@ -127,6 +131,8 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
+                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
                 } else {
@@ -214,6 +220,8 @@ class TransmissionController extends Controller
 
     public function transferFromThePaymentGatewayBack(Request $request)
     {
+        $satiaService=new SatiaService();
+
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
         $balance = Auth::user()->getCreaditBalance();
@@ -235,6 +243,8 @@ class TransmissionController extends Controller
                     'state' => 'failed'
 
                 ]);
+            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
+            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
 
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود' . $objBank->samanTransactionStatus($request->input('Status'))]);
@@ -243,6 +253,10 @@ class TransmissionController extends Controller
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+
+            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
+            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
+
             $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
 
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
@@ -304,6 +318,8 @@ class TransmissionController extends Controller
                     'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                 ]
             );
+            $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+            $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             return redirect()->route('panel.transfer.information', $transitionDelivery);
 
         } else {

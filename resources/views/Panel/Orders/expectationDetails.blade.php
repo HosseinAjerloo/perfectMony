@@ -63,23 +63,28 @@
 
                 </div>
             @endif
-            <div class="text-sm sm:text-base flex items-center justify-between">
-                <div class="flex items-center space-x-2 space-x-reverse">
-                    <p>پرداخت از طریق:</p>
-                    @if($invoice->bank_id)
+            <div class="text-sm sm:text-base flex items-center justify-between mt-2 mb-2 ">
+                @if($invoice->bank_id)
+                   <div class="flex flex-col space-y-3">
+                       <div class="flex items-center space-x-2 space-x-reverse">
+                           <p>پرداخت از طریق:</p>
 
-                        <p>{{$invoice->bank->name}}</p>
-                        @if($invoice->status!='finished')
+                           <p>{{$invoice->bank->name}}</p>
 
-                            <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">
-                            <p>پشتیبانی بانک سامان : 6422-021</p>
-                        @endif
+                       </div>
+                       <div class="flex items-center space-x-2 space-x-reverse">
+                           @if($invoice->status!='finished')
 
-                    @else
+                               <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">
+                               <p>پشتیبانی بانک سامان : 6422-021</p>
+                           @endif
 
-                        کیف پول
-                    @endif
-                </div>
+                           @else
+
+                               کیف پول
+                       </div>
+                   </div>
+                @endif
             </div>
             @if($invoice->payment)
                 <div class="text-sm sm:text-base flex items-center justify-between">
