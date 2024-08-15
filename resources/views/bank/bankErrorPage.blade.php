@@ -23,7 +23,7 @@
         <div>
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3 space-x-reverse mb-2">
-                    <span class="text-sm sm:text-base font-bold bg-gray-400 rounded-sm px-6  py-1">{{$payment->id}}</span>
+                    <span class="text-sm sm:text-base font-bold bg-gray-400 rounded-sm px-6  py-1">{{$payment->order_id??''}}</span>
                     <img src="{{asset('src/images/Group 422.png')}}" alt=""
                          class="w-6 h-6 copy cursor-pointer transition-all hover:scale-125">
                 </div>

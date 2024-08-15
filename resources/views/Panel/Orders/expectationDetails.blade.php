@@ -4,7 +4,7 @@
 @section('container')
 
     <section class="mx-auto px-4 sm:w-3/4 md:w-3/5 lg:w-2/5 space-y-5">
-        <div class="border-2 rounded-md border-white p-3 space-y-3.5">
+        <div class="border-2 border-white rounded-md  p-3 space-y-3.5">
             <div class="text-sm sm:text-base flex items-center justify-between">
                 <p>شماره پیش فاکتور: {{$invoice->id}}</p>
                 <p class="text-center">مبلغ کل:{{numberFormat($invoice->final_amount)}} ریال</p>
@@ -63,27 +63,39 @@
 
                 </div>
             @endif
+            @if($invoice->transferm)
+                <div class="text-sm sm:text-base flex items-center justify-between">
+                    <div class="flex items-center space-x-2 space-x-reverse">
+
+                        <p>شماره حساب مقصد:</p>
+                        <p>{{$invoice->transferm->payee_account}}</p>
+                    </div>
+
+                </div>
+            @endif
             <div class="text-sm sm:text-base flex items-center justify-between mt-2 mb-2 ">
                 @if($invoice->bank_id)
-                   <div class="flex flex-col space-y-3">
-                       <div class="flex items-center space-x-2 space-x-reverse">
-                           <p>پرداخت از طریق:</p>
+                    <div class="flex flex-col space-y-3">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <p>پرداخت از طریق:</p>
 
-                           <p>{{$invoice->bank->name}}</p>
+                            <p>{{$invoice->bank->name}}</p>
 
-                       </div>
-                       <div class="flex items-center space-x-2 space-x-reverse">
-                           @if($invoice->status!='finished')
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            @if($invoice->status!='finished')
 
-                               <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">
-                               <p>پشتیبانی بانک سامان : 6422-021</p>
-                           @endif
+                                <img src="{{asset('src/images/samanBank.png')}}" alt="" class="w-10 h-10">
+                                <p>پشتیبانی بانک سامان : 6422-021</p>
+                            @endif
 
-                           @else
-
-                               کیف پول
-                       </div>
-                   </div>
+                            @else
+                                <div class="flex items-center space-x-2 space-x-reverse">
+                                    <p>پرداخت از طریق:</p>
+                                    <p>کیف پول</p>
+                                </div>
+                        </div>
+                    </div>
                 @endif
             </div>
             @if($invoice->payment)
@@ -123,18 +135,6 @@
                     </div>
                 </div>
             @endif
-
-            @if($invoice->transferm)
-                <div class="text-sm sm:text-base flex items-center justify-between">
-                    <div class="flex items-center space-x-2 space-x-reverse">
-
-                        <p>شماره حساب مقصد:</p>
-                        <p>{{$invoice->transferm->payee_account}}</p>
-                    </div>
-
-                </div>
-            @endif
-
 
         </div>
 
