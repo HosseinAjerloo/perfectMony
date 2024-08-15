@@ -3,7 +3,7 @@
 @section('message-box')
     <div class="flex items-center justify-center space-x-reverse space-x-4 bg-gray-500 p-2">
         <img src="{{asset('src/images/dollar 1.png')}}" alt="" class="w-9 h-9">
-        <p class="text-sm text-center sm:text-base">موجودی فعلی شما:{{numberFormat($balance)}} هزارریال میباشد</p>
+        <p class="text-sm text-center sm:text-base">موجودی فعلی شما:{{numberFormat($balance)}} ریال میباشد</p>
     </div>
 @endsection
 
