@@ -318,7 +318,7 @@ class PanelController extends Controller
 
                 ]);
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-            $bankErrorMessage=" پیامک ناموفق که درگاه سامان پرداخت شما را بدلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد";
+            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
 
             return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
@@ -328,7 +328,8 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-            $bankErrorMessage=" پیامک ناموفق که درگاه سامان پرداخت شما را بدلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد";
+            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
+
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .

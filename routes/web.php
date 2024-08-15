@@ -85,8 +85,5 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
-    $pam='عدم ارتباط';
-    $test="تراکنش ناموفق ، ".$pam." عملیات بانکی انجام نشده است.";
-    dd($test);
 
 });
