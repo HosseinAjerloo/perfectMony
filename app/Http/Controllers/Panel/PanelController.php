@@ -451,16 +451,19 @@ class PanelController extends Controller
 
     public function walletChargingPreview(WalletChargingRequest $request)
     {
+        $user=Auth::user();
         $inputs = $request->all();
         $payment = Payment::create(
             [
                 'state' => 'requested',
             ]);
+        $balance = $user->getCreaditBalance();
+
         $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
         $inputs['orderID'] = $payment->id + Payment::transactionNumber;
         session()->put('payment', $payment->id);
 
-        return view("Panel.RechargeWallet.FinalApproval", compact('inputs'));
+        return view("Panel.RechargeWallet.FinalApproval", compact('inputs','balance'));
     }
 
     public function walletChargingStore(WalletChargingRequest $request)
