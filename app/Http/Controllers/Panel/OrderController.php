@@ -16,7 +16,7 @@ class OrderController extends Controller
     {
         $user=Auth::user();
 
-        $financeTransactions=FinanceTransaction::where('user_id',$user->id)->get();
+        $financeTransactions=FinanceTransaction::where('user_id',$user->id)->orderBy('created_at','desc')->get();
         return view('Panel.Orders.index',compact('financeTransactions'));
     }
     public function details(FinanceTransaction $financeTransaction)
@@ -27,7 +27,7 @@ class OrderController extends Controller
     public function Expectation()
     {
         $user=Auth::user();
-        $invoices=Invoice::where('user_id',$user->id)->get();
+        $invoices=Invoice::where('user_id',$user->id)->orderBy('created_at','desc')->get();
 
         return view('Panel.Orders.expectation',compact('invoices'));
     }

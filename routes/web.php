@@ -85,6 +85,8 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function () {
-
+    $pam='عدم ارتباط';
+    $test=" پیامک ناموفق که درگاه سامان پرداخت شما را بدلیل ".$pam." ناموفق اعلام کرد";
+    dd($test);
 
 });

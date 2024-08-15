@@ -120,8 +120,8 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
-                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" . PHP_EOL.route('panel.order.expectation.details',$invoice);
-                    $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
+                    $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
@@ -187,8 +187,8 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
-                    $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" .PHP_EOL. route('panel.order.expectation.details',$invoice);
-                    $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
+                    $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -318,7 +318,8 @@ class PanelController extends Controller
 
                 ]);
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-
+            $bankErrorMessage=" پیامک ناموفق که درگاه سامان پرداخت شما را بدلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد";
+            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
 
             return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
@@ -327,7 +328,8 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-
+            $bankErrorMessage=" پیامک ناموفق که درگاه سامان پرداخت شما را بدلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد";
+            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
                 PHP_EOL .
@@ -411,8 +413,8 @@ class PanelController extends Controller
                 $request->session()->put('voucher_id', $voucher->id);
                 $request->session()->put('amount_voucher', $payment_amount);
             }
-            $message = "سلام کارت هدیه  شما ایجاد شد برای مشاهده روی لینک ارسالی کلیک فرمایید با تشکر ساینا ارز" .PHP_EOL. route('panel.order.expectation.details',$invoice);
-            $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
+            $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+            $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
 
@@ -430,7 +432,7 @@ class PanelController extends Controller
 
             ]);
             $message = "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید" ;
-            $satiaService->send($message, $user->mobile, '30006928', 'New137', '140101101');
+            $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             $invoice->update(['status' => 'finished','description'=>'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید']);
             return redirect()->route('panel.purchase.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
         }

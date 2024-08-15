@@ -33,7 +33,7 @@
                 <a href="{{route('panel.purchase.view')}}"
                    class="text-center flex items-center space-x-2 space-x-reverse">
                     <img src="{{asset('src/images/prl.png')}}" alt="" class="w-6 h-6">
-                    <p>خرید ووچر پرفکت مانی</p>
+                    <p>خرید کارت هدیه پرفکت مانی</p>
                 </a>
             </div>
             <div class="border-2 border-2-white rounded-md py-3 px-3  w-full text-center   bg-gray-800">
