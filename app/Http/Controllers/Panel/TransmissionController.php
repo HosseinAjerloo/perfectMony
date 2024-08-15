@@ -69,13 +69,14 @@ class TransmissionController extends Controller
                         'type' => "withdrawal",
                         "creadit_balance" => ($balance - $voucherPrice),
                         'description' => 'انتقال ووچر و کسر مبلغ از کیف پول',
-                        'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+                        'time_price_of_dollars' => $dollar->DollarRateWithAddedValue(),
                     ]);
                     $invoice->update(['status' => 'finished']);
                     $transitionDelivery = Transmission::create(
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
+                            'invoice_id'=>$invoice->id,
                             'payee_account_name' => $transition['Payee_Account_Name'],
                             'payee_account' => $transition['Payee_Account'],
                             'payer_account' => $transition['Payer_Account'],
@@ -124,6 +125,7 @@ class TransmissionController extends Controller
                         [
                             'user_id' => $user->id,
                             'finance_id' => $finance->id,
+                            'invoice_id'=>$invoice->id,
                             'payee_account_name' => $transition['Payee_Account_Name'],
                             'payee_account' => $transition['Payee_Account'],
                             'payer_account' => $transition['Payer_Account'],
@@ -312,6 +314,7 @@ class TransmissionController extends Controller
                     'user_id' => $user->id,
                     'finance_id' => $finance->id,
                     'payee_account_name' => $transition['Payee_Account_Name'],
+                    'invoice_id'=>$invoice->id,
                     'payee_account' => $transition['Payee_Account'],
                     'payer_account' => $transition['Payer_Account'],
                     'payment_amount' => $transition['PAYMENT_AMOUNT'],

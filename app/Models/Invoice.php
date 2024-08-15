@@ -37,8 +37,9 @@ class Invoice extends Model
 
     public function transferm()
     {
-        return $this->hasOne(Transmission::class,'finance_id');
+        return $this->hasOne(Transmission::class,'invoice_id');
     }
+
 
     public function voucherAmount()
     {
