@@ -89,6 +89,7 @@
                 let btnLogin = document.getElementById("login");
                 btnLogin.remove();
                 resend_btn.removeAttribute('disabled')
+                resend_btn.removeAttribute('type')
                 let form = document.getElementById('form');
                 form.action = "{{route("login.resend",$otp->token)}}"
 
