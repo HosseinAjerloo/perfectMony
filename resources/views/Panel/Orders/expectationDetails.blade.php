@@ -80,7 +80,6 @@
                             <p>پرداخت از طریق:</p>
 
                             <p>{{$invoice->bank->name}}</p>
-
                         </div>
                         <div class="flex items-center space-x-2 space-x-reverse">
                             @if($invoice->status!='finished')
@@ -89,15 +88,42 @@
                                 <p>پشتیبانی بانک سامان : 6422-021</p>
                             @endif
 
-                            @else
-                                <div class="flex items-center space-x-2 space-x-reverse">
-                                    <p>پرداخت از طریق:</p>
-                                    <p>کیف پول</p>
-                                </div>
                         </div>
+                    </div>
+                @else
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <p>پرداخت از طریق:</p>
+                        <p>کیف پول</p>
                     </div>
                 @endif
             </div>
+            @if($invoice->voucher and $invoice->voucher->status=='finished')
+                <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
+                    <div class="flex items-center space-x-16 space-x-reverse">
+                        <p class="text-sm sm:text-base font-semibold bg-white p-2  rounded-md">شماره ووچر:</p>
+
+
+                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold bg-white p-2 rounded-md">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white ">
+                            <span class="inline-block "> {{$invoice->voucher->serial}}</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
+                    <div class="flex items-center space-x-16 space-x-reverse">
+                        <p class="text-sm sm:text-base font-semibold p-2  rounded-md bg-white">کد فعال سازی:</p>
+
+
+                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold p-2  bg-white rounded-md">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer">
+                            <span class="inline-block">{{$invoice->voucher->code}}</span>
+                        </div>
+
+                    </div>
+                </div>
+            @endif
+
             @if($invoice->payment)
                 <div class="text-sm sm:text-base flex items-center justify-between">
                     <div class="flex items-center space-x-2 space-x-reverse">
@@ -109,32 +135,6 @@
                 </div>
             @endif
 
-            @if($invoice->voucher and $invoice->voucher->status=='finished')
-                <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
-                    <div class="flex items-center space-x-16 space-x-reverse">
-                        <p class="text-sm sm:text-base font-semibold">شماره ووچر:</p>
-
-
-                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                            <span class="inline-block"> {{$invoice->voucher->serial}}</span>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="px-3 py-1.5 bg-white rounded-md text-black text-sm sm:text-base">
-                    <div class="flex items-center space-x-16 space-x-reverse">
-                        <p class="text-sm sm:text-base font-semibold">کد فعال سازی:</p>
-
-
-                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy">
-                            <span class="inline-block">{{$invoice->voucher->code}}</span>
-                        </div>
-
-                    </div>
-                </div>
-            @endif
 
         </div>
 
@@ -146,5 +146,28 @@
 
 @section('script-tag')
 
+    <script>
 
+        function copyToClipboard(text) {
+
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Copying text command was ' + msg);
+            } catch (err) {
+                console.log('Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        $('.copy').click(function () {
+            let spanText = $(this).siblings('span').text();
+            copyToClipboard(spanText);
+        });
+    </script>
 @endsection
