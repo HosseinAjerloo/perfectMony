@@ -14,7 +14,7 @@
 @endsection
 
 @section('container')
-    <article class="px-3 py-6">
+    <article class="px-3 py-1.5">
         <form action="{{route('panel.purchase')}}" method="post"
               class="form relative flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4 after:content-['انتخاب_سریع'] after:absolute after:text-white after:top-[-15px] after:bg-gray-950 after:px-4 sm:after:text-sm after:text-base">
             @csrf
@@ -48,12 +48,12 @@
 
 @section('content')
 
-    <article class="space-y-4 flex items-center justify-center flex-col">
+    <article class="space-y-4 flex items-center justify-center flex-col  mx-auto md:w-3/4 lg:w-3/5 xl:w-2/4">
         <div class="flex items-center justify-center space-x-2 space-x-reverse text-center">
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
             <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
         </div>
-
+        <article class="space-y-4 flex items-center justify-center flex-col md:flex-row md:items-center w-full md:justify-around md:space-y-0">
         <div class=" flex items-center justify-start  max-w-max   rounded-md wallet ">
             <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
             <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
@@ -65,7 +65,7 @@
                 <span class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md"> {{$bank->name}} </span>
             </label>
         @endforeach
-
+        </article>
         <div type="button" class="loading hidden">
 
             <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>
