@@ -99,11 +99,9 @@
             </div>
             @if($invoice->voucher and $invoice->voucher->status=='finished')
                 <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
-                    <div class="flex items-center space-x-16 space-x-reverse">
-                        <p class="text-sm sm:text-base font-semibold bg-white p-2  rounded-md">شماره ووچر:</p>
-
-
-                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold bg-white p-2 rounded-md">
+                    <div class="flex items-center space-x-2 space-x-reverse  ">
+                        <p class="text-sm sm:text-base   rounded-md bg-white   p-2 box-border">شماره ووچر:</p>
+                        <div class="items-center  text-sm sm:text-base font-semibold p-2  bg-white rounded-md flex space-x-4 space-x-reverse">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white ">
                             <span class="inline-block "> {{$invoice->voucher->serial}}</span>
                         </div>
@@ -111,11 +109,9 @@
                     </div>
                 </div>
                 <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
-                    <div class="flex items-center space-x-16 space-x-reverse">
-                        <p class="text-sm sm:text-base font-semibold p-2  rounded-md bg-white">کد فعال سازی:</p>
-
-
-                        <div class=" items-center space-x-4 space-x-reverse text-sm sm:text-base font-semibold p-2  bg-white rounded-md">
+                    <div class="flex items-center space-x-2 space-x-reverse ">
+                        <p class="text-sm sm:text-base   rounded-md bg-white   p-2 box-border">کد فعال سازی:</p>
+                        <div class=" items-center  text-sm sm:text-base font-semibold p-2  bg-white rounded-md flex space-x-4 space-x-reverse">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer">
                             <span class="inline-block">{{$invoice->voucher->code}}</span>
                         </div>
