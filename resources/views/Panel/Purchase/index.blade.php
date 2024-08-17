@@ -7,7 +7,7 @@
         </p>
         <div class="space-x-3 space-x-reverse">
             <input type="text"
-                   class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none Desired_amount custom_payment text-black">
+                   class="rounded-md bg-gray-100 py-1 ring-8 ring-gray-300 ring-opacity-25 outline-none Desired_amount custom_payment text-black text-center">
             <label for="" class="text-sm sm:text-base font-semibold">دلار</label>
         </div>
     </div>
@@ -39,8 +39,8 @@
             @endforeach
 
         </form>
-        <div class="text-center py-5 space-y-2 ">
-            <p class="font-semibold text-sm sm:text-base payment-text"></p>
+        <div class="text-center  ">
+            <p class="font-semibold text-sm sm:text-base payment-text py-2"></p>
         </div>
     </article>
 
@@ -53,18 +53,19 @@
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
             <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
         </div>
-        <article class="space-y-4 flex items-center justify-center flex-col md:flex-row md:items-center w-full md:justify-around md:space-y-0">
-        <div class=" flex items-center justify-start  max-w-max   rounded-md wallet ">
-            <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
-            <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
-        </div>
-        @foreach($banks as $bank)
-            <label data-bank="{{$bank->id}}"
-                   class=" flex items-center justify-start  max-w-max   rounded-md  cursor-pointer bank">
-                <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
-                <span class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md"> {{$bank->name}} </span>
-            </label>
-        @endforeach
+        <article
+            class="space-y-4 flex items-center justify-center flex-col md:flex-row md:items-center w-full md:justify-around md:space-y-0 md:mt-16">
+            <div class=" flex items-center justify-start  max-w-max   rounded-md wallet ">
+                <img src="{{asset('src/images/wallet.png')}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
+                <button class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md">پرداخت با کیف پول</button>
+            </div>
+            @foreach($banks as $bank)
+                <label data-bank="{{$bank->id}}"
+                       class=" flex items-center justify-start  max-w-max   rounded-md  cursor-pointer bank">
+                    <img src="{{asset($bank->logo_url)}}" alt="" class="w-12 h-12 bg-sky-500 rounded-md">
+                    <span class="bg-sky-500 py-1.5 px-2 rounded-se-md rounded-ee-md"> {{$bank->name}} </span>
+                </label>
+            @endforeach
         </article>
         <div type="button" class="loading hidden">
 
