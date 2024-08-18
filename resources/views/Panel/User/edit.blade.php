@@ -21,7 +21,7 @@
             <input type="text" class="font-yekan py-1 px-2   rounded-md text-black outline-none box-border" name="family" value="{{old("family",$user->family)}}">
         </div>
         <div class="flex justify-between items-center  w-full space-x-2 space-x-reverse ">
-            <label for="" class="text-base font-yekan ">تلفن ثابت  :</label>
+            <label for="" class="text-base font-yekan ">تلفن ثابت:</label>
             <input type="text" class="font-yekan py-1 px-2  rounded-md text-black outline-none" name="tel" value="{{old("tel",$user->tel)}}">
         </div>
 
