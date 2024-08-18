@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,18 +11,18 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    const users=
+    const users =
         [
-            'name'=>"حسین",
-            'family'=>"آجرلو",
-            'mobile'=>"09386542718",
+            'name' => "حسین",
+            'family' => "آجرلو",
+            'mobile' => "09386542718",
         ];
     protected $fillable = [
         'name',
@@ -59,17 +60,27 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function  financeTransactions()
+
+    public function financeTransactions()
     {
-        return $this->hasMany(FinanceTransaction::class,'user_id');
+        return $this->hasMany(FinanceTransaction::class, 'user_id');
     }
 
     public function getCreaditBalance()
     {
-        return $this->financeTransactions()->orderBy('id','desc')->first()->creadit_balance??0;
+        return $this->financeTransactions()->orderBy('id', 'desc')->first()->creadit_balance ?? 0;
     }
+
     public function tickets()
     {
-        return $this->hasMany(Ticket::class,'user_id');
+        return $this->hasMany(Ticket::class, 'user_id');
+    }
+
+    public function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value ,array $attributes) {
+                return $attributes['name'] ?? ' ' . $attributes['family'] ?? '';
+            });
     }
 }
