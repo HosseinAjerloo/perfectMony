@@ -26,7 +26,7 @@ class TicketController extends Controller
         if (!$ticket)
             abort(404);
         $ticket_messages = $ticket->messages;
-        return view('panel.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
+        return view('Panel.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
 
     public function ticketMessage(Request $request)

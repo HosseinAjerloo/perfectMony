@@ -51,7 +51,7 @@
         <article class="space-y-2">
             <a href="" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/Profile.png')}}" alt="">
-                <p> {{\Illuminate\Support\Facades\Auth::user()->fullName??''}} </p>
+                <p> {{\Illuminate\Support\Facades\Auth::user()->name??''}} </p>
             </a>
             <a href="" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/editPen.png')}}" alt="">
