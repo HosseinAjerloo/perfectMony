@@ -24,14 +24,15 @@
 @section('container')
     <article class="px-3 py-6">
         <form action="{{route('panel.transmission')}}" method="post"
-              class="form relative flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-2/4 after:content-['انتخاب_سریع'] after:absolute after:text-white after:top-[-15px] after:bg-gray-950 after:px-4 sm:after:text-sm after:text-base">
+              class="form relative flex justify-between items-center border-2 border-white rounded-md  flex-wrap  p-5 text-center  mx-auto md:w-2/3 lg:w-4/6 after:content-['انتخاب_سریع'] after:absolute after:text-white after:top-[-15px] after:bg-gray-950 after:px-4 sm:after:text-sm after:text-base">
             @csrf
             @foreach($services as $service)
                 <label for="dollar-{{$service->id}}" data-inputID="{{$service->id}}"
 
-                       class="dollar @if(old('service_id')==$service->id) select-dollar @endif  transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/5">
+                       class="dollar @if(old('service_id')==$service->id) select-dollar @endif  transition-all duration-500  p-2 w-1/3 flex justify-center items-center flex-col hover:cursor-pointer group  mb-2 sm:1/5 md:w-1/4 lg:w-1/6">
                     <img src="{{asset('src/images/dollar 1.png')}}" alt=""
-                         class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 group-hover:cursor-pointer">
+                         class="dollar   w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 group-hover:cursor-pointer">
+
                     <p class="text-sm  font-yekan font-semibold mt-2 sm:text-base">{{$service->amount.' '.$service->name}}</p>
                     <input type="radio" id="dollar-{{$service->id}}" value="{{$service->id}}"
                            data-amount="{{$service->amount}}" name="service_id" class="hidden"
@@ -49,8 +50,8 @@
             @endforeach
 
         </form>
-        <div class="text-center py-5 space-y-2 ">
-            <p class="font-semibold text-sm sm:text-base payment-text"></p>
+        <div class="text-center  ">
+            <p class="font-semibold text-sm sm:text-base payment-text py-2"></p>
         </div>
     </article>
 
