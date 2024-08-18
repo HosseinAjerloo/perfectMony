@@ -79,8 +79,9 @@ class User extends Authenticatable
     public function fullName(): Attribute
     {
         return Attribute::make(
-            get: function (string $value ,array $attributes) {
-                return $attributes['name'] ?? ' ' . $attributes['family'] ?? '';
+            get: function () {
+
+                return $this->name .' '. $this->family;
             });
     }
 }
