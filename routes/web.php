@@ -22,7 +22,8 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'completionOfInformation'])->name('panel.user.completionOfInformation');
             Route::post('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'register'])->name('panel.user.register');
-
+            Route::get('edit',[App\Http\Controllers\Panel\UserController::class,'edit'])->name('panel.user.edit');
+            Route::post('update',[App\Http\Controllers\Panel\UserController::class,'update'])->name('panel.user.update');
         });
     });
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');

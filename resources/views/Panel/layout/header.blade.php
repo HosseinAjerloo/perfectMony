@@ -1,5 +1,5 @@
 <header class="bg-sky-500 py-3 px-2 flex items-center justify-between relative">
-    <div class="menuHamburger">
+    <div class="menuHamburger cursor-pointer">
         <img src="{{asset('src/images/hamburger.svg')}}" alt="">
     </div>
     <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}" >
@@ -9,12 +9,12 @@
 
 
     </a>
-    <div class="myProfile">
+    <div class="myProfile cursor-pointer">
         <img src="{{asset('src/images/paneLUserIcon.png')}}" alt="">
     </div>
 
     <section id="menu"
-             class=" menu-non-show absolute w-3/5 sm:w-3/6 lg:w-1/4 xl:w-1/5 top-14   z-10 pb-2  text-white bg-sky-500 rounded-ee-md overflow-hidden transition-all duration-500">
+             class=" menu-non-show absolute w-3/5 sm:w-3/6 lg:w-1/4 xl:w-1/5 top-14   z-10 pb-2  text-white bg-sky-500 rounded-ee-md overflow-hidden transition-all duration-500 ">
         <article class="space-y-2">
             <a href="{{route('panel.purchase.view')}}"
                class="text-sm flex  items-center px-3 py-1.5 space-x-2 space-x-reverse border-t border-white">
@@ -53,7 +53,7 @@
                 <img src="{{asset('src/images/Profile.png')}}" alt="">
                 <p> {{\Illuminate\Support\Facades\Auth::user()->fullName??''}} </p>
             </a>
-            <a href="" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
+            <a href="{{route('panel.user.edit')}}" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/editPen.png')}}" alt="">
                 <p>ویرایش مشخصات</p>
             </a>
