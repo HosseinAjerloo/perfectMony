@@ -2,10 +2,10 @@
     <div class="menuHamburger cursor-pointer">
         <img src="{{asset('src/images/hamburger.svg')}}" alt="">
     </div>
-    <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}" >
+    <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}">
         <i class="fa-solid fa-house w-6 h-6"></i>
-            <h1 class="font-bold text-2xl italic">Saina Arz</h1>
-            <img src="{{asset('src/images/logo.svg')}}" alt="">
+        <h1 class="font-bold text-2xl italic">Saina Arz</h1>
+        <img src="{{asset('src/images/logo.svg')}}" alt="">
 
 
     </a>
@@ -53,11 +53,13 @@
                 <img src="{{asset('src/images/Profile.png')}}" alt="">
                 <p> {{\Illuminate\Support\Facades\Auth::user()->fullName??''}} </p>
             </a>
-            <a href="{{route('panel.user.edit')}}" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
+            <a href="{{route('panel.user.edit')}}"
+               class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/editPen.png')}}" alt="">
                 <p>ویرایش مشخصات</p>
             </a>
-            <a href="{{route('logout')}}" class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
+            <a href="{{route('logout')}}"
+               class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
                 <img src="{{asset('src/images/logout.png')}}" alt="">
                 <p>خروج از حساب کاربری</p>
             </a>

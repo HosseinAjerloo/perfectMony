@@ -101,9 +101,9 @@
                 <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
                     <div class="flex items-center space-x-2 space-x-reverse  ">
                         <p class="text-sm sm:text-base   rounded-md bg-white   p-2 box-border">شماره ووچر:</p>
-                        <div class="items-center  text-sm sm:text-base font-semibold p-2  bg-white rounded-md flex space-x-4 space-x-reverse">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white ">
-                            <span class="inline-block "> {{$invoice->voucher->serial}}</span>
+                        <div class="items-center  text-sm sm:text-base font-semibold p-2   rounded-md flex space-x-4 space-x-reverse">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white bg-white p-2 rounded-md">
+                            <span class="inline-block bg-white p-2 rounded-md"> {{$invoice->voucher->serial}}</span>
                         </div>
 
                     </div>
@@ -111,9 +111,9 @@
                 <div class="px-3 py-1.5  rounded-md text-black text-sm sm:text-base">
                     <div class="flex items-center space-x-2 space-x-reverse ">
                         <p class="text-sm sm:text-base   rounded-md bg-white   p-2 box-border">کد فعال سازی:</p>
-                        <div class=" items-center  text-sm sm:text-base font-semibold p-2  bg-white rounded-md flex space-x-4 space-x-reverse">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer">
-                            <span class="inline-block">{{$invoice->voucher->code}}</span>
+                        <div class=" items-center  text-sm sm:text-base font-semibold p-2   rounded-md flex space-x-4 space-x-reverse">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
+                            <span class="inline-block bg-white p-2 rounded-md">{{$invoice->voucher->code}}</span>
                         </div>
 
                     </div>
