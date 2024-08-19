@@ -39,7 +39,7 @@
             $.ajax({
                 type: "POST",
                 headers: {'X-CSRF-TOKEN': "{{csrf_token()}}"},
-                url: "{{route('panel.admin.ticket-message')}}",
+                url: "{{route('panel.ticket-client-message')}}",
                 data: {'ticket_id':{{$ticket->id}},'message':message},
                 success: function(response){
                     if(response.success){
