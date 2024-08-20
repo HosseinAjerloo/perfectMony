@@ -7,7 +7,7 @@
         <div id="messages" class="h-[70vh] overflow-auto">
             @foreach($ticket_messages as $ticket_message)
                 <div class="mb-2 flex flex-wrap justify-center">
-                    <div class="w-full">
+                    <div class="w-full ticket-message">
                         <div
                             class="p-3 rounded-xl w-fit @if($ticket_message->user_id) float-left rounded-bl-none bg-cyan-800 @else rounded-br-none bg-cyan-600 @endif ">
                             <p>{{$ticket_message->message}}</p>
@@ -18,6 +18,12 @@
                                     <img src="{{asset('src/images/them.jpg')}}" alt="" class="w-52 h-52 rounded-md">
                                 </div>
                             </div>
+                            <div class="p-3 rounded-xl  flex w-full">
+                                <div class="p-3 rounded-xl  flex w-full flex justify-end">
+                                    <img src="{{asset('src/images/them.jpg')}}" alt="" class="w-52 h-52 rounded-md">
+                                </div>
+                            </div>
+
                         @else
                             <div class="p-3 rounded-xl  flex w-full">
 
@@ -110,43 +116,82 @@
             })
             $(file).change(function () {
 
-                      $('.file-demo').removeClass('invisible')
-                      $('.file-demo').addClass('visibility')
-                      $('.file-demo').removeClass('right-40')
-                      $('.file-demo').addClass('right-0')
+                let urlImage = showLiveFile();
+                if (urlImage) {
+                    $('.file-demo').removeClass('invisible')
+                    $('.file-demo').addClass('visibility')
+                    $('.file-demo').removeClass('right-40')
+                    $('.file-demo').addClass('right-0')
 
-                      var _URL = window.URL || window.webkitURL;
-
-                      var image, file;
-                      if ((file = this.files[0])) {
-                          image = new Image();
-                          image.onload = function () {
-                              src = this.src;
-                              $(".bg-live").attr('src', src)
-                          }
-                      }
-                      image.src = _URL.createObjectURL(file);
+                    $(".bg-live").attr('src', urlImage)
+                }
             })
         })
     </script>
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
             let file = $("#file");
 
-            $('.send').click(function (){
-                let fileData=$(file).get(0).files[0];
-                let myFormData=new FormData();
-                myFormData.append('image',fileData);
-                $.ajax({
-                    url: "{{route('test')}}",
-                    type: 'GET',
-                    processData: false, // important
-                    contentType: false, // important
-                    dataType : 'json',
-                    data: myFormData
-                });
+            $('.send').click(function () {
+                let fileData = $(file).get(0).files[0];
+                if (imageValidation.includes(fileData.type)) {
+                    let myFormData = new FormData();
+                    myFormData.append('image', fileData);
+                    myFormData.append('_token', "{{csrf_token()}}")
+                    myFormData.append('ticket_id', "{{$ticket->id}}")
+                    $.ajax({
+                        url: "{{route('panel.ticket-client-message')}}",
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        data: myFormData,
+                        headers: {
+                            "Accept": "application/json"
+                        },
+                        mimeType: "multipart/form-data",
+
+                    });
+
+                    let parentImage = $('.ticket-message');
+                    let urlImage = showLiveFile();
+                    let elementMessage =
+                        '<div class="p-3 rounded-xl  flex w-full">' +
+                        '<div class="p-3 rounded-xl  flex w-full flex justify-end">' +
+                        '   <img src="' + urlImage + '" alt="" class="w-52 h-52 rounded-md test">' +
+                        '</div>' +
+                        '</div>';
+                    $(parentImage).append(elementMessage)
+                }
+                $('.close').trigger('click')
+
+
             })
         })
+    </script>
+    <script>
+        let imageValidation = ['image/png', 'image/jpeg', 'image/jpg'];
+
+        function showLiveFile() {
+            let files = $("#file");
+            let src;
+            var _URL = window.URL || window.webkitURL;
+
+            var image, file;
+            if ((file = $(files).get(0).files[0])) {
+                image = new Image();
+                image.onload = function () {
+
+                }
+            }
+
+            if (imageValidation.includes(file.type)) {
+                image.src = _URL.createObjectURL(file);
+                return image.src;
+            }
+            return false;
+
+        }
     </script>
 @endsection
 

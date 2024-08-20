@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('admin_id')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('message')->nullable();
             $table->timestamp('seen_at')->nullable();
+            $table->enum('type',['message','file'])->default('message');
             $table->timestamps();
             $table->softDeletes();
         });

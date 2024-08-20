@@ -86,5 +86,10 @@ Route::fallback(function () {
     abort(404);
 });
 Route::post('test', function (\Illuminate\Http\Request $request) {
-        dd($request->all());
+    $image=new \App\Services\ImageService\ImageService();
+    $image->setFileName('hossein');
+    $image->setFileType('jpeg');
+    $image->setRootFolder('user');
+    $image->setFileFolder('ticket');
+    $image->saveImage($request->file('image'));
 })->name('test');

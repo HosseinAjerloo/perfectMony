@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Panel\Ticket\TicketRequest;
 use App\Models\Ticket;
 use App\Models\TicketMessage;
 use App\Models\User;
@@ -29,17 +30,25 @@ class TicketController extends Controller
         return view('Panel.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
 
-    public function ticketMessage(Request $request)
+    public function ticketMessage(TicketRequest $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
+        $user=Auth::user();
+        $ticket = Ticket::where('user_id',$user->id)->where('id',$request->ticket_id)->first();
         if (!$ticket)
             abort(404);
-        if ($ticket->user_id != $request->user()->id)
-            abort(404);
+        $inputs=$request->all();
+        dd($inputs);
+        if ($request->hasFile('image'))
+        {
+            $inputs['type']='file';
+        }
+        else{
+            $inputs['ticket_id']=$ticket->id;
+            $inputs['user_id']=$ticket->user_id;
+        }
         $new_ticket = TicketMessage::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => $ticket->user_id,
-            'message' => $request->message
+
+
         ]);
         $new_ticket->jalali_date = Jalalian::fromCarbon($new_ticket->created_at)->format('h:i Y/m/d');
         return [
