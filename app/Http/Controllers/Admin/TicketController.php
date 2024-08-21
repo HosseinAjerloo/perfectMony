@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Ticket\TicketRequest;
 use App\Models\Ticket;
 use App\Models\TicketMessage;
 use App\Services\ImageService\ImageService;
@@ -39,7 +40,7 @@ class TicketController extends Controller
         $ticket_messages = TicketMessage::where('ticket_id',$ticket_id)->get();
         return view('Admin.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
-    public function ticketMessage(Request $request,ImageService $imageService)
+    public function ticketMessage(TicketRequest $request,ImageService $imageService)
     {
 
         $user = Auth::user();

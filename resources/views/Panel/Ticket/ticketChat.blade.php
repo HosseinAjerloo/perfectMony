@@ -141,6 +141,8 @@
 
             $('.send').click(function () {
                 let fileData = $(file).get(0).files[0];
+                console.log(fileData)
+
                 let elementMessage = '';
                 if (imageValidation.includes(fileData.type)) {
                     let myFormData = new FormData();
