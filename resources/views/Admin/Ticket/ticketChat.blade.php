@@ -58,7 +58,7 @@
             </label>
 
             <section
-                class="file-demo absolute w-full h-12 box-border  bottom-96 right-40  transition-all duration-1000 invisible">
+                class="file-demo absolute w-full h-12 box-border  bottom-96 right-40  transition-all duration-1000 invisible z-[100]">
                 <article class="flex justify-center items-center h-64">
                     <div class=" w-full bg-white p-2 rounded-md space-y-2 sm:w-3/5 md:w-3/6">
                         <i class="fas fa-times-circle text-sky-500 w-8 h-8 close"></i>
