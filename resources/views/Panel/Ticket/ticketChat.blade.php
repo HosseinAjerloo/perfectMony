@@ -65,6 +65,7 @@
                         <img src="{{asset('src/images/them.jpg')}}" alt=""
                              class="h-64 w-full bg-origin-content rounded-md bg-live">
                         <button class="py-1.5 px-2 rounded-md bg-sky-500 text-sm sm:text-base send">ارسال عکس</button>
+                        <p class="text-rose-500 font-semibold text-sm sm:text-base">عکس ارسالی شما نمیتواند بیشتر از 3 مگابایت باشد</p>
                     </div>
                 </article>
             </section>
