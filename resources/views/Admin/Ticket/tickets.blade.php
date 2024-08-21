@@ -19,6 +19,8 @@
                 <th class=" w-1/3 py-3 font-semibold">عنوان</th>
                 <th class=" w-1/3 py-3 font-semibold">تاریخ</th>
                 <th class=" w-1/3 py-3 font-bold">جزئیات</th>
+                <th class=" w-1/3 py-3 font-bold">ورود به حساب کاربری</th>
+
             </tr>
             </thead>
             <tbody id="tickets_body">
@@ -31,6 +33,12 @@
                     </td>
                     <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
                     <td class=" w-1/3  text-center py-2">{{$ticket->ticketStatus()}}</td>
+                    @if($ticket->user->type!='admin')
+                        <td class=" w-1/3  text-center py-2"><a
+                                href="{{route('panel.admin.login-another-user',$ticket->user_id)}}">وارد شوید</a></td>
+                    @else
+                        ---
+                    @endif
                 </tr>
             @endforeach
             </tbody>
@@ -47,13 +55,13 @@
             var scrollHeight = $(document).height();
             var scrollPosition = $(window).height() + $(window).scrollTop();
             if ((scrollHeight - scrollPosition) < 1) {
-                 if(has_more && !requesting)
+                if (has_more && !requesting)
                     get_next_page();
             }
         });
 
         function get_next_page() {
-            requesting =true;
+            requesting = true;
             $.ajax({
                 type: "GET",
                 url: "{{route('panel.admin.ticket-page')}}",
@@ -62,16 +70,16 @@
                     if (response.success) {
                         has_more = response.has_more;
                         var content = '';
-                        for(var i = 0; i < response.data.data.length;i++){
-                            content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">'+
-                                '<td class=" w-1/3  text-center py-2">'+response.data.data[i].id+'</td>'+
-                            '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a '+
-                                ' href="{{route('panel.admin.ticket-chat',$ticket->id)}}"'+
-                                ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">'+response.data.data[i].subject+'</a>'+
-                            '</td>'+
-                            '<td class=" w-1/3  text-center py-2">'+response.data.data[i].date+'</td>'+
-                            '<td class=" w-1/3  text-center py-2">'+response.data.data[i].status+'</td>'+
-                        '</tr>';
+                        for (var i = 0; i < response.data.data.length; i++) {
+                            content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">' +
+                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].id + '</td>' +
+                                '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a ' +
+                                ' href="{{route('panel.admin.ticket-chat',$ticket->id)}}"' +
+                                ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">' + response.data.data[i].subject + '</a>' +
+                                '</td>' +
+                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].date + '</td>' +
+                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].status + '</td>' +
+                                '</tr>';
                         }
                         $('#tickets_body').append(content);
                     }

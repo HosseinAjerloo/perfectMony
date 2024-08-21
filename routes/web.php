@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('panel.admin');
+    Route::get('login-another-user/{user}', [App\Http\Controllers\Admin\AdminController::class, 'loginAnotherUser'])->name('panel.admin.login-another-user');
     Route::get('tickets', [App\Http\Controllers\Admin\TicketController::class, 'index'])->name('panel.admin.tickets');
     Route::get('ticket-page', [App\Http\Controllers\Admin\TicketController::class, 'ticketPage'])->name('panel.admin.ticket-page');
     Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Admin\TicketController::class, 'ticketChat'])->name('panel.admin.ticket-chat');
@@ -88,6 +89,5 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function (\Illuminate\Http\Request $request) {
-    $file=File::find(1);
-    dd($file->fileable);
+   \Illuminate\Support\Facades\Auth::loginUsingId(1);
 })->name('test');

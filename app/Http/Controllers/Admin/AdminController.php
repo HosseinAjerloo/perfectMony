@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -61,5 +63,14 @@ class AdminController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function loginAnotherUser(Request $request,User $user)
+    {
+        $currentUser=Auth::user();
+        if ($currentUser->type=='admin')
+            session(['previous_user'=>$currentUser->id]);
+
+        Auth::loginUsingId($user->id);
+        return redirect()->route('panel.index');
     }
 }

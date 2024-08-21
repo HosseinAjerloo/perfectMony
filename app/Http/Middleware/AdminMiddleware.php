@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,11 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            $user = Auth::user();
+            if (session()->has('previous_user')) {
+                $user = User::find(session()->get('previous_user'));
+            } else {
+                $user = Auth::user();
+            }
             if ($user->type == 'admin') {
                 return $next($request);
             } else {

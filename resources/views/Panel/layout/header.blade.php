@@ -63,6 +63,13 @@
                 <img src="{{asset('src/images/logout.png')}}" alt="">
                 <p>خروج از حساب کاربری</p>
             </a>
+            @if(session()->has('previous_user') and session()->get('previous_user')!=\Illuminate\Support\Facades\Auth::user()->id)
+                <a href="{{route('panel.admin.login-another-user',session()->get('previous_user'))}}"
+                   class="flex items-center py-1.5 px-2 space-x-2 space-x-reverse text-sm sm:text-base">
+                    <img src="{{asset('src/images/logout.png')}}" alt="">
+                    <p>به حساب خودم وارد شو</p>
+                </a>
+            @endif
         </article>
     </section>
 
