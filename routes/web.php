@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\File;
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
@@ -65,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ticket-client-message', [App\Http\Controllers\Panel\TicketController::class, 'ticketMessage'])->name('panel.ticket-client-message');
     Route::view('ticket-add', 'Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
+    Route::get('download/{file}', [App\Http\Controllers\Panel\TicketController::class, 'download'])->name('panel.ticket.download');
 
 });
 
@@ -85,11 +87,7 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
 Route::fallback(function () {
     abort(404);
 });
-Route::post('test', function (\Illuminate\Http\Request $request) {
-    $image=new \App\Services\ImageService\ImageService();
-    $image->setFileName('hossein');
-    $image->setFileType('jpeg');
-    $image->setRootFolder('user');
-    $image->setFileFolder('ticket');
-    $image->saveImage($request->file('image'));
+Route::get('test', function (\Illuminate\Http\Request $request) {
+    $file=File::find(1);
+    dd($file->fileable);
 })->name('test');

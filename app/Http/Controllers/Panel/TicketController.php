@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Panel\Ticket\TicketRequest;
+use App\Models\File;
 use App\Models\Ticket;
 use App\Models\TicketMessage;
 use App\Models\User;
+use App\Services\ImageService\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Morilog\Jalali\Jalalian;
 
 
@@ -30,31 +33,38 @@ class TicketController extends Controller
         return view('Panel.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
 
-    public function ticketMessage(TicketRequest $request)
+    public function ticketMessage(TicketRequest $request, ImageService $imageService)
     {
-        $user=Auth::user();
-        $ticket = Ticket::where('user_id',$user->id)->where('id',$request->ticket_id)->first();
+        $user = Auth::user();
+        $ticket = Ticket::find($request->ticket_id);
         if (!$ticket)
             abort(404);
-        $inputs=$request->all();
-        dd($inputs);
-        if ($request->hasFile('image'))
-        {
-            $inputs['type']='file';
+        $inputs = $request->all();
+        $inputs['ticket_id'] = $ticket->id;
+        $inputs['user_id'] = $ticket->user_id;
+        if ($request->hasFile('image')) {
+            $imageService->setFileFolder('ticket');
+            $imageService->saveImage($request->file('image'));
+            $inputs['type'] = 'file';
+            $new_ticket = TicketMessage::create($inputs);
+            $result = $new_ticket->image()->create(['user_id' => $ticket->user_id, 'path' => $imageService->getFinalFileAddres()]);
+            $result->jalali_date=Jalalian::fromCarbon($result->created_at)->format('h:i Y/m/d');
+            $result->value=route('panel.ticket.download',$result->id);
+            $result->crs=asset($result->path);
+            return $result ? response()->json(['success' => true,'data'=>$result]) : response()->json(['success' => false]);
+        } else {
+
+            $inputs['type'] = 'message';
+            $new_ticket = TicketMessage::create($inputs);
+
+            $new_ticket->jalali_date = Jalalian::fromCarbon($new_ticket->created_at)->format('h:i Y/m/d');
+            return [
+                'success' => true,
+                'data' => $new_ticket
+            ];
         }
-        else{
-            $inputs['ticket_id']=$ticket->id;
-            $inputs['user_id']=$ticket->user_id;
-        }
-        $new_ticket = TicketMessage::create([
 
 
-        ]);
-        $new_ticket->jalali_date = Jalalian::fromCarbon($new_ticket->created_at)->format('h:i Y/m/d');
-        return [
-            'success' => true,
-            'data' => $new_ticket
-        ];
     }
 
     public function ticketAddSubmit(Request $request)
@@ -70,5 +80,10 @@ class TicketController extends Controller
             'message' => $request->message
         ]);
         return redirect()->route('panel.ticket')->with(['success' => "تیکت با موفقیت ثبت شد."]);
+    }
+    public function download(Request $request,File $file)
+    {
+
+      return  Response::download($file->path);
     }
 }

@@ -7,28 +7,30 @@
         <div id="messages" class="h-[70vh] overflow-auto">
             @foreach($ticket_messages as $ticket_message)
                 <div class="mb-2 flex flex-wrap justify-center">
-                    <div class="w-full ticket-message">
-                        <div
-                            class="p-3 rounded-xl w-fit @if($ticket_message->user_id) float-left rounded-bl-none bg-cyan-800 @else rounded-br-none bg-cyan-600 @endif ">
-                            <p>{{$ticket_message->message}}</p>
-                        </div>
-                        @if($ticket_message->user_id)
+                    <div class="w-full">
+                        @if($ticket_message->type=='message')
+                            <div
+                                class="p-3 rounded-xl w-fit @if($ticket_message->user_id)  rounded-bl-none bg-cyan-800 @else float-left rounded-br-none bg-cyan-600 @endif ">
+                                <p>{{$ticket_message->message}}</p>
+                            </div>
+                        @endif
+                        @if($ticket_message->user_id and $ticket_message->type=='file' and $ticket_message->image)
+
                             <div class="p-3 rounded-xl  flex w-full">
-                                <div class="p-3 rounded-xl  flex w-full flex justify-end">
-                                    <img src="{{asset('src/images/them.jpg')}}" alt="" class="w-52 h-52 rounded-md">
+                                <div class="p-3 rounded-xl  flex w-full  ">
+                                    <img src="{{asset($ticket_message->image->path)}}" alt=""
+                                         class="w-52 h-52 rounded-md dowbload cursor-pointer"
+                                         data-val="{{route('panel.ticket.download',$ticket_message->image->id)}}">
                                 </div>
                             </div>
-                            <div class="p-3 rounded-xl  flex w-full">
-                                <div class="p-3 rounded-xl  flex w-full flex justify-end">
-                                    <img src="{{asset('src/images/them.jpg')}}" alt="" class="w-52 h-52 rounded-md">
-                                </div>
-                            </div>
-
-                        @else
+                        @endif
+                        @if($ticket_message->admin_id and $ticket_message->type=='file' and $ticket_message->image)
                             <div class="p-3 rounded-xl  flex w-full">
 
-                                <div class="p-3 rounded-xl  flex w-full">
-                                    <img src="{{asset('src/images/them.jpg')}}" alt="" class="w-52 h-52 rounded-md">
+                                <div class="p-3 rounded-xl  flex w-full justify-end">
+                                    <img src="{{asset($ticket_message->image->path)}}" alt=""
+                                         class="w-52 h-52 rounded-md dowbload cursor-pointer"
+                                         data-val="{{route('panel.ticket.download',$ticket_message->image->id)}}">
                                 </div>
                             </div>
                         @endif
@@ -37,7 +39,10 @@
                         class="text-xs text-gray-500">{{Morilog\Jalali\Jalalian::forge($ticket_message->created_at)->format('h:i Y/m/d')}}</span>
                 </div>
             @endforeach
+
+
         </div>
+
         <div class="relative">
             <label class="p-2 flex justify-between">
                 <button id="send_message" type="button" class="rounded-full border-2 border-sky-500 w-[57px] h-[48px]">
@@ -90,7 +95,7 @@
                         $('#input_message').val('');
                         const client_new_message = ' <div class="mb-2 flex flex-wrap justify-center">' +
                             '<div class="w-full">' +
-                            '<p class="p-3 bg-cyan-800 rounded-xl rounded-bl-none w-fit float-left">' + response.data.message + '</p>' +
+                            '<p class="p-3 bg-cyan-800 rounded-xl rounded-bl-none w-fit ">' + response.data.message + '</p>' +
                             '</div>' +
                             '<span class="text-xs text-gray-500">' + response.data.jalali_date + '</span>' +
                             '</div>';
@@ -130,10 +135,12 @@
     </script>
     <script>
         $(document).ready(function () {
+            let count = 0;
             let file = $("#file");
 
             $('.send').click(function () {
                 let fileData = $(file).get(0).files[0];
+                let elementMessage = '';
                 if (imageValidation.includes(fileData.type)) {
                     let myFormData = new FormData();
                     myFormData.append('image', fileData);
@@ -150,20 +157,32 @@
                             "Accept": "application/json"
                         },
                         mimeType: "multipart/form-data",
+                        success: function (response) {
+                            if (response.success) {
+                                let parentImage = $('#messages');
+                                console.log(response.data.path);
+
+                                elementMessage =
+                                    ' <div class="mb-2 flex flex-wrap justify-center"> ' +
+                                    '<div class="w-full relative z-10 bg-gray-950 " >' +
+                                    '<div class="p-3 rounded-xl  flex w-full">' +
+                                    '<div class="p-3 rounded-xl  flex w-full flex ">' +
+                                    '   <img src="' + response.data.crs + '" alt="" class="w-52 h-52 rounded-md dowbload cursor-pointer" data-val="' + response.data.value + '">' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<span class="text-xs text-gray-500">' + response.data.jalali_date + '</span>' +
+                                    '</div>';
+                                parentImage.append(elementMessage)
+                                $('.close').trigger('click')
+                                download();
+                            }
+                        }
 
                     });
 
-                    let parentImage = $('.ticket-message');
-                    let urlImage = showLiveFile();
-                    let elementMessage =
-                        '<div class="p-3 rounded-xl  flex w-full">' +
-                        '<div class="p-3 rounded-xl  flex w-full flex justify-end">' +
-                        '   <img src="' + urlImage + '" alt="" class="w-52 h-52 rounded-md test">' +
-                        '</div>' +
-                        '</div>';
-                    $(parentImage).append(elementMessage)
+
                 }
-                $('.close').trigger('click')
 
 
             })
@@ -192,6 +211,17 @@
             return false;
 
         }
+    </script>
+    <script>
+        function download() {
+            $(".dowbload").click(function () {
+                let data = $(this).attr('data-val')
+
+                window.location.href = data;
+            })
+        }
+
+        download();
     </script>
 @endsection
 
