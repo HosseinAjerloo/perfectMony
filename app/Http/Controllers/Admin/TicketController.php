@@ -27,8 +27,9 @@ class TicketController extends Controller
             $ticket->route = route('panel.admin.ticket-chat',$ticket->id);
             if($ticket->user->type!='admin')
             {
-                $tickets->loginAnotherUser=route('panel.admin.login-another-user',$ticket->user_id);
+                $ticket->loginAnotherUser=route('panel.admin.login-another-user',$ticket->user_id);
             }
+
         }
         return [
             'success' => true,

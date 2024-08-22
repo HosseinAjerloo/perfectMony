@@ -71,6 +71,7 @@
                         has_more = response.has_more;
                         var content = '';
                         for (var i = 0; i < response.data.data.length; i++) {
+                            console.log(response.data.data[i])
                             content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].id + '</td>' +
                                 '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a ' +
