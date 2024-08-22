@@ -25,6 +25,10 @@ class TicketController extends Controller
             $ticket->date = \Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s');
             $ticket->status = $ticket->ticketStatus();
             $ticket->route = route('panel.admin.ticket-chat',$ticket->id);
+            if($ticket->user->type!='admin')
+            {
+                $tickets->loginAnotherUser=route('panel.admin.login-another-user',$ticket->user_id);
+            }
         }
         return [
             'success' => true,

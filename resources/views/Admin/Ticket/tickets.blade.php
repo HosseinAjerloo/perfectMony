@@ -79,6 +79,7 @@
                                 '</td>' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].date + '</td>' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].status + '</td>' +
+                                '<td class=" w-1/3  text-center py-2 text-sky-500">'+((response.data.data[i].loginAnotherUser)?'<a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="'+response.data.data[i].loginAnotherUser+'">وارد شوید</a>':'ادمین')+'</td>' +
                                 '</tr>';
                         }
                         $('#tickets_body').append(content);
