@@ -42,5 +42,17 @@ body{
     tr:nth-child(odd) {
         @apply text-white;
     }
+    .notifyBox{
+        animation-name: notify;
+        animation-direction:alternate;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(.12,.65,.9,0);
+
+    }
+    @keyframes notify {
+        /*from{ background-color: rgb(244 63 94 / var(--tw-bg-opacity));color: black}*/
+        /*to{background-color: #ffffff ;color: black}*/
+    }
 
 }

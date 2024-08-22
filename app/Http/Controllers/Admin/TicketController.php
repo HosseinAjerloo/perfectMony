@@ -24,6 +24,7 @@ class TicketController extends Controller
         foreach ($tickets as $ticket){
             $ticket->date = \Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s');
             $ticket->status = $ticket->ticketStatus();
+            $ticket->route = route('panel.admin.ticket-chat',$ticket->id);
         }
         return [
             'success' => true,
