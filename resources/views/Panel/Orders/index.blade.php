@@ -4,47 +4,68 @@
 @section('container')
 
 
-    <section class="mx-auto px-4 sm:w-3/4 md:w-3/5 lg:w-2/5 space-y-5">
-         @foreach($financeTransactions as $transaction)
-            <article class="border-2 rounded-md border-white p-3 space-y-3.5">
-                <div class="text-sm sm:text-base flex items-center justify-between">
-                    <p>شماره سفارش: {{$transaction->id}}</p>
-                    <p class="text-center">مبلغ کل:{{numberFormat($transaction->amount)}} ریال</p>
-                </div>
-                <div class="text-sm sm:text-base flex items-center justify-between">
-                    @if($transaction->voucher)
-                        <div class="flex items-center space-x-2 space-x-reverse">
-                            <img src="{{asset('src/images/prl.png')}}" alt="">
-                            <p>خرید ووچر پرفکت مانی {{$transaction->voucher->voucherAmount()}} دلاری</p>
+    <section class="py-3 px-3 w-full overflow-auto mx-auto">
+
+        <table class="table-fixed  mx-auto  w-max overflow-x-scroll sm:w-2/3 md:w-4/6 ">
+            <thead class="bg-sky-500 ">
+            <tr class="w-full">
+                <th class="py-2 text-sm sm:text-base w-1/12 sm:w-2/6">تاریخ</th>
+                <th class="py-2  text-sm sm:text-base w-2/5 sm:max-w-max">عملیات</th>
+                <th class="py-2 text-sm sm:text-base w-1/6 sm:max-w-max">مبلغ</th>
+                <th class="py-2  text-sm sm:text-base w-1/6 sm:max-w-max">+/-</th>
+                <th class="py-2  text-sm sm:text-base w-1/6 sm:max-w-max">مانده کیف پول</th>
+                <th class="py-2  text-sm sm:text-base w-2/12 sm:max-w-max">بیشتر</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center py-2  w-full ">
+                <td class="py-2  ">1403/02/04 12:14</td>
+                <td class="py-2  ">
+                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
+                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
+                            <p class="font-bold text-sm sm:text-base">575899</p>
                         </div>
-                    @endif
-                    <p class="text-center">
-                        وضعیت:
-                        @if($transaction->status=='success')
-                            <span class="text-green-400">انجام شده</span>
-                        @else
-                            <span class="text-red-700">درحال پردازش</span>
-                        @endif
-                    </p>
-                </div>
-
-                <div class="text-sm sm:text-base flex items-center justify-between">
-                    <div class="flex items-center space-x-2 space-x-reverse">
-
-                        <p>تاریخ ثبت سفارش:</p>
-                        <p>{{\Morilog\Jalali\Jalalian::forge($transaction->created_at)->format('%A, %d %B %y')}}</p>
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
+                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
+                        </div>
                     </div>
-                    @if($transaction->status=='success')
-                        <a href="{{route('panel.order.details',$transaction->id)}}" class="bg-gray-100 px-4 py-1.5 rounded-md space-x-3">
-                            <i class="fa-solid fa-eye text-black"></i>
-                            <span class="text-black">جزئیات</span>
-                        </a>
-                    @endif
+                </td>
+                <td class="py-2  ">1200000</td>
+                <td class="py-2  text-sky-500">+</td>
+                <td class="py-2 ">600000</td>
+                <td class="py-2 text-sky-500">بیشتر</td>
+            </tr>
 
-                </div>
-            </article>
-         @endforeach
+            <tr class="text-center py-2  w-full ">
+                <td class="py-2  ">1403/02/04 12:14</td>
+                <td class="py-2  ">
+                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
+                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
+                            <p class="font-bold text-sm sm:text-base">575899</p>
+                        </div>
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
+                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="py-2  ">1200000</td>
+                <td class="py-2  text-sky-500">+</td>
+                <td class="py-2 ">600000</td>
+                <td class="py-2 text-sky-500">بیشتر</td>
+            </tr>
 
+
+
+
+
+            </tbody>
+        </table>
     </section>
 
 @endsection
