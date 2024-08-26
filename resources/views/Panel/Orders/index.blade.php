@@ -18,37 +18,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="text-center py-2  w-full ">
-                <td class="py-2  text-sky-500">1403/02/04 12:14</td>
-                <td class="py-2 text-sky-500 ">
-                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
-                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">575899</p>
-                        </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="py-2  text-sky-500">1200000</td>
-                <td class="py-2  text-sky-500">+</td>
-                <td class="py-2 text-sky-500">600000</td>
-                <td class="py-2 text-sky-500">بیشتر</td>
-            </tr>
 
             <tr class="text-center py-2  w-full ">
                 <td class="py-2 text-sky-500 ">1403/02/04 12:14</td>
                 <td class="py-2 text-sky-500 ">
                     <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
                         <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">575899</p>
                         </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">879899875879899875</p>
                         </div>
@@ -64,11 +44,11 @@
                 <td class="py-2 text-sky-500 ">
                     <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
                         <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">575899</p>
                         </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">879899875879899875</p>
                         </div>
@@ -84,11 +64,11 @@
                 <td class="py-2 text-sky-500 ">
                     <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
                         <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">575899</p>
                         </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center justify-center">
+                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
                             <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
                             <p class="font-bold text-sm sm:text-base">879899875879899875</p>
                         </div>
