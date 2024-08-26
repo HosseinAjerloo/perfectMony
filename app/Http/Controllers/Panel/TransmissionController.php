@@ -153,6 +153,8 @@ class TransmissionController extends Controller
 
     public function transferFromThePaymentGateway(TransmissionRequest $request)
     {
+        $balance = Auth::user()->getCreaditBalance();
+
         $dollar = Doller::orderBy('id', 'desc')->first();
         $inputs = $request->all();
         $user = Auth::user();
@@ -197,8 +199,17 @@ class TransmissionController extends Controller
         $objBank->setUrlBack(route('panel.back.transferFromThePaymentGateway'));
 
         $status = $objBank->payment();
+        $financeTransaction = FinanceTransaction::create([
+            'user_id' => $user->id,
+            'amount' => $payment->amount,
+            'type' => "bank",
+            "creadit_balance" => $balance ,
+            'description' => " ارتباط با بانک $bank->name",
+            'payment_id' => $payment->id,
+        ]);
         if (!$status) {
             $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش انتقال کارت هدیه پرفکت مانی  شما لغو شد "]);
+            $financeTransaction->update(['description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ",'status'=>'fail']);
 
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
@@ -206,6 +217,7 @@ class TransmissionController extends Controller
         $token = $status;
         session()->put('transmission', $inputs['transmission']);
         session()->put('payment', $payment->id);
+        session()->put('financeTransaction', $financeTransaction->id);
         Log::channel('bankLog')->emergency(PHP_EOL . 'Connect to the bank to transfer the voucher '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
@@ -229,6 +241,8 @@ class TransmissionController extends Controller
         $balance = Auth::user()->getCreaditBalance();
         $inputs = $request->all();
         $payment = Payment::find(session()->get('payment'));
+        $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
+
         $bank = $payment->bank;
         $objBank = new $bank->class;
         Log::channel('bankLog')->emergency(PHP_EOL . " Bank return response from voucher transfer " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
@@ -248,6 +262,7 @@ class TransmissionController extends Controller
             $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')),'status'=>'fail']);
 
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'پرداخت موفقیت آمیز نبود' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
@@ -260,6 +275,7 @@ class TransmissionController extends Controller
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
 
             $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price),'status'=>'fail']);
 
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction from voucher transfer : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
@@ -289,7 +305,7 @@ class TransmissionController extends Controller
         $invoice->update(['status' => 'finished']);
         if (is_array($transition)) {
 
-            $financeTransaction = FinanceTransaction::create([
+            $financeTransaction->update([
                 'user_id' => $user->id,
                 'amount' => $payment->amount,
                 'type' => "deposit",
@@ -328,7 +344,7 @@ class TransmissionController extends Controller
         } else {
             $invoice->update(['status' => 'finished', 'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود جهت انتقال ووچر اقدام نمایید']);
 
-            FinanceTransaction::create([
+           $financeTransaction->update([
                 'user_id' => $user->id,
                 'voucher_id' => null,
                 'amount' => $payment->amount,
