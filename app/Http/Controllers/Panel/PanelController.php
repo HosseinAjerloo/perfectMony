@@ -512,7 +512,7 @@ class PanelController extends Controller
 
             session()->put('payment', $payment->id);
             session()->put('invoice', $invoice->id);
-            $payment = $payment->update(
+           $payment->update(
                 [
                     'bank_id' => $bank->id,
                     'amount' => $inputs['price'],
