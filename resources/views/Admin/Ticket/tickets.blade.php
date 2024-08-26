@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <div class="py-3 px-3 w-full">
+    <div class="py-3 px-3 w-full overflow-auto">
         <div class="w-1/2 md:w-1/6 mx-auto m-2">
             <a href="{{route('panel.ticket-add')}}" class="bg-sky-500 rounded-md flex items-center justify-center">
                 <p class="text-center font-semibold p-2">ثبت تیکت جدید</p>
@@ -14,34 +14,34 @@
         </div>
         <table class="table-fixed  mx-auto  w-max overflow-x-scroll sm:w-2/3 md:w-3/4 lg:w-3/5 xl:w-3/6">
             <thead class="bg-sky-500 ">
-            <tr class="text-white w-full overflow-x-scroll">
-                <th class=" w-1/3 py-3 font-semibold">#</th>
-                <th class=" w-1/3 py-3 font-semibold">عنوان</th>
-                <th class=" w-1/3 py-3 font-semibold">تاریخ</th>
-                <th class=" w-1/3 py-3 font-bold">جزئیات</th>
-                <th class=" w-1/3 py-3 font-bold">ورود به حساب کاربری</th>
-                <th class=" w-1/3 py-3 font-bold">تغییر وضعیت</th>
+            <tr class="text-white w-full overflow-x-scroll ">
+                <th class=" py-3 font-semibold">#</th>
+                <th class=" py-3 font-semibold">عنوان</th>
+                <th class="  py-3 font-semibold">تاریخ</th>
+                <th class=" py-3 font-bold">جزئیات</th>
+                <th class="  py-3 font-bold">ورود به حساب کاربری</th>
+                <th class="  py-3 font-bold">تغییر وضعیت</th>
 
             </tr>
             </thead>
             <tbody id="tickets_body" class="overflow-auto">
             @foreach($tickets as $key=> $ticket)
-                <tr class="py-6 text-black text-sm sm:text-base">
-                    <td class=" w-1/3  text-center py-2">{{$ticket->id}}</td>
-                    <td class=" w-1/3 text-center py-2 cursor-pointer  "><a
+                <tr class="py-6 text-black text-sm sm:text-base space-x-3 space-x-reverse w-full">
+                    <td class="  text-center py-2">{{$ticket->id}}</td>
+                    <td class=" text-center py-2 cursor-pointer  "><a
                             href="{{route('panel.admin.ticket-chat',$ticket->id)}}"
                             class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">{{$ticket->subject}}</a>
                     </td>
-                    <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
-                    <td class=" w-1/3  text-center py-2">{{$ticket->ticketStatus()}}</td>
+                    <td class="   text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
+                    <td class="   text-center py-2">{{$ticket->ticketStatus()}}</td>
                     @if($ticket->user->type!='admin')
-                        <td class=" w-1/3  text-center py-2"><a
+                        <td class=" w-3/12 text-center py-2"><a
                                 class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500"
                                 href="{{route('panel.admin.login-another-user',$ticket->user_id)}}">وارد شوید</a></td>
                     @else
-                        <td class=" w-1/3  text-center py-2 text-sky-500">ادمین</td>
+                        <td class=" w-3/12  text-center py-2 text-sky-500">ادمین</td>
                     @endif
-                    <td class=" w-1/3  text-center py-2"><a
+                    <td class="w-3/12   text-center py-2"><a
                             class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500"
                             href="{{route('panel.admin.tickets.close',$ticket->id)}}">تغییر وضعیت</a></td>
 
@@ -79,15 +79,15 @@
                         for (var i = 0; i < response.data.data.length; i++) {
                             console.log(response.data.data[i])
                             content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">' +
-                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].id + '</td>' +
-                                '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a ' +
+                                '<td class="   text-center py-2">' + response.data.data[i].id + '</td>' +
+                                '<td class="  text-center py-2 cursor-pointer  "><a ' +
                                 ' href="' + response.data.data[i].route + '"' +
                                 ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">' + response.data.data[i].subject + '</a>' +
                                 '</td>' +
-                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].date + '</td>' +
-                                '<td class=" w-1/3  text-center py-2">' + response.data.data[i].status + '</td>' +
-                                '<td class=" w-1/3  text-center py-2 text-sky-500">' + ((response.data.data[i].loginAnotherUser) ? '<a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="' + response.data.data[i].loginAnotherUser + '">وارد شوید</a>' : 'ادمین') + '</td>' +
-                                '<td class=" w-1/3  text-center py-2"> <a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="'+response.data.data[i].changeStaus+'">تغییر وضعیت</a></td>'  +
+                                '<td class="   text-center py-2">' + response.data.data[i].date + '</td>' +
+                                '<td class="  text-center py-2">' + response.data.data[i].status + '</td>' +
+                                '<td class=" w-3/12  text-center py-2 text-sky-500">' + ((response.data.data[i].loginAnotherUser) ? '<a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="' + response.data.data[i].loginAnotherUser + '">وارد شوید</a>' : 'ادمین') + '</td>' +
+                                '<td class=" w-3/12  text-center py-2"> <a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="'+response.data.data[i].changeStaus+'">تغییر وضعیت</a></td>'  +
                                 '</tr>';
                         }
                         $('#tickets_body').append(content);
