@@ -14,7 +14,7 @@
     <div class="flex items-center justify-center flex-col space-y-3  w-full sm:w-1/2 mx-auto text-center p-2">
         <p>مناسب کسانی که خرید های مکرر از ساینا ارز دارند.</p>
         <p>1-شارژ کیف پول بالای 10 دلار یک دلار اضافه شارژ می شود</p>
-        <p>2-موضع تسویه کارت هدیه و یا حواله کیف پول را انتخاب می کنید</p>
+        <p>2-موقع تسویه کارت هدیه و یا حواله کیف پول را انتخاب می کنید</p>
     </div>
     <form class="flex items-center justify-center flex-col space-y-3  w-full sm:w-1/2 mx-auto"
           action="{{route('panel.wallet.charging-Preview')}}" method="get" id="form">
