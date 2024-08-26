@@ -13,7 +13,7 @@ class FinanceTransaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'payment_id', 'voucher_id', 'voucher_id', 'amount', 'type', 'creadit_balance', 'description', 'time_price_of_dollars'];
+    protected $fillable = ['user_id', 'payment_id', 'voucher_id', 'voucher_id', 'amount', 'type', 'creadit_balance', 'description', 'time_price_of_dollars','status'];
 
     public function voucher()
     {
