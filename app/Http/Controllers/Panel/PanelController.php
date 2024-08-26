@@ -233,6 +233,7 @@ class PanelController extends Controller
         $bank = Bank::find($inputs['bank']);
         $inputs['user_id'] = $user->id;
         $inputs['description'] = " خرید مستقیم ووچر از طریق $bank->name";
+        $balance = Auth::user()->getCreaditBalance();
 
         if (isset($inputs['service_id'])) {
             $service = Service::find($inputs['service_id']);
@@ -269,14 +270,24 @@ class PanelController extends Controller
         $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
 
         $status = $objBank->payment();
+        $financeTransaction = FinanceTransaction::create([
+            'user_id' => $user->id,
+            'amount' => $payment->amount,
+            'type' => "bank",
+            "creadit_balance" => $balance ,
+            'description' => " ارتباط با بانک $bank->name",
+            'payment_id' => $payment->id,
+        ]);
         if (!$status) {
             $invoice->update(['status' => 'failed','description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد "]);
-
+            $financeTransaction->update(['description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ",'status'=>'fail']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
         $url = $objBank->getBankUrl();
         $token = $status;
+
         session()->put('payment', $payment->id);
+        session()->put('financeTransaction', $financeTransaction->id);
         Log::channel('bankLog')->emergency(PHP_EOL . 'Connection with the bank payment gateway '
             . PHP_EOL .
             'Name of the bank: ' . $bank->name
@@ -301,6 +312,7 @@ class PanelController extends Controller
         $balance = Auth::user()->getCreaditBalance();
         $inputs = $request->all();
         $payment = Payment::find(session()->get('payment'));
+        $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
         Log::channel('bankLog')->emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
@@ -318,6 +330,8 @@ class PanelController extends Controller
 
                 ]);
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')),'status'=>'fail']);
+
             $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
 
@@ -328,6 +342,8 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price),'status'=>'fail']);
+
             $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
 
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
@@ -383,7 +399,7 @@ class PanelController extends Controller
                 'code' => $this->PMeVoucher['VOUCHER_CODE']
             ]);
             Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
-            $financeTransaction = FinanceTransaction::create([
+            $financeTransaction->update([
                 'user_id' => $user->id,
                 'amount' => $payment->amount,
                 'type' => "deposit",
@@ -421,7 +437,7 @@ class PanelController extends Controller
 
         } else {
             $voucher->delete();
-            FinanceTransaction::create([
+            $financeTransaction->update([
                 'user_id' => $user->id,
                 'voucher_id' => null,
                 'amount' => $payment->amount,
