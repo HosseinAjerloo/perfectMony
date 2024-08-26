@@ -491,6 +491,7 @@ class PanelController extends Controller
             $inputs['price'] .= 0;
             $bank = Bank::find($inputs['bank_id']);
             $user = Auth::user();
+            $balance = Auth::user()->getCreaditBalance();
 
             $inputs['final_amount'] = $inputs['price'];
             $inputs['type'] = 'wallet';
@@ -518,10 +519,20 @@ class PanelController extends Controller
                     'invoice_id' => $invoice->id
 
                 ]);
+            $financeTransaction = FinanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "bank",
+                "creadit_balance" => $balance ,
+                'description' => " ارتباط با بانک $bank->name",
+                'payment_id' => $payment->id,
+            ]);
+            session()->put('financeTransaction', $financeTransaction->id);
 
             $status = $objBank->payment();
             if (!$status) {
                 $invoice->update(['status' => 'failed','description'=>"به دلیل عدم ارتباط با بانک $bank->name شارژ کیف پول انجام نشد "]);
+                $financeTransaction->update(['description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ",'status'=>'fail']);
 
                 return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
             }
@@ -555,6 +566,7 @@ class PanelController extends Controller
         $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
         $inputs = $request->all();
         $payment = Payment::find(session()->get('payment'));
+        $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
         $bank = $payment->bank;
         $objBank = new $bank->class;
         Log::channel('bankLog')->emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
@@ -572,6 +584,8 @@ class PanelController extends Controller
 
                 ]);
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')),'status'=>'fail']);
+
             return redirect()->route('panel.index')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
         $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
@@ -579,6 +593,7 @@ class PanelController extends Controller
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
             $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price),'status'=>'fail']);
 
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
@@ -603,7 +618,7 @@ class PanelController extends Controller
         }
 
 
-        FinanceTransaction::create([
+        $financeTransaction->update([
             'user_id' => $user->id,
             'amount' => $payment->amount,
             'type' => "deposit",
