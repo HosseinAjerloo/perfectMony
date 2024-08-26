@@ -19,22 +19,12 @@
 
 @section('container')
     <article class="py-5 px-3 flex flex-col items-center justify-center space-y-9 relative">
-        <div class="bg-sky-500 px-4  rounded-md flex items-center justify-between space-x-3 space-x-reverse">
-            <p class="text-center font-semibold">
-                <span class="text-lg font-semibold text-sky-500">$</span> موجودی شما : {{numberFormat($balance)}} ریال
-            </p>
-            <a href="{{route('panel.wallet.charging')}}" class="border-r pr-2 ">
-                <i class="fa-solid fa-plus w-6 h-6 mt-2"></i>
-            </a>
-        </div>
+
 
         <div class="flex justify-between items-center   w-full  flex-wrap ">
-            <a href="{{route('panel.order')}}" class="flex flex-col items-center justify-center space-y-2 mb-7 w-1/3 sm:w-1/4 md:w-1/6">
-                <div class="border-white border-2 rounded-full p-4 box-border">
-                    <img src="{{asset('src/images/newTransaction.svg')}}" alt="">
-                </div>
-                <p class="text-sm sm:text-base"> سوابق</p>
-            </a>
+
+
+
             <a href="{{route('panel.transmission.view')}}" class="flex flex-col items-center justify-center space-y-2  mb-7 w-1/3 sm:w-1/4 md:w-1/6">
                 <div class="border-white border-2 rounded-full p-4 box-border">
                     <img src="{{asset('src/images/newPm.svg')}}" alt="" >
@@ -47,6 +37,13 @@
                 </div>
                 <p class="text-sm sm:text-base">کارت هدیه</p>
             </a>
+            <a href="{{route('panel.order')}}" class="flex flex-col items-center justify-center space-y-2 mb-7 w-1/3 sm:w-1/4 md:w-1/6">
+                <div class="border-white border-2 rounded-full p-4 box-border">
+                    <img src="{{asset('src/images/newTransaction.svg')}}" alt="">
+                </div>
+                <p class="text-sm sm:text-base"> سوابق</p>
+            </a>
+
             <a href="{{route('panel.wallet.charging')}}" class="flex flex-col items-center justify-center space-y-2  mb-7 w-1/3 sm:w-1/4 md:w-1/6">
                 <div class="border-white border-2 rounded-full p-4 box-border">
                     <img src="{{asset('src/images/newWallet.svg')}}" alt="">
