@@ -12,9 +12,9 @@
                 <i class="fa-solid fa-plus w-6 h-6  pr-3"></i>
             </a>
         </div>
-        <table class="table-fixed  mx-auto  w-full sm:w-2/3 md:w-3/4 lg:w-3/5 xl:w-3/6">
+        <table class="table-fixed  mx-auto  w-max overflow-x-scroll sm:w-2/3 md:w-3/4 lg:w-3/5 xl:w-3/6">
             <thead class="bg-sky-500 ">
-            <tr class="text-white ">
+            <tr class="text-white w-full overflow-x-scroll">
                 <th class=" w-1/3 py-3 font-semibold">#</th>
                 <th class=" w-1/3 py-3 font-semibold">عنوان</th>
                 <th class=" w-1/3 py-3 font-semibold">تاریخ</th>
@@ -24,7 +24,7 @@
 
             </tr>
             </thead>
-            <tbody id="tickets_body">
+            <tbody id="tickets_body" class="overflow-auto">
             @foreach($tickets as $key=> $ticket)
                 <tr class="py-6 text-black text-sm sm:text-base">
                     <td class=" w-1/3  text-center py-2">{{$ticket->id}}</td>

@@ -4,7 +4,7 @@
     </div>
     <a class="flex items-center space-x-2 space-x-reverse cursor-pointer " href="{{route('panel.index')}}">
         <i class="fa-solid fa-house w-6 h-6"></i>
-        <h1 class="font-bold text-2xl italic">Saina Arz</h1>
+        <h1 class="font-bold text-2xl italic underline underline-offset-2">سایناارز</h1>
         <img src="{{asset('src/images/logo.svg')}}" alt="">
 
 
