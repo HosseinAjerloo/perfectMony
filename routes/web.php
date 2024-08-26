@@ -90,5 +90,7 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function (\Illuminate\Http\Request $request) {
-        dd(file_get_contents("https://www.bonbast.com/"));
+    $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+    $back_price = $client->VerifyTransaction('GmshtyjwKSttQdBzCSp5JGFD+c9WCf87quJsjM1H5N', 12965791);
+    dd($back_price);
 })->name('test');
