@@ -90,6 +90,6 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function (\Illuminate\Http\Request $request) {
-    return view('Panel.Orders.index',compact('financeTransactions'));
+    return view('Panel.Orders.index');
 
 })->name('test');
