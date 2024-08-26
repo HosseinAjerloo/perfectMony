@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Panel\Ticket\AddTicketSubmitRequest;
 use App\Http\Requests\Panel\Ticket\TicketRequest;
 use App\Models\File;
 use App\Models\Ticket;
@@ -37,6 +38,8 @@ class TicketController extends Controller
     {
         $user = Auth::user();
         $ticket = Ticket::find($request->ticket_id);
+        $ticket->update(['status'=>'waiting_for_an_answer']);
+
         if (!$ticket)
             abort(404);
         $inputs = $request->all();
@@ -67,7 +70,7 @@ class TicketController extends Controller
 
     }
 
-    public function ticketAddSubmit(Request $request)
+    public function ticketAddSubmit(AddTicketSubmitRequest $request,ImageService $imageService)
     {
         $ticket = Ticket::create([
             'user_id' => $request->user()->id,
@@ -79,11 +82,20 @@ class TicketController extends Controller
             'user_id' => $request->user()->id,
             'message' => $request->message
         ]);
+
+        if ($request->hasFile('image')) {
+            $imageService->setFileFolder('ticket');
+            $imageService->saveImage($request->file('image'));
+            $inputs['ticket_id'] = $ticket->id;
+            $inputs['user_id'] = $ticket->user_id;
+            $inputs['type'] = 'file';
+            $new_ticket = TicketMessage::create($inputs);
+            $result = $new_ticket->image()->create(['user_id' => $ticket->user_id, 'path' => $imageService->getFinalFileAddres()]);
+        }
         return redirect()->route('panel.ticket')->with(['success' => "تیکت با موفقیت ثبت شد."]);
     }
     public function download(Request $request,File $file)
     {
-
       return  Response::download($file->path);
     }
 }

@@ -77,6 +77,7 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('panel.admin');
     Route::get('login-another-user/{user}', [App\Http\Controllers\Admin\AdminController::class, 'loginAnotherUser'])->name('panel.admin.login-another-user');
     Route::get('tickets', [App\Http\Controllers\Admin\TicketController::class, 'index'])->name('panel.admin.tickets');
+    Route::get('ticket/close/{ticket}', [App\Http\Controllers\Admin\TicketController::class, 'closeTicket'])->name('panel.admin.tickets.close');
     Route::get('ticket-page', [App\Http\Controllers\Admin\TicketController::class, 'ticketPage'])->name('panel.admin.ticket-page');
     Route::get('ticket-chat/{ticket_id}', [App\Http\Controllers\Admin\TicketController::class, 'ticketChat'])->name('panel.admin.ticket-chat');
     Route::post('ticket-message', [App\Http\Controllers\Admin\TicketController::class, 'ticketMessage'])->name('panel.admin.ticket-message');
@@ -89,5 +90,5 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function (\Illuminate\Http\Request $request) {
-   \Illuminate\Support\Facades\Auth::loginUsingId(1);
+        dd(file_get_contents("https://www.bonbast.com/"));
 })->name('test');

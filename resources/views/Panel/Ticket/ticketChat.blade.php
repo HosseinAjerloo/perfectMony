@@ -48,8 +48,10 @@
                 <button id="send_message" type="button" class="rounded-full border-2 border-sky-500 w-[57px] h-[48px]">
                     <i class="fa-solid fa-paper-plane-top fa-xl text-sky-500 p-1"></i>
                 </button>
-                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2">
-                <i class="fa-solid fa-link w-8 h-8 top-4 left-3 absolute cursor-pointer bg-gray-500 z-10 file"></i>
+                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2" @if($ticket->status=='closed') disabled @endif placeholder="@if($ticket->status=='closed') تیکت بسته شده است@endif">
+                @if($ticket->status!='closed')
+                    <i class="fa-solid fa-link w-8 h-8 top-4 left-3 absolute cursor-pointer bg-gray-500 z-10 file"></i>
+                @endif
                 <input type="file" class="hidden" id="file" name="file">
                 {{--                <form action="{{route('test')}}" method="post" enctype="multipart/form-data">--}}
                 {{--                    @csrf--}}
@@ -57,18 +59,20 @@
                 {{--                </form>--}}
             </label>
 
-            <section
-                class="file-demo absolute w-full h-12 box-border  bottom-96 right-40  transition-all duration-1000 invisible z-[100]">
-                <article class="flex justify-center items-center h-64">
-                    <div class=" w-full bg-white p-2 rounded-md space-y-2 sm:w-3/5 md:w-3/6">
-                        <i class="fas fa-times-circle text-sky-500 w-8 h-8 close"></i>
-                        <img src="{{asset('src/images/them.jpg')}}" alt=""
-                             class="h-64 w-full bg-origin-content rounded-md bg-live">
-                        <button class="py-1.5 px-2 rounded-md bg-sky-500 text-sm sm:text-base send">ارسال عکس</button>
-                        <p class="text-rose-500 font-semibold text-sm sm:text-base">عکس ارسالی شما نمیتواند بیشتر از 3 مگابایت باشد</p>
-                    </div>
-                </article>
-            </section>
+           @if($ticket->status!='closed')
+                <section
+                    class="file-demo absolute w-full h-12 box-border  bottom-96 right-40  transition-all duration-1000 invisible z-[100]">
+                    <article class="flex justify-center items-center h-64">
+                        <div class=" w-full bg-white p-2 rounded-md space-y-2 sm:w-3/5 md:w-3/6">
+                            <i class="fas fa-times-circle text-sky-500 w-8 h-8 close"></i>
+                            <img src="{{asset('src/images/them.jpg')}}" alt=""
+                                 class="h-64 w-full bg-origin-content rounded-md bg-live">
+                            <button class="py-1.5 px-2 rounded-md bg-sky-500 text-sm sm:text-base send">ارسال عکس</button>
+                            <p class="text-rose-500 font-semibold text-sm sm:text-base">عکس ارسالی شما نمیتواند بیشتر از 3 مگابایت باشد</p>
+                        </div>
+                    </article>
+                </section>
+           @endif
         </div>
 
     </div>

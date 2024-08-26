@@ -209,7 +209,10 @@ return [
         "price"=>'مبلغ کیف پول',
         'custom_payment'=>'مبلغ ووچر دلخواه',
         'bank_id'=>'نوع درگاه پرداخت',
-        'transmission'=>"آدرس حساب مقصد"
+        'transmission'=>"آدرس حساب مقصد",
+        'subject'=>"عنوان تیکت",
+        'message'=>'متن پیام',
+        'image'=>'فابل'
     ],
 
 ];

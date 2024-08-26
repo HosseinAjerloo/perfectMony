@@ -8,7 +8,7 @@
 @endsection
 
 @section('container')
-    <form
+    <form enctype="multipart/form-data"
         class="font-yekan py-5 px-4 w-full sm:w-2/4 md:w-2/3 lg:w-2/4 xl:w-1/4 flex flex-col items-center justify-center space-y-9 sm:mx-auto"
         method="post" action="{{route('panel.ticket-add-submit')}}">
         @csrf
@@ -24,6 +24,7 @@
                 <textarea id="input_subject"  name="message" cols="40" rows="5" class="py-1 px-2 m-2 rounded-md text-black outline-none w-full"></textarea>
             </label>
         </div>
+        <input type="file" name="image">
         <div>
             <button class="text-base font-semibold bg-sky-500 px-6 py-1.5 rounded-md font-yekan">ثبت تیکت</button>
         </div>

@@ -20,6 +20,7 @@
                 <th class=" w-1/3 py-3 font-semibold">تاریخ</th>
                 <th class=" w-1/3 py-3 font-bold">جزئیات</th>
                 <th class=" w-1/3 py-3 font-bold">ورود به حساب کاربری</th>
+                <th class=" w-1/3 py-3 font-bold">تغییر وضعیت</th>
 
             </tr>
             </thead>
@@ -34,11 +35,16 @@
                     <td class=" w-1/3  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s')}}</td>
                     <td class=" w-1/3  text-center py-2">{{$ticket->ticketStatus()}}</td>
                     @if($ticket->user->type!='admin')
-                        <td class=" w-1/3  text-center py-2"><a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500"
+                        <td class=" w-1/3  text-center py-2"><a
+                                class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500"
                                 href="{{route('panel.admin.login-another-user',$ticket->user_id)}}">وارد شوید</a></td>
                     @else
                         <td class=" w-1/3  text-center py-2 text-sky-500">ادمین</td>
                     @endif
+                    <td class=" w-1/3  text-center py-2"><a
+                            class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500"
+                            href="{{route('panel.admin.tickets.close',$ticket->id)}}">تغییر وضعیت</a></td>
+
                 </tr>
             @endforeach
             </tbody>
@@ -75,12 +81,13 @@
                             content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].id + '</td>' +
                                 '<td class=" w-1/3 text-center py-2 cursor-pointer  "><a ' +
-                                ' href="'+response.data.data[i].route+'"' +
+                                ' href="' + response.data.data[i].route + '"' +
                                 ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">' + response.data.data[i].subject + '</a>' +
                                 '</td>' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].date + '</td>' +
                                 '<td class=" w-1/3  text-center py-2">' + response.data.data[i].status + '</td>' +
-                                '<td class=" w-1/3  text-center py-2 text-sky-500">'+((response.data.data[i].loginAnotherUser)?'<a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="'+response.data.data[i].loginAnotherUser+'">وارد شوید</a>':'ادمین')+'</td>' +
+                                '<td class=" w-1/3  text-center py-2 text-sky-500">' + ((response.data.data[i].loginAnotherUser) ? '<a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="' + response.data.data[i].loginAnotherUser + '">وارد شوید</a>' : 'ادمین') + '</td>' +
+                                '<td class=" w-1/3  text-center py-2"> <a class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500" href="'+response.data.data[i].changeStaus+'">تغییر وضعیت</a></td>'  +
                                 '</tr>';
                         }
                         $('#tickets_body').append(content);

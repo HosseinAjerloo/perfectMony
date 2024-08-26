@@ -16,19 +16,20 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $tickets = Ticket::orderBy('id', 'desc')->simplePaginate(10);
-        return view('Admin.Ticket.tickets',compact('tickets'));
+        return view('Admin.Ticket.tickets', compact('tickets'));
     }
+
     public function ticketPage(Request $request)
     {
         $tickets = Ticket::orderBy('id', 'desc')->simplePaginate(10);
-        foreach ($tickets as $ticket){
+        foreach ($tickets as $ticket) {
             $ticket->date = \Morilog\Jalali\Jalalian::forge($ticket->created_at)->format('Y/m/d H:i:s');
             $ticket->status = $ticket->ticketStatus();
-            $ticket->route = route('panel.admin.ticket-chat',$ticket->id);
-            if($ticket->user->type!='admin')
-            {
-                $ticket->loginAnotherUser=route('panel.admin.login-another-user',$ticket->user_id);
+            $ticket->route = route('panel.admin.ticket-chat', $ticket->id);
+            if ($ticket->user->type != 'admin') {
+                $ticket->loginAnotherUser = route('panel.admin.login-another-user', $ticket->user_id);
             }
+            $ticket->changeStaus=route('panel.admin.tickets.close',$ticket->id);
 
         }
         return [
@@ -38,15 +39,16 @@ class TicketController extends Controller
         ];
     }
 
-    public function ticketChat(Request $request,$ticket_id)
+    public function ticketChat(Request $request, $ticket_id)
     {
         $ticket = Ticket::find($ticket_id);
         if (!$ticket)
             abort(404);
-        $ticket_messages = TicketMessage::where('ticket_id',$ticket_id)->get();
+        $ticket_messages = TicketMessage::where('ticket_id', $ticket_id)->get();
         return view('Admin.Ticket.ticketChat', compact('ticket', 'ticket_messages'));
     }
-    public function ticketMessage(TicketRequest $request,ImageService $imageService)
+
+    public function ticketMessage(TicketRequest $request, ImageService $imageService)
     {
 
         $user = Auth::user();
@@ -54,6 +56,7 @@ class TicketController extends Controller
         if (!$ticket)
             abort(404);
         $inputs = $request->all();
+        $ticket->update(['status' => 'has_been_answered']);
         $inputs['ticket_id'] = $ticket->id;
         $inputs['admin_id'] = $user->id;
         if ($request->hasFile('image')) {
@@ -62,10 +65,10 @@ class TicketController extends Controller
             $inputs['type'] = 'file';
             $new_ticket = TicketMessage::create($inputs);
             $result = $new_ticket->image()->create(['user_id' => $user->id, 'path' => $imageService->getFinalFileAddres()]);
-            $result->jalali_date=Jalalian::fromCarbon($result->created_at)->format('h:i Y/m/d');
-            $result->value=route('panel.ticket.download',$result->id);
-            $result->crs=asset($result->path);
-            return $result ? response()->json(['success' => true,'data'=>$result]) : response()->json(['success' => false]);
+            $result->jalali_date = Jalalian::fromCarbon($result->created_at)->format('h:i Y/m/d');
+            $result->value = route('panel.ticket.download', $result->id);
+            $result->crs = asset($result->path);
+            return $result ? response()->json(['success' => true, 'data' => $result]) : response()->json(['success' => false]);
         } else {
 
             $inputs['type'] = 'message';
@@ -78,4 +81,16 @@ class TicketController extends Controller
             ];
         }
     }
+
+    public function closeTicket(Ticket $ticket)
+    {
+        $inputs['status'] = 'closed';
+        $ticketMessage = $ticket->messages()->latest()->first();
+        if ($ticket->status == 'closed') {
+            $inputs['status'] = isset($ticketMessage->admin_id) ? 'has_been_answered' : 'waiting_for_an_answer';
+        }
+        $ticket->update($inputs);
+        return redirect()->route('panel.admin.tickets')->with('success', 'وضعیت تیکت بروز رسانی شد');
+    }
+
 }

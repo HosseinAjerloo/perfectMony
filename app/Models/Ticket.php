@@ -23,7 +23,8 @@ class Ticket extends Model
         return match ($this->status) {
             'waiting_for_an_answer' => 'درانتظارپاسخ',
             'has_been_answered' => 'پاسخ داده شده',
-            'closed' => 'بسته شده'
+            'closed' => 'بسته شده',
+            default=>' '
         };
     }
     public function user()
