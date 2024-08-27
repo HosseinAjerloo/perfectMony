@@ -10,23 +10,23 @@
             <article class="min-w-full w-full ">
                 <div class="min-w-full w-full flex flex-col space-y-3 bg-sky-500 rounded-ss-md rounded-se-md">
                     <div class="flex items-center min-w-full  justify-between border-b-4 border-gray-200">
-                        <div class="text-[11.5px] w-2/12  text-center py-2">تاریخ</div>
-                        <div class="text-[11.5px] w-1/4  text-center py-2">تراکنش</div>
-                        <div class="text-[11.5px] w-2/12  text-center py-2">مبلغ به هزارتومان</div>
-                        <div class="text-[11.5px] w-1/12  text-center py-2">وضعیت</div>
-                        <div class="text-[11.5px] w-2/12  text-center py-2">مانده به هزارتومان</div>
+                        <div class="text-[11.5px] w-2/12 font-semibold  text-center py-2">تاریخ</div>
+                        <div class="text-[11.5px] w-1/4 font-semibold  text-center py-2">تراکنش</div>
+                        <div class="text-[11.5px] w-2/12  font-semibold text-center py-2">مبلغ به هزارتومان</div>
+                        <div class="text-[11.5px] w-1/12 font-semibold text-center py-2">وضعیت</div>
+                        <div class="text-[11.5px] w-2/12 font-semibold text-center py-2">مانده به هزارتومان</div>
                     </div>
                 </div>
                 <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-ee-md rounded-es-md">
                     <div class="flex items-center min-w-full  justify-between ">
                         <div
-                            class="text-[11.5px] w-2/12  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($financeTransaction->created_at)->format('Y/m/d H:i:s')}}</div>
+                            class="font-semibold text-[11.5px] w-2/12  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($financeTransaction->created_at)->format('Y/m/d H:i:s')}}</div>
                         <div
-                            class="text-[11.5px] w-1/4  text-center py-2">{{$financeTransaction->description??''}}</div>
+                            class="text-[11.5px] w-1/4 font-semibold  text-center py-2">{{$financeTransaction->description??''}}</div>
                         <div class="text-[11.5px] w-2/12 text-center py-2 ">
 
                             <div class="flex items-center justify-center">
-                                <p>{{ strrev(substr(strrev($financeTransaction->amount),4))!=""?strrev(substr(strrev($financeTransaction->amount),4)):0}}</p>
+                                <p class="font-semibold text-[11.5px]">{{ strrev(substr(strrev($financeTransaction->amount),4))!=""?strrev(substr(strrev($financeTransaction->amount),4)):0}}</p>
                                 @if($financeTransaction->type=="deposit")
                                     <i class="fa-solid fa-plus text-[11.5px] text-green-400"></i>
 
@@ -42,7 +42,7 @@
                                 <i class="fas fa-times-circle text-[11.5px] text-rose-500"></i>
                             @endif
                         </div>
-                        <div class="text-[11.5px] w-2/12  text-center py-2">
+                        <div class="text-[11.5px] w-2/12  text-center py-2 font-semibold">
                             {{strrev(substr(strrev($financeTransaction->creadit_balance),4))!=""?strrev(substr(strrev($financeTransaction->creadit_balance),4)):0}}
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                                 </p>
                                 <div class="flex items-center space-x-3 space-x-reverse">
                                     <span
-                                        class="text-sm sm:text-base">{{$financeTransaction->transmission->payment_amount}}</span>
+                                        class="text-sm sm:text-base ">{{$financeTransaction->transmission->payment_amount}} دلاری</span>
                                     <img src="{{asset('src/images/Group 422.png')}}" alt=""
                                          class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
                                 </div>
