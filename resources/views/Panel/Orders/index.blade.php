@@ -102,7 +102,7 @@
             <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
                 <div class="flex items-center min-w-full  justify-between ">
                     <div class="text-[10px] w-2/12  text-center py-2">1403/02/01 11:07</div>
-                    <div class="text-[10px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[10px] w-1/4  text-center py-2">افزایش مبلغ کیف پول درگاه بانک سامان</div>
                     <div class="text-[10px] w-2/12 text-center py-2">120،000</div>
                     <div class="text-[10px] w-1/12  text-center py-2">
                         <i class="fa-solid fa-plus text-[10px] text-green-400"></i>
