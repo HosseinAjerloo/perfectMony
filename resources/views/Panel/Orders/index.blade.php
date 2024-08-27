@@ -3,94 +3,117 @@
 
 @section('container')
 
-    <section class="py-3 px-3 w-full ">
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8  lg:px-8">
-
-            <div
-                class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard  pt-3 rounded-bl-lg rounded-br-lg">
-                <table class="w-full min-w-full">
-                    <thead>
-                    <tr>
-
-                        <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
-                            تاریخ
-                        </th>
-                        <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
-                            عملیات
-                        </th>
-                        <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
-                            مبلغ هزارتومان
-                        </th>
-
-
-                        <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
-                             مانده کیف پول هزار تومان
-                        </th>
-
-                    </tr>
-                    </thead>
-                    <tbody class="bg-white">
-                    <tr>
-
-                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500 text-center">
-                            <div class="text-[10px] leading-5 text-blue-900"> 11:7 1403/06/07</div>
-                        </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 leading-5 text-center">
-                            پرداخت بانک سامان
-                        </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
-                            <span>120،000</span>
-                            <i class="fa-solid fa-minus text-[10px] text-rose-500"></i>
-                        </td>
-
-
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
-                            120،000
-                        </td>
-
-                    </tr>
-                    <tr>
-
-                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500 text-center">
-                            <div class="text-[10px] leading-5 text-blue-900"> 11:7 1403/06/07</div>
-                        </td>
-                        <td class=" text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
-                            <p class="text-center text-[10px] ">
-                                صدور کارت هدیه 1 دلاری
-                            </p>
-                            <div class="flex items-center  space-x-3 space-x-reverse">
-                                <img src="{{asset('src/images/Group 422.png')}}" alt=""
-                                     class="w-4 h-4 mt-1 copy cursor-pointer transition-all hover:scale-150">
-
-                                <span class="text-[10px] sm:text-base">12056978</span>
-                            </div>
-
-                            <div class="flex items-center  space-x-3 space-x-reverse">
-                                <img src="{{asset('src/images/Group 422.png')}}" alt=""
-                                     class="w-4 h-4 mt-1 copy cursor-pointer transition-all hover:scale-150">
-                                <span class="text-[10px] ">12056564654978</span>
-
-                            </div>
-
-                        </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
-                            <span>120،000</span>
-                            <i class="fa-solid fa-minus text-[10px] text-rose-500"></i>
-                        </td>
-
-
-
-                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
-                            120،000
-                        </td>
-
-                    </tr>
-
-                    </tbody>
-                </table>
-
+    <section class="py-3 px-3 w-full space-y-1 ">
+        <div class="min-w-full w-full flex flex-col space-y-3 bg-sky-500">
+            <div class="flex items-center min-w-full  justify-between border-b-4 border-gray-200">
+                <div class="text-[10px] w-2/12  text-center py-2">تاریخ</div>
+                <div class="text-[10px] w-1/4  text-center py-2">تراکنش</div>
+                <div class="text-[10px] w-2/12  text-center py-2">مبلغ هزارتومان</div>
+                <div class="text-[10px] w-1/12  text-center py-2">وضعیت</div>
+                <div class="text-[10px] w-2/12  text-center py-2">مانده هزارتومان</div>
             </div>
         </div>
+        <article class="min-w-full w-full ">
+            <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-md">
+                <div class="flex items-center min-w-full  justify-between ">
+                    <div class="text-[10px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[10px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[10px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[10px] w-1/12  text-center py-2"><i
+                            class="fa-solid fa-minus text-[10px] text-rose-500"></i></div>
+                    <div class="text-[10px] w-2/12  text-center py-2">120،000</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-semibold sm:text-base">
+                        کد فعال سازی:
+                    </p>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <span class="text-sm sm:text-base">100001515645</span>
+                        <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-semibold sm:text-base">
+                        شماره ووچر:
+                    </p>
+                    <div class=" relative">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <span class="text-sm sm:text-base">465465</span>
+                            <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </article>
+        <article class="min-w-full w-full ">
+            <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
+                <div class="flex items-center min-w-full  justify-between ">
+                    <div class="text-[10px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[10px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[10px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[10px] w-1/12  text-center py-2">
+                        <i class="fa-solid fa-plus text-[10px] text-green-400"></i>
+                    </div>
+                    <div class="text-[10px] w-2/12  text-center py-2">120،000</div>
+                </div>
+
+
+            </div>
+
+        </article>
+
+        <article class="min-w-full w-full ">
+            <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-md">
+                <div class="flex items-center min-w-full  justify-between ">
+                    <div class="text-[10px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[10px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[10px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[10px] w-1/12  text-center py-2"><i
+                            class="fa-solid fa-minus text-[10px] text-rose-500"></i></div>
+                    <div class="text-[10px] w-2/12  text-center py-2">120،000</div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-semibold sm:text-base">
+                        کد فعال سازی:
+                    </p>
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <span class="text-sm sm:text-base">100001515645</span>
+                        <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-semibold sm:text-base">
+                        شماره ووچر:
+                    </p>
+                    <div class=" relative">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <span class="text-sm sm:text-base">465465</span>
+                            <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </article>
+        <article class="min-w-full w-full ">
+            <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
+                <div class="flex items-center min-w-full  justify-between ">
+                    <div class="text-[10px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[10px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[10px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[10px] w-1/12  text-center py-2">
+                        <i class="fa-solid fa-plus text-[10px] text-green-400"></i>
+                    </div>
+                    <div class="text-[10px] w-2/12  text-center py-2">120،000</div>
+                </div>
+
+
+            </div>
+
+        </article>
     </section>
 
 @endsection
