@@ -72,7 +72,7 @@
                             <div class="flex items-center  space-x-3 space-x-reverse">
                                 <img src="{{asset('src/images/Group 422.png')}}" alt=""
                                      class="w-4 h-4 mt-1 copy cursor-pointer transition-all hover:scale-150">
-                                <span class="text-[10px] text-sm sm:text-base">12056564654978</span>
+                                <span class="text-[10px] ">12056564654978</span>
 
                             </div>
 
