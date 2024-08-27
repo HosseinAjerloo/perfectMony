@@ -110,7 +110,7 @@ class PanelController extends Controller
                         'amount' => $voucherPrice,
                         'type' => "withdrawal",
                         "creadit_balance" => ($balance - $voucherPrice),
-                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول',
+                        'description' => "خرید کارت هدیه {$service->amount} دلاری و کسر مبغ از کیف پول",
                         'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
 
                     ]);
@@ -176,7 +176,8 @@ class PanelController extends Controller
                         'amount' => $voucherPrice,
                         'type' => "withdrawal",
                         "creadit_balance" => ($balance - $voucherPrice),
-                        'description' => 'خرید ووچر و کسر مبلغ از کیف پول',
+                        'description' => "خرید کارت هدیه {$inputs['custom_payment']} دلاری و کسر مبغ از کیف پول",
+
                         'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
                     ]);
                     $invoice->update(['status' => 'finished']);
@@ -415,7 +416,8 @@ class PanelController extends Controller
                 'amount' => $payment->amount,
                 'type' => "withdrawal",
                 "creadit_balance" => $financeTransaction->creadit_balance - $payment->amount,
-                'description' => 'خرید ووچر و برداشت مبلغ از کیف پول',
+                'description' => "خرید کارت هدیه {$amount} دلاری و کسر مبغ از کیف پول",
+
                 'payment_id' => $payment->id,
                 'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);
