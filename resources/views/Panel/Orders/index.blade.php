@@ -12,9 +12,9 @@
                     <div class="flex items-center min-w-full  justify-between border-b-4 border-gray-200">
                         <div class="text-[11.5px] w-2/12  text-center py-2">تاریخ</div>
                         <div class="text-[11.5px] w-1/4  text-center py-2">تراکنش</div>
-                        <div class="text-[11.5px] w-2/12  text-center py-2">مبلغ هزارتومان</div>
+                        <div class="text-[11.5px] w-2/12  text-center py-2">مبلغ به هزارتومان</div>
                         <div class="text-[11.5px] w-1/12  text-center py-2">وضعیت</div>
-                        <div class="text-[11.5px] w-2/12  text-center py-2">مانده هزارتومان</div>
+                        <div class="text-[11.5px] w-2/12  text-center py-2">مانده به هزارتومان</div>
                     </div>
                 </div>
                 <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-ee-md rounded-es-md">
