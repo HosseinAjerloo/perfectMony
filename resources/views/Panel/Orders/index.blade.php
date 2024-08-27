@@ -30,10 +30,14 @@
                     <tbody class="bg-white">
 
                     <tr >
-                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <p>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 space-y-3">
+                            <p class="text-center">
                                 صدور کارت هدیه 1 دلاری
                             </p>
+                            <div class="flex items-center flex-col">
+                                <p>تاریخ: 1403/03/04</p>
+                                <p>ساعت 11:07 </p>
+                            </div>
                             <div class="flex items-center space-x-3 space-x-reverse">
                                 <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
                                 <span class="text-sm sm:text-base">12056978</span>
