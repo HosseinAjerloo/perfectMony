@@ -6,22 +6,22 @@
     <section class="py-3 px-3 w-full space-y-1 ">
         <div class="min-w-full w-full flex flex-col space-y-3 bg-sky-500">
             <div class="flex items-center min-w-full  justify-between border-b-4 border-gray-200">
-                <div class="text-[12px] w-2/12  text-center py-2">تاریخ</div>
-                <div class="text-[12px] w-1/4  text-center py-2">تراکنش</div>
-                <div class="text-[12px] w-2/12  text-center py-2">مبلغ هزارتومان</div>
-                <div class="text-[12px] w-1/12  text-center py-2">وضعیت</div>
-                <div class="text-[12px] w-2/12  text-center py-2">مانده هزارتومان</div>
+                <div class="text-[11.5px] w-2/12  text-center py-2">تاریخ</div>
+                <div class="text-[11.5px] w-1/4  text-center py-2">تراکنش</div>
+                <div class="text-[11.5px] w-2/12  text-center py-2">مبلغ هزارتومان</div>
+                <div class="text-[11.5px] w-1/12  text-center py-2">وضعیت</div>
+                <div class="text-[11.5px] w-2/12  text-center py-2">مانده هزارتومان</div>
             </div>
         </div>
         <article class="min-w-full w-full ">
             <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-md">
                 <div class="flex items-center min-w-full  justify-between ">
-                    <div class="text-[12px] w-2/12  text-center py-2">1403/02/01 11:07</div>
-                    <div class="text-[12px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
-                    <div class="text-[12px] w-2/12 text-center py-2">120،000</div>
-                    <div class="text-[12px] w-1/12  text-center py-2"><i
-                            class="fa-solid fa-minus text-[12px] text-rose-500"></i></div>
-                    <div class="text-[12px] w-2/12  text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[11.5px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[11.5px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-1/12  text-center py-2"><i
+                            class="fa-solid fa-minus text-[11.5px] text-rose-500"></i></div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">120،000</div>
                 </div>
                 <div class="flex items-center justify-between">
                     <p class="text-sm font-semibold sm:text-base">
@@ -50,13 +50,13 @@
         <article class="min-w-full w-full ">
             <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
                 <div class="flex items-center min-w-full  justify-between ">
-                    <div class="text-[12px] w-2/12  text-center py-2">1403/02/01 11:07</div>
-                    <div class="text-[12px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
-                    <div class="text-[12px] w-2/12 text-center py-2">120،000</div>
-                    <div class="text-[12px] w-1/12  text-center py-2">
-                        <i class="fa-solid fa-plus text-[12px] text-green-400"></i>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[11.5px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[11.5px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-1/12  text-center py-2">
+                        <i class="fa-solid fa-plus text-[11.5px] text-green-400"></i>
                     </div>
-                    <div class="text-[12px] w-2/12  text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">120،000</div>
                 </div>
 
 
@@ -67,12 +67,12 @@
         <article class="min-w-full w-full ">
             <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-md">
                 <div class="flex items-center min-w-full  justify-between ">
-                    <div class="text-[12px] w-2/12  text-center py-2">1403/02/01 11:07</div>
-                    <div class="text-[12px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
-                    <div class="text-[12px] w-2/12 text-center py-2">120،000</div>
-                    <div class="text-[12px] w-1/12  text-center py-2"><i
-                            class="fa-solid fa-minus text-[12px] text-rose-500"></i></div>
-                    <div class="text-[12px] w-2/12  text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[11.5px] w-1/4  text-center py-2">صدور کارت هدیه پرفکت مانی</div>
+                    <div class="text-[11.5px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-1/12  text-center py-2"><i
+                            class="fa-solid fa-minus text-[11.5px] text-rose-500"></i></div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">120،000</div>
                 </div>
                 <div class="flex items-center justify-between">
                     <p class="text-sm font-semibold sm:text-base">
@@ -101,13 +101,13 @@
         <article class="min-w-full w-full ">
             <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
                 <div class="flex items-center min-w-full  justify-between ">
-                    <div class="text-[12px] w-2/12  text-center py-2">1403/02/01 11:07</div>
-                    <div class="text-[12px] w-1/4  text-center py-2">افزایش مبلغ کیف پول درگاه بانک سامان</div>
-                    <div class="text-[12px] w-2/12 text-center py-2">120،000</div>
-                    <div class="text-[12px] w-1/12  text-center py-2">
-                        <i class="fa-solid fa-plus text-[12px] text-green-400"></i>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[11.5px] w-1/4  text-center py-2">افزایش مبلغ کیف پول درگاه بانک سامان</div>
+                    <div class="text-[11.5px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-1/12  text-center py-2">
+                        <i class="fa-solid fa-plus text-[11.5px] text-green-400"></i>
                     </div>
-                    <div class="text-[12px] w-2/12  text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">120،000</div>
                 </div>
 
 
