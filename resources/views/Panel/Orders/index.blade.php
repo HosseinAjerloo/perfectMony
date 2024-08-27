@@ -3,7 +3,7 @@
 
 @section('container')
 
-    <section class="py-3 px-3 w-full space-y-20">
+    <section class="py-3 px-3 w-full space-y-32">
         <article class=" shadow-xl shadow-sky-500 flex   rounded-md">
             <div class="w-1/2  space-y-1 p-1">
                 <p class="text-sm text-balance text-center">تاریخ:1403/03/02</p>
