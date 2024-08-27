@@ -3,88 +3,153 @@
 
 @section('container')
 
+    <section class="py-3 px-3 w-full ">
+        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
 
-    <section class="py-3 px-3 w-full overflow-auto mx-auto">
+            <div
+                class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
+                <table class="w-full min-w-full">
+                    <thead>
+                    <tr>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  leading-4 text-blue-500 tracking-wider">
+                            ردیف
+                        </th>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            تاریخ
+                        </th>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            عملیات
+                        </th>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            مبلغ
+                        </th>
 
-        <table class="table-fixed  mx-auto  w-max overflow-x-scroll sm:w-2/3 md:w-4/6 ">
-            <thead class="bg-sky-500 ">
-            <tr class="w-full">
-                <th class="py-2 text-sm sm:text-base w-1/12 sm:w-2/6">تاریخ</th>
-                <th class="py-2  text-sm sm:text-base w-2/5 sm:max-w-max">عملیات</th>
-                <th class="py-2 text-sm sm:text-base w-1/6 sm:max-w-max">مبلغ</th>
-                <th class="py-2  text-sm sm:text-base w-1/6 sm:max-w-max">+/-</th>
-                <th class="py-2  text-sm sm:text-base w-1/6 sm:max-w-max">مانده کیف پول</th>
-                <th class="py-2  text-sm sm:text-base w-2/12 sm:max-w-max">بیشتر</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr class="text-center py-2  w-full ">
-                <td class="py-2 text-sky-500 ">1403/02/04 12:14</td>
-                <td class="py-2 text-sky-500 ">
-                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
-                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">575899</p>
-                        </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="py-2 text-sky-500 ">1200000</td>
-                <td class="py-2  text-sky-500">+</td>
-                <td class="py-2 text-sky-500 ">600000</td>
-                <td class="py-2 text-sky-500">بیشتر</td>
-            </tr>
-            <tr class="text-center py-2  w-full ">
-                <td class="py-2 text-sky-500 ">1403/02/04 12:14</td>
-                <td class="py-2 text-sky-500 ">
-                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
-                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">575899</p>
-                        </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="py-2 text-sky-500 ">1200000</td>
-                <td class="py-2  text-sky-500">+</td>
-                <td class="py-2 text-sky-500 ">600000</td>
-                <td class="py-2 text-sky-500">بیشتر</td>
-            </tr>
-            <tr class="text-center py-2  w-full ">
-                <td class="py-2 text-sky-500 ">1403/02/04 12:14</td>
-                <td class="py-2 text-sky-500 ">
-                    <div class="flex items-center justify-center  flex-col  space-y-3 w-full text-sky-500 ">
-                        <p>صدور کارت هدیه 1 دلاری پرفکت مانی</p>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">575899</p>
-                        </div>
-                        <div class="flex  w-full space-x-4 space-x-reverse items-center ">
-                            <img src="{{asset('src/images/copy.svg')}}" alt="" class="inline-block copy cursor-pointer bg-white p-2 rounded-md">
-                            <p class="font-bold text-sm sm:text-base">879899875879899875</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="py-2 text-sky-500 ">1200000</td>
-                <td class="py-2  text-sky-500">+</td>
-                <td class="py-2 text-sky-500 ">600000</td>
-                <td class="py-2 text-sky-500">بیشتر</td>
-            </tr>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            وضعیت
+                        </th>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            مانده کیف پول
+                        </th>
+                        <th class="px-6 py-3 border-b-2 border-gray-300  text-sm leading-4 text-blue-500 tracking-wider">
+                            بیشتر
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="bg-white">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="flex items-center">
+                                <div>
+                                    <div class="text-sm leading-5 text-gray-800">#1</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="text-sm leading-5 text-blue-900"> 11:7 1403/06/07 </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            پرداخت بانک سامان
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                           1،200،000 ریال
+                        </td>
 
 
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                            <i class="fa-solid fa-plus text-2xl text-green-400"></i>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            1،200،000 ریال
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                            <button
+                                class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="flex items-center">
+                                <div>
+                                    <div class="text-sm leading-5 text-gray-800">#1</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="text-sm leading-5 text-blue-900"> 11:7 1403/06/07 </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            پرداخت بانک سامان
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            1،200،000 ریال
+                        </td>
 
 
-            </tbody>
-        </table>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                            <i class="fa-solid fa-minus text-2xl text-rose-500"></i>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            1،200،000 ریال
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                            <button
+                                class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="flex items-center">
+                                <div>
+                                    <div class="text-sm leading-5 text-gray-800">#1</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
+                            <div class="text-sm leading-5 text-blue-900"> 11:7 1403/06/07 </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            <p>
+                                صدور کارت هدیه 1 دلاری
+                            </p>
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <span class="text-sm sm:text-base">12056978</span>
+                                    <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                                </div>
+
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <span class="text-sm sm:text-base">12056564654978</span>
+                                    <img src="{{asset('src/images/Group 422.png')}}" alt="" class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">
+                                </div>
+
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            1،200،000 ریال
+                        </td>
+
+
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                            <i class="fa-solid fa-minus text-2xl text-rose-500"></i>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                            1،200،000 ریال
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                            <button
+                                class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </section>
 
 @endsection
