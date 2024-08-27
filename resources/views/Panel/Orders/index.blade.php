@@ -114,6 +114,25 @@
             </div>
 
         </article>
+
+        <article class="min-w-full w-full ">
+            <div class="min-w-full w-full flex flex-col bg-slate-200 text-black p-2 rounded-md">
+                <div class="flex items-center min-w-full  justify-between ">
+                    <div class="text-[11.5px] w-2/12  text-center py-2">1403/02/01 11:07</div>
+                    <div class="text-[11.5px] w-1/4  text-center py-2">افزایش مبلغ کیف پول درگاه بانک سامان</div>
+                    <div class="text-[11.5px] w-2/12 text-center py-2">120،000</div>
+                    <div class="text-[11.5px] w-1/12  text-center py-2">
+                        <i class="fas fa-times-circle text-[11.5px] text-rose-500"></i>
+                    </div>
+                    <div class="text-[11.5px] w-2/12  text-center py-2">120،000</div>
+                </div>
+                <p class="text-[11.5px] leading-6">
+                    پرداخت موفقیت آمیز نبود انصراف کاربر از درگاه پرداخت  پرداخت موفقیت آمیز نبود انصراف کاربر از درگاه پرداخت  پرداخت موفقیت آمیز نبود انصراف کاربر از درگاه پرداخت  پرداخت موفقیت آمیز نبود انصراف کاربر از درگاه پرداخت
+                </p>
+
+            </div>
+
+        </article>
     </section>
 
 @endsection
