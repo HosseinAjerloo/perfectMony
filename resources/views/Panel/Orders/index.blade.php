@@ -22,9 +22,7 @@
                             مبلغ هزارتومان
                         </th>
 
-                        <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
-                            وضعیت
-                        </th>
+
                         <th class=" py-3 border-b-2 border-gray-300  text-[10px] leading-4 text-blue-500 tracking-wider">
                              مانده کیف پول هزار تومان
                         </th>
@@ -34,31 +32,29 @@
                     <tbody class="bg-white">
                     <tr>
 
-                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500">
+                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500 text-center">
                             <div class="text-[10px] leading-5 text-blue-900"> 11:7 1403/06/07</div>
                         </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 leading-5 text-center">
                             پرداخت بانک سامان
                         </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            120،000
-                        </td>
-
-
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
+                            <span>120،000</span>
                             <i class="fa-solid fa-minus text-[10px] text-rose-500"></i>
                         </td>
-                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+
+
+                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
                             120،000
                         </td>
 
                     </tr>
                     <tr>
 
-                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500">
+                        <td class=" py-4 whitespace-no-wrap border-b border-gray-500 text-center">
                             <div class="text-[10px] leading-5 text-blue-900"> 11:7 1403/06/07</div>
                         </td>
-                        <td class=" text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                        <td class=" text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
                             <p class="text-center text-[10px] ">
                                 صدور کارت هدیه 1 دلاری
                             </p>
@@ -77,15 +73,14 @@
                             </div>
 
                         </td>
-                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            120000
-                        </td>
-
-
-                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                        <td class="text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
+                            <span>120،000</span>
                             <i class="fa-solid fa-minus text-[10px] text-rose-500"></i>
                         </td>
-                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+
+
+
+                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5 text-center">
                             120،000
                         </td>
 
