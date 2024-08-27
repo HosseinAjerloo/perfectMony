@@ -59,7 +59,7 @@
                             <div class="text-[10px] leading-5 text-blue-900"> 11:7 1403/06/07</div>
                         </td>
                         <td class=" text-[10px] py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
-                            <p class="text-center ">
+                            <p class="text-center text-[10px] ">
                                 صدور کارت هدیه 1 دلاری
                             </p>
                             <div class="flex items-center  space-x-3 space-x-reverse">
@@ -77,15 +77,15 @@
                             </div>
 
                         </td>
-                        <td class="text-[10px] px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             120000
                         </td>
 
 
-                        <td class="text-[10px] px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
+                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5">
                             <i class="fa-solid fa-minus text-[10px] text-rose-500"></i>
                         </td>
-                        <td class="text-[10px] px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
+                        <td class="text-[10px]  py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             120،000
                         </td>
 
