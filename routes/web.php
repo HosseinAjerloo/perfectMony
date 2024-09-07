@@ -91,12 +91,12 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
 Route::fallback(function () {
     abort(404);
 });
-Route::get('test', function (\Illuminate\Http\Request $request) {
-    $dollar = Doller::first();
-    $usdt = Http::post('https://api.nobitex.ir/market/stats', [
-        'srcCurrency' => 'USDT',
-        'dstCurrency' => 'IRT'
-    ]);
-    dd($usdt->json());
-
-})->name('test');
+//Route::get('test', function (\Illuminate\Http\Request $request) {
+//    $dollar = Doller::first();
+//    $usdt = Http::post('https://api.nobitex.ir/market/stats', [
+//        'srcCurrency' => 'USDT',
+//        'dstCurrency' => 'IRT'
+//    ]);
+//    dd($usdt->json());
+//
+//})->name('test');
