@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Doller;
 use App\Models\File;
 use App\Models\Invoice;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 
@@ -90,6 +92,11 @@ Route::fallback(function () {
     abort(404);
 });
 Route::get('test', function (\Illuminate\Http\Request $request) {
-            \Illuminate\Support\Facades\Auth::loginUsingId(9);
+    $dollar = Doller::first();
+    $usdt = Http::post('https://api.nobitex.ir/market/stats', [
+        'srcCurrency' => 'USDT',
+        'dstCurrency' => 'IRT'
+    ]);
+    dd($usdt->json());
 
 })->name('test');
