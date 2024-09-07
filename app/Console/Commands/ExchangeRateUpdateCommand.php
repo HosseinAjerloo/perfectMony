@@ -28,7 +28,7 @@ class ExchangeRateUpdateCommand extends Command
     public function handle()
     {
 
-        info('test');
+
         $dollar = Doller::first();
 
         $usdt = Http::post('https://api.nobitex.ir/market/stats', [
