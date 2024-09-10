@@ -21,7 +21,7 @@
             </div>
             <div
                 class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
-                <p>
+                <p class="text-right">
 
                     بعد از پرداخت باید منتظر بمانید تا به سایت ساینا ارز منتقل شوید و اگر دگمه stop یا Back یا F5
                     (Refresh) را بزنید.  پرداخت شما برگشت می خورد و بانک مبلغ را ظرف مدت 24 الی 72 ساعت به حساب شما
@@ -42,7 +42,7 @@
                 </div>
                 <div
                     class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base space-y-3 flex flex-col items-center justify-center toggle hidden mx-auto">
-                    <p>در قسمت سوابق علاوه بر سوابق تراکنش می توانید مشخصات کارت هدیه خریداری شده را نیز مشاهده و کپی
+                    <p class="text-right">در قسمت سوابق علاوه بر سوابق تراکنش می توانید مشخصات کارت هدیه خریداری شده را نیز مشاهده و کپی
                         کنید.</p>
                  <div class="min-w-full flex items-center justify-center">
                      <img class="sm:w-2/5 2xl:w-3/12" src="{{asset('src/images/example.svg')}}" alt="">
@@ -61,7 +61,7 @@
 
                 </div>
                 <div class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
-                    <p>طبق قوانین مبارزه با پولشویی بانک مرکزی این اطلاعات بایستی از کاربران دریافت شود. شما بایستی با
+                    <p class="text-right">طبق قوانین مبارزه با پولشویی بانک مرکزی این اطلاعات بایستی از کاربران دریافت شود. شما بایستی با
                         کارت
                         بانکی، شماره موبایل و کد ملی خود در سایت ثبت نام کرده و خرید خود را انجام دهید. این اطلاعات
                         کاملا
@@ -81,7 +81,7 @@
 
                 </div>
                 <div class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
-                    <p>فیلترشکن خود را خاموش کنید و دوباره امتحان کنید.</p>
+                    <p class="text-right">فیلترشکن خود را خاموش کنید و دوباره امتحان کنید.</p>
                 </div>
 
         </article>
