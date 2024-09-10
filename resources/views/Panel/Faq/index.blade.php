@@ -9,7 +9,7 @@
 
 @section('container')
 
-    <section class="px-2 space-y-6">
+    <section class="px-2 space-y-6  ">
         <article class="border-2 border-white rounded-md cursor-pointer pr">
 
             <div class="bg-white p-2 flex items-center justify-between text-black text-sm  font-bold">
@@ -22,7 +22,7 @@
             <div
                 class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
                 <p>
-                    چرا برخی موارد تراکنش بانکی برگشت می خورد ؟
+
                     بعد از پرداخت باید منتظر بمانید تا به سایت ساینا ارز منتقل شوید و اگر دگمه stop یا Back یا F5
                     (Refresh) را بزنید.  پرداخت شما برگشت می خورد و بانک مبلغ را ظرف مدت 24 الی 72 ساعت به حساب شما
                     باز
@@ -85,6 +85,11 @@
                 </div>
 
         </article>
+        <div class="min-w-full flex items-center justify-center">
+            <a href="{{route('panel.ticket')}}" class="font-sm sm:font-semibold text-white rounded-md bg-sky-500 py-1.5 px-2 "> ورود به قسمت تیکت </a>
+
+        </div>
+
     </section>
 @endsection
 
