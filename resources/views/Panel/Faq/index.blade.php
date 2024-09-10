@@ -41,10 +41,12 @@
 
                 </div>
                 <div
-                    class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base space-y-3 flex flex-col items-center justify-center toggle hidden">
+                    class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base space-y-3 flex flex-col items-center justify-center toggle hidden mx-auto">
                     <p>در قسمت سوابق علاوه بر سوابق تراکنش می توانید مشخصات کارت هدیه خریداری شده را نیز مشاهده و کپی
                         کنید.</p>
-                    <img class="sm:w-2/5" src="{{asset('src/images/example.svg')}}" alt="">
+                 <div class="min-w-full flex items-center justify-center">
+                     <img class="sm:w-2/5" src="{{asset('src/images/example.svg')}}" alt="">
+                 </div>
 
                 </div>
         </article>
