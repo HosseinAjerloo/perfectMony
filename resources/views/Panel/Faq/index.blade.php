@@ -12,9 +12,11 @@
     <section class="px-2 space-y-6">
         <article class="border-2 border-white rounded-md cursor-pointer pr">
 
-            <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
-                <img src="{{asset('src/images/faq.svg')}}" alt="">
-                <p>چرا برخی موارد تراکنش بانکی برگشت می خورد ؟</p>
+            <div class="bg-white p-2 flex items-center justify-between text-black text-sm  font-bold">
+               <div class="space-x-reverse space-x-3 flex items-center">
+                   <img src="{{asset('src/images/faq.svg')}}" alt="">
+                   <p>چرا برخی موارد تراکنش بانکی برگشت می خورد ؟</p>
+               </div>
                 <img src="{{asset('src/images/DownButton.svg')}}" alt="">
             </div>
             <div
@@ -30,9 +32,11 @@
         </article>
 
         <article class="border-2 border-white rounded-md cursor-pointer pr">
-                <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
-                    <img src="{{asset('src/images/faq.svg')}}" alt="">
-                    <p>چگونه مشخصات کارت هدیه خریداری شده را ببینم ؟</p>
+                <div class="bg-white p-2 flex items-center justify-between text-black text-sm font-bold">
+                    <div class="space-x-reverse space-x-3 flex items-center">
+                        <img src="{{asset('src/images/faq.svg')}}" alt="">
+                        <p>چگونه مشخصات کارت هدیه خریداری شده را ببینم ؟</p>
+                    </div>
                     <img src="{{asset('src/images/DownButton.svg')}}" alt="">
 
                 </div>
@@ -46,9 +50,11 @@
         </article>
 
         <article class="border-2 border-white rounded-md cursor-pointer pr">
-                <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
-                    <img src="{{asset('src/images/faq.svg')}}" alt="">
-                    <p>چرا مشخصات فردی، شماره، کد ملی و آدرس گرفته می شود؟</p>
+                <div class="bg-white p-2 flex items-center justify-between text-black text-sm font-bold">
+                    <div class="space-x-reverse space-x-3 flex items-center">
+                        <img src="{{asset('src/images/faq.svg')}}" alt="">
+                        <p>چرا مشخصات فردی، شماره، کد ملی و آدرس گرفته می شود؟</p>
+                    </div>
                     <img src="{{asset('src/images/DownButton.svg')}}" alt="">
 
                 </div>
@@ -64,9 +70,11 @@
 
         <article class="border-2 border-white rounded-md cursor-pointer pr">
 
-                <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
-                    <img src="{{asset('src/images/faq.svg')}}" alt="">
-                    <p>چرا سایت ساینا ارز برای من باز نمی شود ؟</p>
+                <div class="bg-white p-2 flex items-center justify-between text-black text-sm  font-bold">
+                  <div class="flex items-center space-x-reverse space-x-3" >
+                      <img src="{{asset('src/images/faq.svg')}}" alt="">
+                      <p>چرا سایت ساینا ارز برای من باز نمی شود ؟</p>
+                  </div>
                     <img src="{{asset('src/images/DownButton.svg')}}" alt="">
 
                 </div>
