@@ -56,7 +56,7 @@
                 </div>
                 <p class="text-sm sm:text-base">تماس باما</p>
             </a>
-            <a href="{{route('panel.ticket')}}" class="flex flex-col items-center justify-center space-y-2  mb-7 w-1/3 sm:w-1/4 md:w-1/6">
+            <a href="{{route('panel.faq')}}" class="flex flex-col items-center justify-center space-y-2  mb-7 w-1/3 sm:w-1/4 md:w-1/6">
                 <div class="border-white border-2 rounded-full p-4 box-border">
                     <img src="{{asset('src/images/newTicket.svg')}}" alt="">
                 </div>

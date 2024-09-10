@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('ticket-add', 'Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
     Route::get('download/{file}', [App\Http\Controllers\Panel\TicketController::class, 'download'])->name('panel.ticket.download');
-
+    Route::get('faq',[App\Http\Controllers\Panel\FaqController::class,'index'])->name('panel.faq');
 });
 
 // Admin
@@ -91,8 +91,4 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
 Route::fallback(function () {
     abort(404);
 });
-//Route::get('test', function (\Illuminate\Http\Request $request) {
-//    $user=\App\Models\User::find(1);
-//   \Illuminate\Support\Facades\Mail::to('ahosseinajerloo@gmail.com')->send(new \App\Mail\SendNotification($user));
-//
-//})->name('test');
+
