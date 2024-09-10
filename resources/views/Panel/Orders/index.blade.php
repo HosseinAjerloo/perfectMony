@@ -10,6 +10,7 @@
             <article class="min-w-full w-full ">
                 <div class="min-w-full w-full flex flex-col space-y-3 bg-sky-500 rounded-ss-md rounded-se-md">
                     <div class="flex items-center min-w-full  justify-between border-b-4 border-gray-200">
+                        <div class="text-[11.5px] w-2/12 font-semibold  text-center py-2">شماره سفارش</div>
                         <div class="text-[11.5px] w-2/12 font-semibold  text-center py-2">تاریخ</div>
                         <div class="text-[11.5px] w-1/4 font-semibold  text-center py-2">تراکنش</div>
                         <div class="text-[11.5px] w-2/12  font-semibold text-center py-2">مبلغ به هزارتومان</div>
@@ -19,6 +20,10 @@
                 </div>
                 <div class="min-w-full w-full flex flex-col bg-slate-50 text-black p-2 rounded-ee-md rounded-es-md">
                     <div class="flex items-center min-w-full  justify-between ">
+                        <div
+                            class="font-semibold text-[11.5px] w-2/12  text-center py-2">
+                            {{$financeTransaction->id}}
+                        </div>
                         <div
                             class="font-semibold text-[11.5px] w-2/12  text-center py-2">{{\Morilog\Jalali\Jalalian::forge($financeTransaction->created_at)->format('Y/m/d H:i:s')}}</div>
                         <div

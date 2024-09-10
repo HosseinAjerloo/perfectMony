@@ -92,11 +92,7 @@ Route::fallback(function () {
     abort(404);
 });
 //Route::get('test', function (\Illuminate\Http\Request $request) {
-//    $dollar = Doller::first();
-//    $usdt = Http::post('https://api.nobitex.ir/market/stats', [
-//        'srcCurrency' => 'USDT',
-//        'dstCurrency' => 'IRT'
-//    ]);
-//    dd($usdt->json());
+//    $user=\App\Models\User::find(1);
+//   \Illuminate\Support\Facades\Mail::to('ahosseinajerloo@gmail.com')->send(new \App\Mail\SendNotification($user));
 //
 //})->name('test');
