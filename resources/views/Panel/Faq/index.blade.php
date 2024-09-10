@@ -45,7 +45,7 @@
                     <p>در قسمت سوابق علاوه بر سوابق تراکنش می توانید مشخصات کارت هدیه خریداری شده را نیز مشاهده و کپی
                         کنید.</p>
                  <div class="min-w-full flex items-center justify-center">
-                     <img class="sm:w-2/5" src="{{asset('src/images/example.svg')}}" alt="">
+                     <img class="sm:w-2/5 2xl:w-3/12" src="{{asset('src/images/example.svg')}}" alt="">
                  </div>
 
                 </div>
