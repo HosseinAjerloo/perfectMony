@@ -15,6 +15,7 @@
             <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
                 <img src="{{asset('src/images/faq.svg')}}" alt="">
                 <p>چرا برخی موارد تراکنش بانکی برگشت می خورد ؟</p>
+                <img src="{{asset('src/images/DownButton.svg')}}" alt="">
             </div>
             <div
                 class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
@@ -32,6 +33,8 @@
                 <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
                     <img src="{{asset('src/images/faq.svg')}}" alt="">
                     <p>چگونه مشخصات کارت هدیه خریداری شده را ببینم ؟</p>
+                    <img src="{{asset('src/images/DownButton.svg')}}" alt="">
+
                 </div>
                 <div
                     class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base space-y-3 flex flex-col items-center justify-center toggle hidden">
@@ -46,6 +49,8 @@
                 <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
                     <img src="{{asset('src/images/faq.svg')}}" alt="">
                     <p>چرا مشخصات فردی، شماره، کد ملی و آدرس گرفته می شود؟</p>
+                    <img src="{{asset('src/images/DownButton.svg')}}" alt="">
+
                 </div>
                 <div class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
                     <p>طبق قوانین مبارزه با پولشویی بانک مرکزی این اطلاعات بایستی از کاربران دریافت شود. شما بایستی با
@@ -62,6 +67,8 @@
                 <div class="bg-white p-2 flex items-center text-black text-sm space-x-reverse space-x-3 font-bold">
                     <img src="{{asset('src/images/faq.svg')}}" alt="">
                     <p>چرا سایت ساینا ارز برای من باز نمی شود ؟</p>
+                    <img src="{{asset('src/images/DownButton.svg')}}" alt="">
+
                 </div>
                 <div class="py-2 px-2.5 text-center leading-snug text-sm sm:text-base toggle hidden">
                     <p>فیلترشکن خود را خاموش کنید و دوباره امتحان کنید.</p>
