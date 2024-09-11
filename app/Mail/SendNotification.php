@@ -36,12 +36,12 @@ class SendNotification extends Mailable
     /**
      * Get the message content definition.
      */
-
-    public function build()
+    public function content()
     {
-
-        return $this->view('Email.index');
+        return new Content(markdown: 'Email.index');
     }
+
+
 
     /**
      * Get the attachments for the message.
