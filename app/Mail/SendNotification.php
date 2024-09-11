@@ -36,13 +36,12 @@ class SendNotification extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
+
+    public function build()
     {
         $asset=asset('build/assets/app-DfXRdrCz.css');
-        return new Content(
-            markdown: 'Email.index',
-            with: ['asset'=>$asset]
-        );
+
+        return $this->view('Email.index',['asset'=>$asset]);
     }
 
     /**
