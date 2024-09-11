@@ -1,3 +1,5 @@
+@vite('resources/css/app.css')
+
 @extends('Email.layout.master')
 
 @section('message-box')
