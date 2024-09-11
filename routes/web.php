@@ -94,6 +94,7 @@ Route::fallback(function () {
 
 Route::get('test',function(){
   $response= \Illuminate\Support\Facades\Mail::to('hosseinajerloo9098@gmail.com')->send(new \App\Mail\SendNotification());
+  // test
   dd($response);
 });
 
