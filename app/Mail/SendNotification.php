@@ -39,7 +39,7 @@ class SendNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'Email.index',
+            markdown: 'Email.index',
         );
     }
 
