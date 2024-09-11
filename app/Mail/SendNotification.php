@@ -36,9 +36,10 @@ class SendNotification extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content()
+
+    public function build()
     {
-        return new Content(view: 'Email.index');
+        return $this->view('Email.index');
     }
 
 
