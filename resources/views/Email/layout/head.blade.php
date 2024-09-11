@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{asset('src/FontAwesome/css/all.css')}}">
     <style>
         body{
-            background-color: blue;
+            background-color: blue!important;
         }
     </style>
 </head>
