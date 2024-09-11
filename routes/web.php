@@ -93,7 +93,6 @@ Route::fallback(function () {
 });
 
 Route::get('test',function(){
-    return view('Email.index');
   $response= \Illuminate\Support\Facades\Mail::to('hosseinajerloo9098@gmail.com')->send(new \App\Mail\SendNotification());
   dd($response);
 });
