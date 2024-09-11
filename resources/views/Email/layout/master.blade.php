@@ -2,7 +2,6 @@
 <body class="font-yekan text-white  overflow-x-hidden bg-white ">
 @include('Email.layout.header')
 @yield('header-tag')
-@include('Email.layout.script')
 <main class=" w-full transition-all duration-700">
     @include('Alert.Toast.warning')
     @include('Alert.Toast.success')
