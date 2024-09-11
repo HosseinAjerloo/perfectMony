@@ -25,13 +25,13 @@
             <p>
                 086-33805
             </p>
-            <img src="{{$message->embed(public_path('src/images/phone.png'))}}" alt="" class="w-4 h-4 mt-2">
+{{--            <img src="{{$message->embed(public_path('src/images/phone.png'))}}" alt="" class="w-4 h-4 mt-2">--}}
         </div>
         <div class="flex items-center justify-center space-x-1 space-x-reverse">
             <p>
                 www.sainaex.ir
             </p>
-            <img src="{{$message->embed(public_path('src/images/network.svg'))}}" alt="">
+{{--            <img src="{{$message->embed(public_path('src/images/network.svg'))}}" alt="">--}}
         </div>
     </article>
 
