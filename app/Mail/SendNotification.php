@@ -38,12 +38,10 @@ class SendNotification extends Mailable
      */
     public function content(): Content
     {
-        $path=asset('src/images/faildIcon.svg');
-
-
+        $asset=asset('build/assets/app-DfXRdrCz.css');
         return new Content(
             markdown: 'Email.index',
-            with: ['path'=>$path]
+            with: ['asset'=>$asset]
         );
     }
 

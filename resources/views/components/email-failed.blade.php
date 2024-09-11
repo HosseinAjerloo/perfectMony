@@ -2,7 +2,7 @@
     @case('message-box')
         <section class="space-y-3">
             <div class="flex justify-center min-w-full items-center">
-                <img src="{{$path}}" class="w-8 h-8">
+                <img src="" class="w-8 h-8">
                 <h1 class="font-bold text-lg text-rose-500">خرید ناموفق کارت هدیه (ووچر)</h1>
             </div>
             <div class="flex items-center justify-center text-black text-sm border-2 rounded-md border-black ">
