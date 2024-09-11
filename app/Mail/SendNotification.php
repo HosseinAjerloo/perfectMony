@@ -38,8 +38,11 @@ class SendNotification extends Mailable
      */
     public function content(): Content
     {
+        $path=public_path('src/images/faildIcon.svg');
+
         return new Content(
             markdown: 'Email.index',
+            with: ['path'=>$path]
         );
     }
 

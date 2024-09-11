@@ -1,11 +1,10 @@
 @extends('Email.layout.master')
-
 @section('message-box')
-    <x-email-failed :type="'message-box'"/>
+    <x-email-failed :type="'message-box'" :path="$message->embed($path)"/>
 @endsection
 
 @section('container')
-    <x-email-failed :type="'container'"/>
+    <x-email-failed :type="'container'" :path="$message->embed($path)"/>
 @endsection
 
 @section('footer')
