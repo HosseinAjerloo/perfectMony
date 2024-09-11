@@ -9,4 +9,9 @@
     <title>ورود به ساینا ارز</title>
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{asset('src/FontAwesome/css/all.css')}}">
+    <style>
+        body{
+            background-color: blue;
+        }
+    </style>
 </head>

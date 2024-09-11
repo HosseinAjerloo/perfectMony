@@ -1,9 +1,3 @@
-@vite('resources/css/app.css')
-<style>
-    body{
-        background-color: red!important;
-    }
-</style>
 @extends('Email.layout.master')
 
 @section('message-box')
