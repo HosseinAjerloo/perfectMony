@@ -39,9 +39,8 @@ class SendNotification extends Mailable
 
     public function build()
     {
-        $asset=asset('build/assets/app-DfXRdrCz.css');
 
-        return $this->view('Email.index',['asset'=>$asset]);
+        return $this->view('Email.index');
     }
 
     /**

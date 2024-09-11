@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ورود به ساینا ارز</title>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <link rel="stylesheet" href="{{asset('src/FontAwesome/css/all.css')}}">
 
 </head>
