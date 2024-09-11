@@ -40,7 +40,7 @@ class SendNotification extends Mailable
     public function build()
     {
 
-        return $this->view('vendor.mail.html.message');
+        return $this->view('Email.index');
     }
 
     /**
