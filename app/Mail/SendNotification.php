@@ -34,7 +34,7 @@ class SendNotification extends Mailable
     }
     public function content()
     {
-        return new Content(text:'Email.index' );
+        return new Content(view:'Email.index' );
     }
 
     /**
