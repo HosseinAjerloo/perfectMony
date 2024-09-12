@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 
 Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
@@ -93,7 +94,13 @@ Route::fallback(function () {
 });
 
 Route::get('test',function(){
-  $response= \Illuminate\Support\Facades\Mail::to('hosseinajerloo9098@gmail.com')->send(new \App\Mail\SendNotification());
+//    $cssToInlineStyles = new CssToInlineStyles();
+//    $test=view('Email.index')->render();
+//    $css=\Illuminate\Support\Facades\File::get(public_path('build/assets/app-BTQ9gFuG.css'));
+//    \Illuminate\Support\Facades\File::put(public_path('test.text'),$cssToInlineStyles->convert($test,$css));
+
+
+    $response= \Illuminate\Support\Facades\Mail::to('hosseinajerloo9098@gmail.com')->send(new \App\Mail\SendNotification());
   dd($response);
 });
 
