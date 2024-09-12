@@ -32,15 +32,12 @@ class SendNotification extends Mailable
 
         );
     }
-//    public function content()
-//    {
-//        return new Content(view:'Email.index' );
-//    }
-
-    public function build()
+    public function content()
     {
-        return $this->view('Email.index');
+        return new Content(markdown:'Email.index' );
     }
+
+
     /**
      * Get the message content definition.
      */
