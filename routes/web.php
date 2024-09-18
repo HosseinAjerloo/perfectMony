@@ -93,14 +93,7 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test',function(){
-////    $cssToInlineStyles = new CssToInlineStyles();
-////    $test=view('Email.index')->render();
-////    $css=\Illuminate\Support\Facades\File::get(public_path('build/assets/app-BTQ9gFuG.css'));
-////    \Illuminate\Support\Facades\File::put(public_path('test.text'),$cssToInlineStyles->inlineCssOnElement($test,$css));
-//
-//
-////    $response= \Illuminate\Support\Facades\Mail::to('hosseinajerloo9098@gmail.com')->send(new \App\Mail\SendNotification());
-////  dd($response);
-//});
+Route::get('test',function(){
+    dd($_SERVER);
+});
 

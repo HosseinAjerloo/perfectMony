@@ -107,7 +107,7 @@ class LoginController extends Controller
             ]);
             Auth::loginUsingId($user->id);
             $code->update(['seen_at'=>date('Y/m/d H:i:s',time())]);
-            return redirect()->route('panel.index');
+            return redirect()->intended();
 
         } else {
             return redirect()->route('login.dologin', $otp->token)->withErrors(['expiration_at' => "کد وارد شده صحیح نمیباشد "]);
@@ -133,7 +133,7 @@ class LoginController extends Controller
         if (Auth::check()) {
             Auth::logout();
         }
-        return redirect()->route('login.index');
+        return redirect()->intended(route('login.index'));
 
     }
 }
