@@ -12,7 +12,9 @@ use App\Models\User;
 use App\Services\ImageService\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File as FileAlias;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 use Morilog\Jalali\Jalalian;
 
 
@@ -96,6 +98,7 @@ class TicketController extends Controller
     }
     public function download(Request $request,File $file)
     {
-      return  Response::download($file->path);
+            $path=public_path($file->path);
+            return FileAlias::exists($path)?Response::download($path):  redirect()->back()->withErrors(['error' => 'دانلود فایل با خطا مواجه شد لطفا بعدا تلاش فرمایید']);
     }
 }
