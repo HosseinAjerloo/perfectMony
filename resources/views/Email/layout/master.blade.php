@@ -1,5 +1,5 @@
 @include('Email.layout.head')
-<body class="font-yekan text-white  overflow-x-hidden bg-gray-950 ">
+<body class="font-yekan text-white  overflow-x-hidden bg-white">
 @include('Email.layout.header')
 @yield('header-tag')
 <main class=" w-full h-screen transition-all duration-700">

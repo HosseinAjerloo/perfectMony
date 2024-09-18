@@ -2,8 +2,6 @@
 
 
 @section('message-box')
-    <link rel="preload" as="style" href="{{asset('build/assets/app-BTQ9gFuG.css')}}">
-    <link rel="stylesheet" href="{{asset('build/assets/app-BTQ9gFuG.css')}}">
 
     <section class="py-5 px-3 flex justify-center items-center container md:mx-auto">
         <x-email-failed :type="'message-box'"/>
@@ -39,13 +37,3 @@
 
 
 @endsection
-
-
-
-
-
-
-
-
-
-
