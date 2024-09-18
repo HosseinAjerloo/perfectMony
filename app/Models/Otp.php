@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Otp extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable=['mobile','code','token'];
+    protected $fillable=['mobile','code','token','seen_at'];
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('mobile')->nullable();
             $table->string('code')->nullable();
             $table->string('token')->nullable();
+            $table->timestamp('seen_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

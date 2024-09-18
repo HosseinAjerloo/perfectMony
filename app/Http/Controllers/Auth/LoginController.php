@@ -83,10 +83,10 @@ class LoginController extends Controller
     public function dologin(Request $request, Otp $otp)
     {
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
+        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->whereNull('seen_at')->first();
         if ($otp)
             return view('Auth.verify', compact('otp'));
-        return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است "]);
+        return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است و یا قبلا استفاده شده است "]);
     }
 
     public function login(Request $request, Otp $otp)
@@ -96,16 +96,17 @@ class LoginController extends Controller
         ]);
         $inputs = $request->all();
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
+        $otp = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->whereNull('seen_at')->first();
         if (!$otp) {
             return redirect()->route('login.index')->withErrors(['expiration_at' => "مدت زمان استفاده از کد گذشته است و یا کد وارده صحیح نمیباشد "]);
         }
-        $code = $otp->where('code', $inputs['SMS_code'])->first();
+        $code = $otp->where('code', $inputs['SMS_code'])->whereNull('seen_at')->where('token', $otp->token)->where('created_at', ">", $expiration)->first();
         if ($code) {
             $user = User::firstOrCreate(['mobile' => $code->mobile], [
                 'mobile' => $code->mobile
             ]);
             Auth::loginUsingId($user->id);
+            $code->update(['seen_at'=>date('Y/m/d H:i:s',time())]);
             return redirect()->route('panel.index');
 
         } else {
@@ -117,7 +118,7 @@ class LoginController extends Controller
     public function resend(Request $request, Otp $otp)
     {
         $expiration = Carbon::now()->subMinutes(3)->toDateTimeString();
-        $result = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->first();
+        $result = $otp->where('created_at', ">", $expiration)->where('token', $otp->token)->whereNull('seen_at')->first();
         if (!$result) {
             $request->request->add(['mobile' => $otp->mobile]);
             $otp = $this->generateCode($request);
