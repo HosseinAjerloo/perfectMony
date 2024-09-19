@@ -1,10 +1,10 @@
 @extends('Panel.layout.master')
 
 @section('message-box')
-    <h1 class=" border-2 border-2-white rounded-md py-3 px-3 text-sm sm:text-base font-semibold  ">
-        ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> لطفا مشکل خود را بیان کنید تا
-        در اسرع وقت کارشناسان ما مشکل شما را بر طرف کنند.
-    </h1>
+    <form action="" class=" px-2 min-w-full flex items-center justify-center mb-6 relative">
+        <input type="text" placeholder="جستوجو" class="text-gray-500 outline-none placeholder:text-gray-600/50 min-w-full  sm:w-1/2 py-3 px-2 rounded-md ring-8 ring-offset-4 ring-gray-500/50">
+        <i class="fas fa-search absolute text-2xl  text-gray-700/50 left-3 top-[12px]"></i>
+    </form>
 @endsection
 
 @section('container')
