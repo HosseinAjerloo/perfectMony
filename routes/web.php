@@ -86,6 +86,10 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
     Route::post('ticket-message', [App\Http\Controllers\Admin\TicketController::class, 'ticketMessage'])->name('panel.admin.ticket-message');
     Route::get('dollar-price', [App\Http\Controllers\Admin\DollarController::class, 'index'])->name('panel.admin.dollar-price');
     Route::get('dollar-price-submit', [App\Http\Controllers\Admin\DollarController::class, 'priceSubmit'])->name('panel.admin.dollar-price-submit');
+
+    Route::prefix('user')->group(function (){
+        Route::get('/',[App\Http\Controllers\Admin\UserController::class,'index'])->name('panel.admin.user.index');
+    });
 });
 
 
