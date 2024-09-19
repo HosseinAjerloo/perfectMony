@@ -80,8 +80,11 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: function () {
-
-                return $this->name .' '. $this->family;
+                if (isset($this->name) and isset($this->family))
+                    return $this->name . ' ' . $this->family;
+                else
+                    return $this->mobile;
             });
     }
+
 }

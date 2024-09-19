@@ -93,7 +93,7 @@ Route::fallback(function () {
     abort(404);
 });
 
-Route::get('test',function(){
-    dd($_SERVER);
-});
+//Route::get('test',function(){
+//    dd($_SERVER);
+//});
 

@@ -16,6 +16,7 @@
             <thead class="bg-sky-500 ">
             <tr class="text-white w-full overflow-x-scroll ">
                 <th class=" py-3 font-semibold">#</th>
+                <th class=" py-3 font-semibold">نام کاربری</th>
                 <th class=" py-3 font-semibold">عنوان</th>
                 <th class="  py-3 font-semibold">تاریخ</th>
                 <th class=" py-3 font-bold">جزئیات</th>
@@ -28,6 +29,7 @@
             @foreach($tickets as $key=> $ticket)
                 <tr class="py-6 text-black text-sm sm:text-base space-x-3 space-x-reverse w-full">
                     <td class="  text-center py-2">{{$ticket->id}}</td>
+                    <td class="  text-center py-2">{{$ticket->user->fullName??'-'}}</td>
                     <td class=" text-center py-2 cursor-pointer  "><a
                             href="{{route('panel.admin.ticket-chat',$ticket->id)}}"
                             class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">{{$ticket->subject}}</a>
