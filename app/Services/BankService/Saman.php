@@ -45,6 +45,8 @@ class Saman implements BankInterface
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data)));
         curl_setopt($curl, CURLOPT_SSL_CIPHER_LIST, 'DEFAULT@SECLEVEL=1');
+        curl_setopt($curl,CURLOPT_TIMEOUT,30);
+
         $result = curl_exec($curl);
         curl_close($curl);
 
