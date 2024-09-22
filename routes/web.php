@@ -101,26 +101,8 @@ Route::get('test',function(){
 
     $account_id="65049907";
     $PassPhrase='hr_hon4774';
-    $response=Http::timeout(1)->get('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
-    $data=file_get_contents('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
+    $response=Http::timeout(10)->get('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
 
-        // searching for hidden fields
-        if (!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $data, $result, PREG_SET_ORDER)) {
-            return false;
-        }
-        $account='U47768533';
-        // putting data to array
-        $array = [];
-
-        foreach ($result as $item) {
-            $array[$item[1]] = $item[2];
-        }
-
-        if ($account == null) {
-            return $array;
-        }
-
-        var_dump($result);
 
 
 });
