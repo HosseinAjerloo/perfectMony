@@ -97,7 +97,10 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test',function(){
-//    dd($_SERVER);
-//});
+Route::get('test',function(){
+    $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+    $back_price = $client->VerifyTransaction('GmshtyjwKSsnc+zI1rddY3eAUfoMzcmcMrKDZnt/mT',13660514);
+dd($back_price);
+});
 
