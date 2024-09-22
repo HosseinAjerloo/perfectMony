@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Response;
 use function Laravel\Prompts\alert;
 
 
@@ -49,7 +50,6 @@ class PanelController extends Controller
     }
 
 
-
     public function purchase()
     {
 
@@ -62,7 +62,7 @@ class PanelController extends Controller
     public function store(PurchaseRequest $request)
     {
         try {
-            $satiaService=new SatiaService();
+            $satiaService = new SatiaService();
 
             $inputs = request()->all();
             $dollar = Doller::orderBy('id', 'desc')->first();
@@ -125,11 +125,9 @@ class PanelController extends Controller
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
                 } else {
-                    $voucher->update([
-                        'status' => 'failed',
-                        'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
-                    ]);
-                    $invoice->update(['status' => 'failed','description'=>'خرید کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول متوقف شد']);
+                    $voucher->delete();
+
+                    $invoice->update(['status' => 'failed', 'description' => 'خرید کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول متوقف شد']);
 
                     Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
@@ -194,11 +192,9 @@ class PanelController extends Controller
 
 
                 } else {
-                    $voucher->update([
-                        'status' => 'failed',
-                        'description' => "به دلیل مشکل فنی روند ساخت پرفکت مانی به مشکل خورد",
-                    ]);
-                    $invoice->update(['status' => 'failed','description'=>'خرید کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول متوقف شد']);
+                    $voucher->delete();
+
+                    $invoice->update(['status' => 'failed', 'description' => 'خرید کارت هدیه پرفکت مانی ناموفق بود و عملیات کسر موجودی از کیف پول متوقف شد']);
 
                     Log::emergency("perfectmoney error : " . $this->PMeVoucher['ERROR']);
                     return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
@@ -226,6 +222,7 @@ class PanelController extends Controller
         }
     }
 
+
     public function PurchaseThroughTheBank(PurchaseThroughTheBankRequest $request)
     {
         $dollar = Doller::orderBy('id', 'desc')->first();
@@ -250,7 +247,7 @@ class PanelController extends Controller
         $inputs['status'] = 'requested';
         $inputs['bank_id'] = $bank->id;
         $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
-        $inputs['description'] = ' خرید کارت هدیه پرفکت مانی از طریق '.$bank->name;
+        $inputs['description'] = ' خرید کارت هدیه پرفکت مانی از طریق ' . $bank->name;
 
         $invoice = Invoice::create($inputs);
         $objBank = new $bank->class;
@@ -275,13 +272,13 @@ class PanelController extends Controller
             'user_id' => $user->id,
             'amount' => $payment->amount,
             'type' => "bank",
-            "creadit_balance" => $balance ,
+            "creadit_balance" => $balance,
             'description' => " ارتباط با بانک $bank->name",
             'payment_id' => $payment->id,
         ]);
         if (!$status) {
-            $invoice->update(['status' => 'failed','description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد "]);
-            $financeTransaction->update(['description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ",'status'=>'fail']);
+            $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد "]);
+            $financeTransaction->update(['description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ", 'status' => 'fail']);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
         $url = $objBank->getBankUrl();
@@ -306,7 +303,7 @@ class PanelController extends Controller
 //
     public function backPurchaseThroughTheBank(Request $request)
     {
-        $satiaService=new SatiaService();
+        $satiaService = new SatiaService();
 
         $dollar = Doller::orderBy('id', 'desc')->first();
         $user = Auth::user();
@@ -330,10 +327,10 @@ class PanelController extends Controller
                     'state' => 'failed'
 
                 ]);
-            $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')),'status'=>'fail']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
 
-            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanTransactionStatus($request->input('Status'))." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
+            $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanTransactionStatus($request->input('Status')) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
 
             return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
@@ -342,10 +339,10 @@ class PanelController extends Controller
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price),'status'=>'fail']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
 
-            $bankErrorMessage="درگاه بانک سامان تراکنش شمارا به دلیل ".$objBank->samanVerifyTransaction($back_price)." ناموفق اعلام کرد باتشکر سایناارز".PHP_EOL.'پشتیبانی بانک سامان'.PHP_EOL.'021-6422';
+            $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanVerifyTransaction($back_price) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
 
             $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
@@ -363,99 +360,114 @@ class PanelController extends Controller
                 'ResNum' => $inputs['ResNum'],
                 'state' => 'finished'
             ]);
-        $service = '';
-        $amount = '';
-        if (isset($invoice->service_id)) {
-            $service = $invoice->service;
-            $amount = $service->amount;
-        } else {
-            $amount = $invoice->service_id_custom;
-        }
 
-        $this->generateVoucher($amount);
+        $financeTransaction->update([
+            'user_id' => $user->id,
+            'amount' => $payment->amount,
+            'type' => "deposit",
+            "creadit_balance" => $balance + $payment->amount,
+            'description' => ' افزایش کیف پول',
+            'payment_id' => $payment->id,
+            'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+        ]);
 
-        $voucher = Voucher::create(
-            [
-                'user_id' => $user->id,
-                'invoice_id' => $invoice->id,
-                'status' => 'requested',
-                'description' => 'ارسال در خواست به سروریس پرفکت مانی',
-            ]
-        );
-        if (isset($invoice->service_id)) {
+        $invoice->update(['status' => 'finished']);
 
-            $voucher->update([
-                'service_id' => $service->id
-            ]);
-        } else {
-            $voucher->update([
-                "service_id_custom" => $amount
-            ]);
-        }
-        if (is_array($this->PMeVoucher) and isset($this->PMeVoucher['VOUCHER_NUM']) and isset($this->PMeVoucher['VOUCHER_CODE'])) {
-            $voucher->update([
-                'status' => 'finished',
-                'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
-                "serial" => $this->PMeVoucher['VOUCHER_NUM'],
-                'code' => $this->PMeVoucher['VOUCHER_CODE']
-            ]);
-            Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
-            $financeTransaction->update([
-                'user_id' => $user->id,
-                'amount' => $payment->amount,
-                'type' => "deposit",
-                "creadit_balance" => $balance + $payment->amount,
-                'description' => ' افزایش کیف پول',
-                'payment_id' => $payment->id,
-                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
-            ]);
+        return redirect()->route('panel.deliveryVoucherBankView',[$invoice,$payment]);
 
-            FinanceTransaction::create([
-                'user_id' => $user->id,
-                'voucher_id' => $voucher->id,
-                'amount' => $payment->amount,
-                'type' => "withdrawal",
-                "creadit_balance" => $financeTransaction->creadit_balance - $payment->amount,
-                'description' => "خرید کارت هدیه {$amount} دلاری و کسر مبغ از کیف پول",
+    }
 
-                'payment_id' => $payment->id,
-                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
-            ]);
-            $invoice->update(['status' => 'finished']);
+    public function deliveryVoucherBankView(Request $request, Invoice $invoice, Payment $payment)
+    {
+        $user = Auth::user();
+        $balance = Auth::user()->getCreaditBalance();
+        $voucher = Voucher::where('invoice_id', $invoice->id)->where('user_id', $user->id)->first();
+        if ($voucher)
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "شما قبلا کارت هدیه را دریافت کرده اید لطفا کارت هدیه جدید خود را مجدد خرید فرمایید."]);
+
+        if ($balance < $payment->amount)
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "شارژ کیف پول  شما جهت خریداری کارت هدیه کافی نمیباشد لطفا کیف پول خود را شارژ فرمایید و مجددا خرید فرمایید.  "]);
+
+        return view('Panel.Delivery.bankDelivery', compact('invoice', 'payment'));
+    }
+
+    public function deliveryVoucherBank(Request $request, Invoice $invoice, Payment $payment, SatiaService $satiaService)
+    {
+        dd('ih');
+        try {
+            $balance = Auth::user()->getCreaditBalance();
+            $dollar = Doller::orderBy('id', 'desc')->first();
+            $user = Auth::user();
+            $service = '';
+            $amount = '';
             if (isset($invoice->service_id)) {
                 $service = $invoice->service;
-                $payment_amount = $service->amount;
+                $amount = $service->amount;
             } else {
-                $payment_amount = $invoice->service_id_custom;
+                $amount = $invoice->service_id_custom;
             }
-            if ($this->validationFiledUser()) {
-                $request->session()->put('voucher_id', $voucher->id);
-                $request->session()->put('amount_voucher', $payment_amount);
+
+            $this->generateVoucher($amount);
+
+            $voucher = Voucher::create(
+                [
+                    'user_id' => $user->id,
+                    'invoice_id' => $invoice->id,
+                    'status' => 'requested',
+                    'description' => 'ارسال در خواست به سروریس پرفکت مانی',
+                ]
+            );
+            if (isset($invoice->service_id)) {
+
+                $voucher->update([
+                    'service_id' => $service->id
+                ]);
+            } else {
+                $voucher->update([
+                    "service_id_custom" => $amount
+                ]);
             }
-            $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
-            $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
-            return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
+            if (is_array($this->PMeVoucher) and isset($this->PMeVoucher['VOUCHER_NUM']) and isset($this->PMeVoucher['VOUCHER_CODE'])) {
+                $voucher->update([
+                    'status' => 'finished',
+                    'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
+                    "serial" => $this->PMeVoucher['VOUCHER_NUM'],
+                    'code' => $this->PMeVoucher['VOUCHER_CODE']
+                ]);
+                Log::emergency("panel Controller :" . json_encode($this->PMeVoucher));
+
+                FinanceTransaction::create([
+                    'user_id' => $user->id,
+                    'voucher_id' => $voucher->id,
+                    'amount' => $payment->amount,
+                    'type' => "withdrawal",
+                    "creadit_balance" => $balance - $payment->amount,
+                    'description' => "خرید کارت هدیه {$amount} دلاری و کسر مبغ از کیف پول",
+
+                    'payment_id' => $payment->id,
+                    'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
+                ]);
+                if (isset($invoice->service_id)) {
+                    $service = $invoice->service;
+                    $payment_amount = $service->amount;
+                } else {
+                    $payment_amount = $invoice->service_id_custom;
+                }
+
+                $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
+                return Response::json(['voucher' => $voucher, 'payment_amount' => $payment_amount, 'status' => true]);
 
 
-        } else {
-            $voucher->delete();
-            $financeTransaction->update([
-                'user_id' => $user->id,
-                'voucher_id' => null,
-                'amount' => $payment->amount,
-                'type' => "deposit",
-                "creadit_balance" => $balance + $payment->amount,
-                'description' => 'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید',
-                'payment_id' => $payment->id,
-                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
-
-            ]);
-            $message = "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید" ;
-            $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
-            $invoice->update(['status' => 'finished','description'=>'پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید']);
-            return redirect()->route('panel.purchase.view')->with(['success' => "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد."]);
+            } else {
+                $voucher->delete();
+                $message = "پرداخت با موفقیت انجام شد به دلیل عدم ارتباط با پرفکت مانی مبلغ کیف پول شما افزایش داده شد و شما میتوانید در یک ساعت آینده از کیف پول خود ووچر خودرا تهیه کنید";
+                $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
+                return Response::json(['status' => false]);
+            }
+        } catch (\Exception $e) {
+            return Response::json(['status' => false]);
         }
-
     }
 
     public function walletCharging(Request $request)
@@ -469,7 +481,7 @@ class PanelController extends Controller
 
     public function walletChargingPreview(WalletChargingRequest $request)
     {
-        $user=Auth::user();
+        $user = Auth::user();
         $inputs = $request->all();
         $payment = Payment::create(
             [
@@ -481,7 +493,7 @@ class PanelController extends Controller
         $inputs['orderID'] = $payment->id + Payment::transactionNumber;
         session()->put('payment', $payment->id);
 
-        return view("Panel.RechargeWallet.FinalApproval", compact('inputs','balance'));
+        return view("Panel.RechargeWallet.FinalApproval", compact('inputs', 'balance'));
     }
 
     public function walletChargingStore(WalletChargingRequest $request)
@@ -500,7 +512,7 @@ class PanelController extends Controller
             $inputs['status'] = 'requested';
             $inputs['bank_id'] = $bank->id;
             $inputs['user_id'] = $user->id;
-            $inputs['description'] = ' افزایش مبلغ کیف پول '.$bank->name;
+            $inputs['description'] = ' افزایش مبلغ کیف پول ' . $bank->name;
             $invoice = Invoice::create($inputs);
 
 
@@ -514,7 +526,7 @@ class PanelController extends Controller
 
             session()->put('payment', $payment->id);
             session()->put('invoice', $invoice->id);
-           $payment->update(
+            $payment->update(
                 [
                     'bank_id' => $bank->id,
                     'amount' => $inputs['price'],
@@ -525,7 +537,7 @@ class PanelController extends Controller
                 'user_id' => $user->id,
                 'amount' => $payment->amount,
                 'type' => "bank",
-                "creadit_balance" => $balance ,
+                "creadit_balance" => $balance,
                 'description' => " ارتباط با بانک $bank->name",
                 'payment_id' => $payment->id,
             ]);
@@ -533,8 +545,8 @@ class PanelController extends Controller
 
             $status = $objBank->payment();
             if (!$status) {
-                $invoice->update(['status' => 'failed','description'=>"به دلیل عدم ارتباط با بانک $bank->name شارژ کیف پول انجام نشد "]);
-                $financeTransaction->update(['description'=>"به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ",'status'=>'fail']);
+                $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name شارژ کیف پول انجام نشد "]);
+                $financeTransaction->update(['description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ", 'status' => 'fail']);
 
                 return redirect()->route('panel.index')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
             }
@@ -585,8 +597,8 @@ class PanelController extends Controller
                     'state' => 'failed'
 
                 ]);
-            $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')),'status'=>'fail']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
 
             return redirect()->route('panel.index')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
         }
@@ -594,8 +606,8 @@ class PanelController extends Controller
 
         $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
         if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            $invoice->update(['status' => 'failed','description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-            $financeTransaction->update(['description'=>' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price),'status'=>'fail']);
+            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
 
             Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
                 'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
