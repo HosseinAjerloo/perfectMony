@@ -3,6 +3,7 @@
 use App\Models\Doller;
 use App\Models\File;
 use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
@@ -98,31 +99,18 @@ Route::fallback(function () {
 });
 
 Route::get('test',function(){
-//
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), 1);
-//    if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
-//
-//        dd($PMeVoucher);
-//    }
+        $bank=\App\Models\Bank::find(3);
+    $objBank = new $bank->class;
+
+    $objBank->setOrderID(6741817468768);
+    $objBank->setBankUrl($bank->url);
+    $objBank->setTerminalId($bank->terminal_id);
+    $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
+
+    $status = $objBank->payment();
+    dd($status);
 
 
-
-   $data= Http::timeout('30')->withoutVerifying()->get('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
-   dd($data);
-    // searching for hidden fields
-    if (!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $data, $result, PREG_SET_ORDER)) {
-        return false;
-    }
-
-    // putting data to array
-    $array = [];
-
-    foreach ($result as $item) {
-        $array[$item[1]] = $item[2];
-    }
-
-    return $array;
 
 
 });
