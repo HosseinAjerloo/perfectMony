@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        set_time_limit(30);
+//        set_time_limit(30);
 
     }
 }
