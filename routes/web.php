@@ -99,5 +99,28 @@ Route::fallback(function () {
 
 Route::get('test',function(){
 
+    $account_id="65049907";
+    $PassPhrase='hr_hon4774';
+    $response=Http::timeout(120)->get('https://perfectmoney.is/acct/balance.asp?AccountID={$this->AccountID}&PassPhrase={$this->PassPhrase}');
+        dd($response);
+
+        // searching for hidden fields
+        if (!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $data, $result, PREG_SET_ORDER)) {
+            return false;
+        }
+
+        // putting data to array
+        $array = [];
+
+        foreach ($result as $item) {
+            $array[$item[1]] = $item[2];
+        }
+
+        if ($account == null) {
+            return $array;
+        }
+
+        return $array[$account] ?? false;
+
 });
 
