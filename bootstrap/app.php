@@ -21,8 +21,5 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        if ($exceptions instanceof HttpResponseException && $exceptions->getResponse()->getStatusCode() == Response::HTTP_GATEWAY_TIMEOUT) {
-            dd('hi');
-            return redirect()->route('custom_error_page');
-        }
+
     })->create();
