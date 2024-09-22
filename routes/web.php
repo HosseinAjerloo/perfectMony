@@ -101,7 +101,7 @@ Route::get('test',function(){
 
     $account_id="65049907";
     $PassPhrase='hr_hon4774';
-    $response=Http::timeout(10)->get('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
+    $response=Http::timeout(2)->get('https://perfectmoney.is/acct/balance.asp?AccountID=65049907&PassPhrase=hr_hon4774');
 
 
 
