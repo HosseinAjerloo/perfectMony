@@ -29,6 +29,7 @@ class TicketController extends Controller
             if ($ticket->user->type != 'admin') {
                 $ticket->loginAnotherUser = route('panel.admin.login-another-user', $ticket->user_id);
             }
+            $ticket->userName=$ticket->user->fullName??'-';
             $ticket->changeStaus=route('panel.admin.tickets.close',$ticket->id);
 
         }

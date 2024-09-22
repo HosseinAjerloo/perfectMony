@@ -82,6 +82,7 @@
                             console.log(response.data.data[i])
                             content += '<tr id="ticket_row" class="py-6 text-black text-sm sm:text-base">' +
                                 '<td class="   text-center py-2">' + response.data.data[i].id + '</td>' +
+                                '<td class="   text-center py-2">' + response.data.data[i].userName + '</td>' +
                                 '<td class="  text-center py-2 cursor-pointer  "><a ' +
                                 ' href="' + response.data.data[i].route + '"' +
                                 ' class="decoration-2 decoration-sky-500 underline underline-offset-8 text-sky-500 ">' + response.data.data[i].subject + '</a>' +
