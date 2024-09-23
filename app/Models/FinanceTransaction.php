@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FinanceTransaction extends Model
 {
@@ -18,6 +19,10 @@ class FinanceTransaction extends Model
     public function voucher()
     {
         return $this->belongsTo(Voucher::class, 'voucher_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function transmission()
     {
@@ -33,5 +38,10 @@ class FinanceTransaction extends Model
             $query->where('status', 'success')->where('user_id', $user->id)->whereNotNull('voucher_id')->whereMonth('created_at', $mount);
         }
     }
+    public function scopeGetFailTransaction(Builder $query,$date)
+    {
+        $query->select('user_id')->distinct()->orderBy('user_id','asc')->whereDate('created_at',">=",$date)->limit(10);
+    }
+
 
 }

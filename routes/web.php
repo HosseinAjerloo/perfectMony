@@ -4,10 +4,13 @@ use App\Models\Doller;
 use App\Models\File;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Services\SmsService\SatiaService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Illuminate\Database\Eloquent\Builder;
 
 
 Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
@@ -99,6 +102,18 @@ Route::fallback(function () {
 });
 
 Route::get('test',function(){
+
+
+
+    $message='باعرض پوزش بابت اختلال پیش آمده سایناارز '.PHP_EOL.
+        'هم اکنون اختلال برطرف شد و شما میتوانید از طریق لینک زیرخرید خودرا انجام دهید'.PHP_EOL
+        .'https://sainaex.ir/purchase';
+\App\Jobs\SendSmsNotification::dispatch($message);
+
+
+
+
+
 
 });
 
