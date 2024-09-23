@@ -48,8 +48,11 @@
                 <button id="send_message" type="button" class="rounded-full border-2 border-sky-500 w-[57px] h-[48px]">
                     <i class="fa-solid fa-paper-plane-top fa-xl text-sky-500 p-1"></i>
                 </button>
-                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2" @if($ticket->status=='closed') disabled @endif placeholder="@if($ticket->status=='closed') تیکت بسته شده است@endif">
-                @if($ticket->status!='closed')
+{{--                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2" @if($ticket->status=='closed') disabled @endif placeholder="@if($ticket->status=='closed') تیکت بسته شده است@endif">--}}
+
+                <textarea id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2  resize-none  " @if($ticket->status=='closed') readonly disabled @endif>@if($ticket->status=='closed') تیکت بسته شده است@endif</textarea>
+
+            @if($ticket->status!='closed')
                     <i class="fa-solid fa-link w-8 h-8 top-4 left-3 absolute cursor-pointer bg-gray-500 z-10 file"></i>
                 @endif
                 <input type="file" class="hidden" id="file" name="file">
@@ -106,6 +109,7 @@
                             '</div>';
                         $('#messages').append(client_new_message);
                         messages.animate({scrollTop: messages.prop("scrollHeight")}, 500);
+                        $('#input_message').css({'height':'auto'})
                     }
                 }
             });
@@ -229,6 +233,16 @@
         }
 
         download();
+    </script>
+
+    <script>
+        document.querySelectorAll('textarea').forEach( element => {
+            element.style.height = `${element.scrollHeight}px`;
+            element.addEventListener('input', event => {
+                event.target.style.height = 'auto';
+                event.target.style.height = `${event.target.scrollHeight}px`;
+            })
+        })
     </script>
 @endsection
 

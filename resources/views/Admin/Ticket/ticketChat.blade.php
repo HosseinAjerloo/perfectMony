@@ -43,13 +43,14 @@
 
         </div>
 
-        <div class="relative">
+        <div class="relative ">
             <label class="p-2 flex justify-between">
                 <button id="send_message" type="button" class="rounded-full border-2 border-sky-500 w-[57px] h-[48px]">
                     <i class="fa-solid fa-paper-plane-top fa-xl text-sky-500 p-1"></i>
                 </button>
-                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2">
-                <i class="fa-solid fa-link w-8 h-8 top-4 left-3 absolute cursor-pointer bg-gray-500 z-10 file"></i>
+{{--                <input id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2 p-2">--}}
+                <textarea id="input_message" type="text" class="rounded-lg bg-gray-500 w-full mr-2  resize-none"></textarea>
+                <i class="fa-solid fa-link w-8 h-8 top-4 left-3 absolute cursor-pointer bg-transparent z-10 file"></i>
                 <input type="file" class="hidden" id="file" name="file">
                 {{--                <form action="{{route('test')}}" method="post" enctype="multipart/form-data">--}}
                 {{--                    @csrf--}}
@@ -102,6 +103,7 @@
                             '<span class="text-xs text-gray-500">' + response.data.jalali_date + '</span>' +
                             '</div>';
                         $('#messages').append(client_new_message);
+                        $('#input_message').css({'height':'auto'})
                         messages.animate({scrollTop: messages.prop("scrollHeight")}, 500);
                     }
                 }
@@ -225,6 +227,15 @@
         }
 
         download();
+    </script>
+    <script>
+        document.querySelectorAll('textarea').forEach( element => {
+            element.style.height = `${element.scrollHeight}px`;
+            element.addEventListener('input', event => {
+                event.target.style.height = 'auto';
+                event.target.style.height = `${event.target.scrollHeight}px`;
+            })
+        })
     </script>
 @endsection
 
