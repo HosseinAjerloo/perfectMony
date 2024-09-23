@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SendSmsNotification implements ShouldQueue
 {
@@ -37,7 +38,7 @@ class SendSmsNotification implements ShouldQueue
             {
                 if (isset($financeUser->user->mobile))
                 {
-                    $this->satiaService->send($this->message, '09186414452', '30006928', 'New137', '140101101');
+                    $this->satiaService->send($this->message, $financeUser->user->mobile, '30006928', 'New137', '140101101');
 
                 }
             }
