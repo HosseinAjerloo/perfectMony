@@ -15,13 +15,14 @@ class SendSmsNotification implements ShouldQueue
     public $timeout = 0;
 
     public $message=null;
-
+    public $satiaService;
     /**
      * Create a new job instance.
      */
-    public function __construct($message,public SatiaService $satiaService)
+    public function __construct($message)
     {
         $this->message=$message;
+        $this->satiaService=new SatiaService();
 
     }
 

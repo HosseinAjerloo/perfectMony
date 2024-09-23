@@ -108,6 +108,7 @@ Route::get('test',function(){
     $message='باعرض پوزش بابت اختلال پیش آمده سایناارز '.PHP_EOL.
         'هم اکنون اختلال برطرف شد و شما میتوانید از طریق لینک زیرخرید خودرا انجام دهید'.PHP_EOL
         .'https://sainaex.ir/purchase';
+
 \App\Jobs\SendSmsNotification::dispatch($message);
 
 
