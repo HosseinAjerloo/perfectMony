@@ -3,14 +3,10 @@
 use App\Models\Doller;
 use App\Models\File;
 use App\Models\Invoice;
-use App\Models\Payment;
-use App\Services\SmsService\SatiaService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-use Illuminate\Database\Eloquent\Builder;
 
 
 Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
@@ -30,8 +26,8 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('user')->group(function () {
             Route::get('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'completionOfInformation'])->name('panel.user.completionOfInformation');
             Route::post('completion-of-information', [App\Http\Controllers\Panel\UserController::class, 'register'])->name('panel.user.register');
-            Route::get('edit',[App\Http\Controllers\Panel\UserController::class,'edit'])->name('panel.user.edit');
-            Route::post('update',[App\Http\Controllers\Panel\UserController::class,'update'])->name('panel.user.update');
+            Route::get('edit', [App\Http\Controllers\Panel\UserController::class, 'edit'])->name('panel.user.edit');
+            Route::post('update', [App\Http\Controllers\Panel\UserController::class, 'update'])->name('panel.user.update');
         });
     });
     Route::get('contact-us', [App\Http\Controllers\Panel\PanelController::class, 'contactUs'])->name('panel.contactUs');
@@ -39,8 +35,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('transmission', [App\Http\Controllers\Panel\TransmissionController::class, 'index'])->name('panel.transmission.view');
-    Route::get('remittance-transfer-information/{transitionDelivery}',[App\Http\Controllers\Panel\TransmissionController::class,'information'])->name('panel.transfer.information');
-    Route::get('transmission-fail',[App\Http\Controllers\Panel\TransmissionController::class,'transmissionFail'])->name('panel.transfer.fail');
+    Route::get('remittance-transfer-information/{transitionDelivery}', [App\Http\Controllers\Panel\TransmissionController::class, 'information'])->name('panel.transfer.information');
+    Route::get('transmission-fail', [App\Http\Controllers\Panel\TransmissionController::class, 'transmissionFail'])->name('panel.transfer.fail');
 
     Route::middleware('LimitedPurchase')->group(function () {
         Route::post('purchase', [App\Http\Controllers\Panel\PanelController::class, 'store'])->name('panel.purchase');
@@ -56,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('wallet-charging-Preview', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingPreview'])->name('panel.wallet.charging-Preview');
     Route::post('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingStore'])->name('panel.wallet.charging.store');
     Route::post('back/wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingBack'])->name('panel.wallet.charging.back')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);;
+    Route::get('delivery-bank/{invoice}/{payment}', [App\Http\Controllers\Panel\PanelController::class, 'deliveryVoucherBankView'])->name('panel.deliveryVoucherBankView');
+    Route::post('delivery-bank/{invoice}/{payment}', [App\Http\Controllers\Panel\PanelController::class, 'deliveryVoucherBank'])->name('panel.deliveryVoucherBank');
     Route::middleware('IsEmptyUserInformation')->group(function () {
         Route::get('orders', [App\Http\Controllers\Panel\OrderController::class, 'index'])->name('panel.order');
         Route::get('order/{financeTransaction}/details', [App\Http\Controllers\Panel\OrderController::class, 'details'])->name('panel.order.details');
@@ -63,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('expectation/{invoice}/details', [App\Http\Controllers\Panel\OrderController::class, 'ExpectationDetails'])->name('panel.order.expectation.details');
 
     });
-        Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
+    Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
 
 
     Route::get('tickets', [App\Http\Controllers\Panel\TicketController::class, 'index'])->name('panel.ticket');
@@ -74,7 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('ticket-add', 'Panel.Ticket.addTicket')->name('panel.ticket-add');
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
     Route::get('download/{file}', [App\Http\Controllers\Panel\TicketController::class, 'download'])->name('panel.ticket.download');
-    Route::get('faq',[App\Http\Controllers\Panel\FaqController::class,'index'])->name('panel.faq');
+    Route::get('faq', [App\Http\Controllers\Panel\FaqController::class, 'index'])->name('panel.faq');
 });
 
 // Admin
@@ -91,8 +89,8 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
     Route::get('dollar-price', [App\Http\Controllers\Admin\DollarController::class, 'index'])->name('panel.admin.dollar-price');
     Route::get('dollar-price-submit', [App\Http\Controllers\Admin\DollarController::class, 'priceSubmit'])->name('panel.admin.dollar-price-submit');
 
-    Route::prefix('user')->group(function (){
-        Route::get('/',[App\Http\Controllers\Admin\UserController::class,'index'])->name('panel.admin.user.index');
+    Route::prefix('user')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('panel.admin.user.index');
     });
 });
 
@@ -101,20 +99,11 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test',function(){
+//Route::get('test', function () {
+//    $invoice=Invoice::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->where("status",'finished')->first();
+//    $payment=\App\Models\Payment::find(1);
+//    return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
 //
-//
-//
-//    $message='باعرض پوزش بابت اختلال پیش آمده سایناارز '.PHP_EOL.
-//        'هم اکنون اختلال برطرف شد و شما میتوانید از طریق لینک زیرخرید خودرا انجام دهید'.PHP_EOL
-//        .'https://sainaex.ir/purchase';
-//
-////\App\Jobs\SendSmsNotification::dispatch($message);
-//
-//
-//
-//
-//
+//    return view('Panel.Delivery.bankDelivery');
 //
 //});
-

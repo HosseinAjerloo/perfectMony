@@ -2,20 +2,20 @@
 
 namespace App\Http\Traits;
 
-use App\Models\Doller;
-use App\Models\FinanceTransaction;
+
 use App\Models\Invoice;
-use App\Models\Service;
 use App\Models\Voucher;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 trait HasConfig
 {
     protected $PMeVoucher = null;
+    protected $redirectTo = 'panel.purchase.view';
+    protected $message;
 
+    protected $purchasePermitStatus = false;
 
 
     private function validationFiledUser()
@@ -50,7 +50,34 @@ trait HasConfig
 
     }
 
+    protected function purchasePermit($invoice, $payment)
+    {
+        $user = Auth::user();
+        $balance = Auth::user()->getCreaditBalance();
+        $invoice=Invoice::where('id',$invoice->id)->where('user_id',$user->id)->where("status",'finished')->first();
+        $voucher=$invoice->voucher;
 
+        if ($voucher) {
+            $this->message = ['error' => "این سفارش قبلا توسط شما خریداری شده است لطفا جهت مشاهده سفارش از منوی داشبورد به قسمت سفارشات مراجعه فرمایید. "];
+            $this->purchasePermitStatus = true;
+            return $this;
+        }
+
+        if ($balance < $payment->amount) {
+            $this->message = ['error' => "شارژ کیف پول  شما جهت خریداری کارت هدیه کافی نمیباشد لطفا کیف پول خود را شارژ فرمایید و مجددا خرید فرمایید.  "];
+            $this->purchasePermitStatus = true;
+            return $this;
+        }
+        return $this;
+
+
+
+    }
+
+    protected function redirectFunction()
+    {
+        return redirect()->route($this->redirectTo)->withErrors($this->message);
+    }
 
 
 }
