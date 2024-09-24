@@ -373,28 +373,28 @@ class PanelController extends Controller
 
         $invoice->update(['status' => 'finished']);
 
-        return redirect()->route('panel.deliveryVoucherBankView',[$invoice,$payment]);
+        return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
 
     }
 
     public function deliveryVoucherBankView(Request $request, Invoice $invoice, Payment $payment)
     {
-        $user = Auth::user();
-        $balance = Auth::user()->getCreaditBalance();
-        $voucher = Voucher::where('invoice_id', $invoice->id)->where('user_id', $user->id)->first();
-        if ($voucher)
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => "شما قبلا کارت هدیه را دریافت کرده اید لطفا کارت هدیه جدید خود را مجدد خرید فرمایید."]);
-
-        if ($balance < $payment->amount)
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => "شارژ کیف پول  شما جهت خریداری کارت هدیه کافی نمیباشد لطفا کیف پول خود را شارژ فرمایید و مجددا خرید فرمایید.  "]);
-
+        $validationPurchasePermit = $this->purchasePermit($invoice, $payment);
+        if ($validationPurchasePermit->purchasePermitStatus) {
+            return $validationPurchasePermit->redirectFunction();
+        }
         return view('Panel.Delivery.bankDelivery', compact('invoice', 'payment'));
     }
 
     public function deliveryVoucherBank(Request $request, Invoice $invoice, Payment $payment, SatiaService $satiaService)
     {
-        dd('ih');
+
+
         try {
+            $validationPurchasePermit = $this->purchasePermit($invoice, $payment);
+            if ($validationPurchasePermit->purchasePermitStatus) {
+                return $validationPurchasePermit->redirectFunction();
+            }
             $balance = Auth::user()->getCreaditBalance();
             $dollar = Doller::orderBy('id', 'desc')->first();
             $user = Auth::user();
@@ -443,7 +443,6 @@ class PanelController extends Controller
                     'type' => "withdrawal",
                     "creadit_balance" => $balance - $payment->amount,
                     'description' => "خرید کارت هدیه {$amount} دلاری و کسر مبغ از کیف پول",
-
                     'payment_id' => $payment->id,
                     'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
                 ]);

@@ -99,8 +99,12 @@ Route::fallback(function () {
     abort(404);
 });
 
-Route::get('test', function () {
-    return view('Panel.Delivery.bankDelivery');
-
-});
+//Route::get('test', function () {
+//    $invoice=Invoice::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->where("status",'finished')->first();
+//    $payment=\App\Models\Payment::find(1);
+//    return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
+//
+//    return view('Panel.Delivery.bankDelivery');
+//
+//});
 
