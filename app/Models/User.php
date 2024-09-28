@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -86,6 +87,11 @@ class User extends Authenticatable
                 else
                     return $this->mobile;
             });
+    }
+
+    public function scopeSearch(Builder $query,$search)
+    {
+      return  $query->where('name','like',"%".$search['search']."%")->orWhere('family','like',"%".$search['search']."%")->orWhere('mobile','like',"%".$search['search']."%");
     }
 
 }

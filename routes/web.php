@@ -91,6 +91,8 @@ Route::prefix('admin')->middleware(['auth', 'AdminLogin'])->group(function () {
 
     Route::prefix('user')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('panel.admin.user.index');
+        Route::get('inactive/{user}', [App\Http\Controllers\Admin\UserController::class, 'inactive'])->name('panel.admin.user.inactive');
+        Route::post('search', [App\Http\Controllers\Admin\UserController::class, 'search'])->name('panel.admin.user.search');
     });
 });
 

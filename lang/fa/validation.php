@@ -212,7 +212,8 @@ return [
         'transmission'=>"آدرس حساب مقصد",
         'subject'=>"عنوان تیکت",
         'message'=>'متن پیام',
-        'image'=>'فابل'
+        'image'=>'فابل',
+        'search'=>'عبارت جستجو'
     ],
 
 ];

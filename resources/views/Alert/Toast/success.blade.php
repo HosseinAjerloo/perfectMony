@@ -1,5 +1,5 @@
 @if(session()->has('success'))
-    <section class="container p-2 absolute space-y-2 max-w-max">
+    <section class="container p-2 absolute space-y-2 max-w-max z-[1000]">
         <div id="toast-success"
              class="toast transition-all duration-300 transform flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
              role="alert">

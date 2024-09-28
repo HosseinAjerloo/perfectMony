@@ -11,7 +11,7 @@
 @endsection
 
 @section('container')
-    @foreach($users->items() as $user)
+    @foreach($users as $user)
         <section class="flex justify-center  flex-col px-4 mt-3">
             <article
                 class="pb-8 space-y-3 flex-wrap rounded-md text-black  bg-white  p-2 ring-8 ring-offset-8 ring-gray-800 flex items-center justify-between ">
@@ -73,70 +73,70 @@
 
 
 
-    <section class="min-w-full flex justify-center items-center space-x-reverse space-x-2 px-2 flex-wrap">
+{{--    <section class="min-w-full flex justify-center items-center space-x-reverse space-x-2 px-2 flex-wrap">--}}
 
-        @if($users->currentPage()>1)
+{{--        @if($users->currentPage()>1)--}}
 
-            @for($j=$users->currentPage()-5;$j<$users->currentPage();$j++)
-                @if($j!=$users->currentPage() and $j>0)
-                    <a href="{{$users->url($j)}}"
-                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$j) @endif">
-                        {{$j}}
-                    </a>
-                @endif
+{{--            @for($j=$users->currentPage()-5;$j<$users->currentPage();$j++)--}}
+{{--                @if($j!=$users->currentPage() and $j>0)--}}
+{{--                    <a href="{{$users->url($j)}}"--}}
+{{--                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$j) @endif">--}}
+{{--                        {{$j}}--}}
+{{--                    </a>--}}
+{{--                @endif--}}
 
-            @endfor
-            <div
-                class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5">
-                ...
-            </div>
-        @endif
-        @if($users->hasPages())
-            @for($i=$users->currentPage();$i<$users->currentPage()+3;$i++)
+{{--            @endfor--}}
+{{--            <div--}}
+{{--                class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5">--}}
+{{--                ...--}}
+{{--            </div>--}}
+{{--        @endif--}}
+{{--        @if($users->hasPages())--}}
+{{--            @for($i=$users->currentPage();$i<$users->currentPage()+3;$i++)--}}
 
-                @if($users->lastPage()>$i)
-                    <a href="{{$users->url($i)}}"
-                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$i)selectPage @endif">
-                        {{$i}}
-                    </a>
-                @endif
+{{--                @if($users->lastPage()>$i)--}}
+{{--                    <a href="{{$users->url($i)}}"--}}
+{{--                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$i)selectPage @endif">--}}
+{{--                        {{$i}}--}}
+{{--                    </a>--}}
+{{--                @endif--}}
 
-            @endfor
-        @endif
-        @if($users->hasMorePages() )
-            <div
-                class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5">
-                ...
-            </div>
-        @endif
+{{--            @endfor--}}
+{{--        @endif--}}
+{{--        @if($users->hasMorePages() )--}}
+{{--            <div--}}
+{{--                class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5">--}}
+{{--                ...--}}
+{{--            </div>--}}
+{{--        @endif--}}
 
-        @if($users->hasMorePages() and $users->currentPage()>=3)
-            @for($i=$users->currentPage()+4;$i<$users->currentPage()+6;$i++)
-                @if($users->lastPage()>=$i)
-                    <a href="{{$users->url($i)}}"
-                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$i)selectPage @endif">
-                        {{$i}}
-                    </a>
-                @endif
-            @endfor
-        @endif
-
-
-
-        {{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 selectPage">--}}
-        {{--            3--}}
-        {{--        </a>--}}
+{{--        @if($users->hasMorePages() and $users->currentPage()>=3)--}}
+{{--            @for($i=$users->currentPage()+4;$i<$users->currentPage()+6;$i++)--}}
+{{--                @if($users->lastPage()>=$i)--}}
+{{--                    <a href="{{$users->url($i)}}"--}}
+{{--                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$i)selectPage @endif">--}}
+{{--                        {{$i}}--}}
+{{--                    </a>--}}
+{{--                @endif--}}
+{{--            @endfor--}}
+{{--        @endif--}}
 
 
-        {{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">--}}
-        {{--            12--}}
-        {{--        </a>--}}
-        {{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 selectPage">--}}
-        {{--            13--}}
-        {{--        </a>--}}
-        {{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">--}}
-        {{--           بعدی--}}
-        {{--        </a>--}}
-    </section>
+
+{{--        --}}{{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 selectPage">--}}
+{{--        --}}{{--            3--}}
+{{--        --}}{{--        </a>--}}
+
+
+{{--        --}}{{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">--}}
+{{--        --}}{{--            12--}}
+{{--        --}}{{--        </a>--}}
+{{--        --}}{{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 selectPage">--}}
+{{--        --}}{{--            13--}}
+{{--        --}}{{--        </a>--}}
+{{--        --}}{{--        <a class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">--}}
+{{--        --}}{{--           بعدی--}}
+{{--        --}}{{--        </a>--}}
+{{--    </section>--}}
 
 @endsection
