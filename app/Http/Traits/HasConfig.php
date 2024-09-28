@@ -18,9 +18,15 @@ trait HasConfig
     protected $purchasePermitStatus = false;
 
 
-    private function validationFiledUser()
+    public function validationFiledUser()
     {
-        if ($user = Auth::user()) {
+        $classOpp = get_class();
+        if (isset($classOpp) and $classOpp == 'App\Models\User') {
+            $user = $this;
+        } else {
+            $user = Auth::user();
+        }
+        if ($user) {
             if (empty($user->name) || empty($user->family) || empty($user->national_code) || empty($user->mobile) || empty($user->tel) || empty($user->address) || empty($user->email)) {
                 return true;
             } else return false;
@@ -54,8 +60,8 @@ trait HasConfig
     {
         $user = Auth::user();
         $balance = Auth::user()->getCreaditBalance();
-        $invoice=Invoice::where('id',$invoice->id)->where('user_id',$user->id)->where("status",'finished')->first();
-        $voucher=$invoice->voucher;
+        $invoice = Invoice::where('id', $invoice->id)->where('user_id', $user->id)->where("status", 'finished')->first();
+        $voucher = $invoice->voucher;
 
         if ($voucher) {
             $this->message = ['error' => "این سفارش قبلا توسط شما خریداری شده است لطفا جهت مشاهده سفارش از منوی داشبورد به قسمت سفارشات مراجعه فرمایید. "];
@@ -69,7 +75,6 @@ trait HasConfig
             return $this;
         }
         return $this;
-
 
 
     }

@@ -54,5 +54,11 @@ body{
         /*from{ background-color: rgb(244 63 94 / var(--tw-bg-opacity));color: black}*/
         /*to{background-color: #ffffff ;color: black}*/
     }
+    .selectPage{
+        @apply text-sky-500 bg-white
+    }
+    .paginate{
+        @apply bg-sky-500
+    }
 
 }
