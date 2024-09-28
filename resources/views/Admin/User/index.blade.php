@@ -94,7 +94,7 @@
         @if($users->hasPages())
             @for($i=$users->currentPage();$i<$users->currentPage()+3;$i++)
 
-                @if($users->lastPage()>$i)
+                @if($users->lastPage()>=$i)
                     <a href="{{$users->url($i)}}"
                        class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-5 @if($users->currentPage()==$i)selectPage @endif">
                         {{$i}}
