@@ -65,21 +65,21 @@
 
 
 
-    <section class="min-w-full flex justify-center items-center space-x-reverse space-x-2 px-2 rtl">
+    <section class="min-w-full flex justify-center items-center space-x-reverse space-x-2 px-2 flex-wrap">
 
         @if($users->currentPage()>1)
 
             @for($j=$users->currentPage()-5;$j<$users->currentPage();$j++)
                 @if($j!=$users->currentPage() and $j>0)
                     <a href="{{$users->url($j)}}"
-                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300  @if($users->currentPage()==$j) @endif">
+                       class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-3 @if($users->currentPage()==$j) @endif">
                         {{$j}}
                     </a>
                 @endif
 
             @endfor
                     <div
-                        class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">
+                        class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-3">
                         ...
                     </div>
                 @endif
@@ -88,7 +88,7 @@
 
                         @if($users->lastPage()>$i)
                             <a href="{{$users->url($i)}}"
-                               class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 @if($users->currentPage()==$i)selectPage @endif">
+                               class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-3 @if($users->currentPage()==$i)selectPage @endif">
                                 {{$i}}
                             </a>
                         @endif
@@ -97,7 +97,7 @@
                 @endif
                 @if($users->hasMorePages() )
                     <div
-                        class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300">
+                        class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-3">
                         ...
                     </div>
                 @endif
@@ -106,7 +106,7 @@
                     @for($i=$users->currentPage()+4;$i<$users->currentPage()+6;$i++)
                         @if($users->lastPage()>=$i)
                             <a href="{{$users->url($i)}}"
-                               class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 @if($users->currentPage()==$i)selectPage @endif">
+                               class="w-8 h-8 rounded-sm  flex items-center justify-center font-bold shadow shadow-emerald-300 mt-3 @if($users->currentPage()==$i)selectPage @endif">
                                 {{$i}}
                             </a>
                         @endif
