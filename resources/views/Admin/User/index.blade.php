@@ -52,9 +52,10 @@
                 <div class="min-w-full h-[1px] rounded-md bg-gray-300"></div>
                 <div
                     class="min-w-full flex items-center space-x-2 space-x-reverse text-sm text-white justify-center sm:justify-normal ">
-                    <a href="{{route('panel.admin.login-another-user',$user->id)}}"
-                       class="flex items-center justify-center px-4 py-1.5 bg-sky-500 rounded-md shadow-amber-300 shadow-2xl">وارید
-                        شوید</a>
+                    <a href="@if($user->type!='admin') {{route('panel.admin.login-another-user',$user->id)}} @endif"
+                       class="flex items-center justify-center px-4 py-1.5 bg-sky-500 rounded-md shadow-amber-300 shadow-2xl">
+                        @if($user->type!='admin') واردشوید @else کاربرادمین@endif
+                        </a>
                     <a href="{{route('panel.admin.user.inactive',$user->id)}}"
                        class="flex items-center justify-center px-4 py-1.5  rounded-md shadow-amber-300 shadow-2xl  @if($user->is_active) bg-rose-500  @else bg-emerald-400 @endif ">
                         @if($user->is_active)
