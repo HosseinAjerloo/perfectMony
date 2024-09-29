@@ -52,7 +52,7 @@
                 <div class="min-w-full h-[1px] rounded-md bg-gray-300"></div>
                 <div
                     class="min-w-full flex items-center space-x-2 space-x-reverse text-sm text-white justify-center sm:justify-normal ">
-                    <a href="@if($user->type!='admin') {{route('panel.admin.login-another-user',$user->id)}} @endif"
+                    <a href="@if($user->type!='admin') {{route('panel.admin.login-another-user',$user->id)}} @else # @endif"
                        class="flex items-center justify-center px-4 py-1.5 bg-sky-500 rounded-md shadow-amber-300 shadow-2xl">
                         @if($user->type!='admin') واردشوید @else کاربرادمین@endif
                         </a>
