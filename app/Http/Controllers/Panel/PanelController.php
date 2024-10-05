@@ -303,77 +303,83 @@ class PanelController extends Controller
 //
     public function backPurchaseThroughTheBank(Request $request)
     {
-        $satiaService = new SatiaService();
+        try {
+            $satiaService = new SatiaService();
 
-        $dollar = Doller::orderBy('id', 'desc')->first();
-        $user = Auth::user();
-        $balance = Auth::user()->getCreaditBalance();
-        $inputs = $request->all();
-        $payment = Payment::find(session()->get('payment'));
-        $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
-        $bank = $payment->bank;
-        $objBank = new $bank->class;
-        Log::channel('bankLog')->emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
-            'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
-            'user ID :' . $user->id
-            . PHP_EOL
-        );
-        $invoice = $payment->invoice;
-        if (!$objBank->backBank()) {
-            $payment->update(
-                [
-                    'RefNum' => null,
-                    'ResNum' => $inputs['ResNum'],
-                    'state' => 'failed'
-
-                ]);
-            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
-
-            $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanTransactionStatus($request->input('Status')) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
-            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
-
-            return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-        }
-        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-
-        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
-        if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
-
-            $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanVerifyTransaction($back_price) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
-
-            $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
-            Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
-                'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
-                PHP_EOL .
-                'user Id: ' . $user->id
+            $dollar = Doller::orderBy('id', 'desc')->first();
+            $user = Auth::user();
+            $balance = Auth::user()->getCreaditBalance();
+            $inputs = $request->all();
+            $payment = Payment::find(session()->get('payment'));
+            $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
+            $bank = $payment->bank;
+            $objBank = new $bank->class;
+            Log::channel('bankLog')->emergency(PHP_EOL . "Return from the bank and the bank's response to the purchase of the service " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+                'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
+                'user ID :' . $user->id
                 . PHP_EOL
             );
-            return redirect()->route('panel.error', $payment->id);
-        }
+            $invoice = $payment->invoice;
+            if (!$objBank->backBank()) {
+                $payment->update(
+                    [
+                        'RefNum' => null,
+                        'ResNum' => $inputs['ResNum'],
+                        'state' => 'failed'
 
-        $payment->update(
-            [
-                'RefNum' => $inputs['RefNum'],
-                'ResNum' => $inputs['ResNum'],
-                'state' => 'finished'
+                    ]);
+                $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+                $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
+
+                $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanTransactionStatus($request->input('Status')) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
+                $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
+
+                return redirect()->route('panel.purchase.view')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            }
+            $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+            $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
+            if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+                $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+                $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
+
+                $bankErrorMessage = "درگاه بانک سامان تراکنش شمارا به دلیل " . $objBank->samanVerifyTransaction($back_price) . " ناموفق اعلام کرد باتشکر سایناارز" . PHP_EOL . 'پشتیبانی بانک سامان' . PHP_EOL . '021-6422';
+
+                $satiaService->send($bankErrorMessage, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
+                Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction Purchase Voucher : " . json_encode($request->all()) . PHP_EOL .
+                    'Bank message: ' . $objBank->samanVerifyTransaction($back_price) .
+                    PHP_EOL .
+                    'user Id: ' . $user->id
+                    . PHP_EOL
+                );
+                return redirect()->route('panel.error', $payment->id);
+            }
+
+            $payment->update(
+                [
+                    'RefNum' => $inputs['RefNum'],
+                    'ResNum' => $inputs['ResNum'],
+                    'state' => 'finished'
+                ]);
+
+            $financeTransaction->update([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "deposit",
+                "creadit_balance" => $balance + $payment->amount,
+                'description' => ' افزایش کیف پول',
+                'payment_id' => $payment->id,
+                'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
             ]);
 
-        $financeTransaction->update([
-            'user_id' => $user->id,
-            'amount' => $payment->amount,
-            'type' => "deposit",
-            "creadit_balance" => $balance + $payment->amount,
-            'description' => ' افزایش کیف پول',
-            'payment_id' => $payment->id,
-            'time_price_of_dollars' => $dollar->DollarRateWithAddedValue()
-        ]);
+            $invoice->update(['status' => 'finished']);
 
-        $invoice->update(['status' => 'finished']);
+            return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
+        } catch (\Exception $e) {
+            Log::emergency("panel Controller :" . $e->getMessage());
+            return redirect()->route('panel.purchase.view')->withErrors(['error' => "خطایی رخ داد از صبر و شکیبایی شما مچکریم لطفا جهت پیگیری در خواست تیکت ثبت کنید"]);
 
-        return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
+        }
 
     }
 
@@ -574,73 +580,79 @@ class PanelController extends Controller
     public function walletChargingBack(Request $request)
     {
 
+        try {
 
-        $user = Auth::user();
-        $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
-        $inputs = $request->all();
-        $payment = Payment::find(session()->get('payment'));
-        $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
-        $bank = $payment->bank;
-        $objBank = new $bank->class;
-        Log::channel('bankLog')->emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
-            'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
-            'user ID :' . $user->id
-            . PHP_EOL
-        );
-        $invoice = Invoice::find(session()->get('invoice'));
-        if (!$objBank->backBank()) {
-            $payment->update(
-                [
-                    'RefNum' => null,
-                    'ResNum' => $inputs['ResNum'],
-                    'state' => 'failed'
-
-                ]);
-            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
-
-            return redirect()->route('panel.index')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
-        }
-        $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
-
-        $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
-        if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
-            $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
-            $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
-
-            Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
-                'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
-                . PHP_EOL .
+            $user = Auth::user();
+            $lastBalance = $user->financeTransactions()->orderBy('id', 'desc')->first();
+            $inputs = $request->all();
+            $payment = Payment::find(session()->get('payment'));
+            $financeTransaction = FinanceTransaction::find(session()->get('financeTransaction'));
+            $bank = $payment->bank;
+            $objBank = new $bank->class;
+            Log::channel('bankLog')->emergency(PHP_EOL . "Back from the bank and the bank's response to charging the wallet " . PHP_EOL . json_encode($request->all()) . PHP_EOL .
+                'Bank message: ' . PHP_EOL . $objBank->samanTransactionStatus($request->input('Status')) . PHP_EOL .
                 'user ID :' . $user->id
                 . PHP_EOL
             );
-            return redirect()->route('panel.error', $payment->id);
-        }
-        $payment->update(
-            [
-                'RefNum' => $inputs['RefNum'],
-                'ResNum' => $inputs['ResNum'],
-                'state' => 'finished'
+            $invoice = Invoice::find(session()->get('invoice'));
+            if (!$objBank->backBank()) {
+                $payment->update(
+                    [
+                        'RefNum' => null,
+                        'ResNum' => $inputs['ResNum'],
+                        'state' => 'failed'
+
+                    ]);
+                $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+                $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status')), 'status' => 'fail']);
+
+                return redirect()->route('panel.index')->withErrors(['error' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanTransactionStatus($request->input('Status'))]);
+            }
+            $client = new \SoapClient("https://verify.sep.ir/Payments/ReferencePayment.asmx?WSDL");
+
+            $back_price = $client->VerifyTransaction($inputs['RefNum'], $bank->terminal_id);
+            if ($back_price != $payment->amount or Payment::where("order_id", $inputs['ResNum'])->count() > 1) {
+                $invoice->update(['status' => 'failed', 'description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price)]);
+                $financeTransaction->update(['description' => ' پرداخت موفقیت آمیز نبود ' . $objBank->samanVerifyTransaction($back_price), 'status' => 'fail']);
+
+                Log::channel('bankLog')->emergency(PHP_EOL . "Bank Credit VerifyTransaction wallet recharge  : " . json_encode($request->all()) . PHP_EOL .
+                    'Bank message: ' . $objBank->samanVerifyTransaction($back_price)
+                    . PHP_EOL .
+                    'user ID :' . $user->id
+                    . PHP_EOL
+                );
+                return redirect()->route('panel.error', $payment->id);
+            }
+            $payment->update(
+                [
+                    'RefNum' => $inputs['RefNum'],
+                    'ResNum' => $inputs['ResNum'],
+                    'state' => 'finished'
+
+                ]);
+            $invoice->update(['status' => 'finished']);
+            if ($lastBalance) {
+                $amount = $payment->amount + $lastBalance->creadit_balance;
+            } else {
+                $amount = $payment->amount;
+            }
+
+
+            $financeTransaction->update([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "deposit",
+                "creadit_balance" => $amount,
+                'description' => 'افزایش   مبلغ کیف پول',
+                'payment_id' => $payment->id
 
             ]);
-        $invoice->update(['status' => 'finished']);
-        if ($lastBalance) {
-            $amount = $payment->amount + $lastBalance->creadit_balance;
-        } else {
-            $amount = $payment->amount;
+            return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
+        } catch (\Exception $e) {
+            Log::emergency("panel Controller :" . $e->getMessage());
+            return redirect()->route('panel.index')->withErrors(['error' => "خطایی رخ داد از صبر و شکیبایی شما مچکریم لطفا جهت پیگیری در خواست تیکت ثبت کنید"]);
+
         }
-
-
-        $financeTransaction->update([
-            'user_id' => $user->id,
-            'amount' => $payment->amount,
-            'type' => "deposit",
-            "creadit_balance" => $amount,
-            'description' => 'افزایش   مبلغ کیف پول',
-            'payment_id' => $payment->id
-
-        ]);
-        return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
     }
 
     public function error(Request $request, Payment $payment)
