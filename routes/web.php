@@ -103,6 +103,14 @@ Route::fallback(function () {
 });
 
 Route::get('test', function () {
+
+    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+    $balance=$PM->getBalance(env('PAYER_ACCOUNT'));
+    dd($balance);
+//    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), 1);
+    if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+        $this->PMeVoucher = $PMeVoucher;
+    }
 //    $invoice=Invoice::find(1466);
 //    $payment=\App\Models\Payment::find(1837);
 //    $payment->amount=520000;
