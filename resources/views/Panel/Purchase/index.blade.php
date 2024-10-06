@@ -51,7 +51,7 @@
     <article class="space-y-4 flex items-center justify-center flex-col  mx-auto md:w-3/4 lg:w-3/5 xl:w-2/4">
         <div class="flex items-center justify-center space-x-2 space-x-reverse text-center">
             <input type="checkbox" class="accent-yellow-600 Accepting_the_rules">
-            <p class="sm:text-base text-sm  text-center ">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</p>
+            <p class="sm:text-base text-sm  text-center "><a href="{{route('panel.rules')}}" class="text-sky-500 underline underline-offset-8 inline-block decoration-2">شرایط استفاده رو با دقت مطالعه نموده و قبول دارم</a></p>
         </div>
         <article
             class="space-y-4 flex items-center justify-center flex-col md:flex-row md:items-center w-full md:justify-around md:space-y-0 md:mt-16">

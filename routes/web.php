@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
 
     });
     Route::get('delivery', [App\Http\Controllers\Panel\PanelController::class, 'delivery'])->name('panel.delivery');
+    Route::get('rules', [App\Http\Controllers\Panel\PanelController::class, 'rules'])->name('panel.rules');
 
 
     Route::get('tickets', [App\Http\Controllers\Panel\TicketController::class, 'index'])->name('panel.ticket');
@@ -101,11 +102,12 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//    $invoice=Invoice::where('user_id',\Illuminate\Support\Facades\Auth::user()->id)->where("status",'finished')->first();
-//    $payment=\App\Models\Payment::find(1);
-//    return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
-//
-//    return view('Panel.Delivery.bankDelivery');
-//
-//});
+Route::get('test', function () {
+//    $invoice=Invoice::find(1466);
+//    $payment=\App\Models\Payment::find(1837);
+//    $payment->amount=520000;
+//    return view('Panel.Delivery.bankDelivery',compact('invoice','payment'));
+});
+
+
+

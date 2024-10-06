@@ -664,5 +664,10 @@ class PanelController extends Controller
             return redirect()->route('panel.index');
     }
 
+    public function rules()
+    {
+        return view('panel.Rules.index');
+    }
+
 
 }

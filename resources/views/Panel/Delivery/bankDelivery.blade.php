@@ -3,8 +3,16 @@
 @section('message-box')
     <div class="flex items-center justify-center flex-col space-y-3">
         <img src="{{asset('src/images/Group 414.png')}}" alt="" class="w-14 h-14" id="warning-img">
+        <div type="button" class="loading ">
+            <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>
+            درحال ساخت کارت هدیه پرفکت مانی لطفا منتظر بمانید.
+        </div>
         <div class="space-x-3 space-x-reverse">
-            <p class="text-sm text-center sm:text-lg font-bold" id="warning-text">خرید با موفقیت انجام شد</p>
+            <p class="text-sm text-center sm:text-lg font-bold" id="warning-text">مبلغ {{substr($payment->amount,0,strlen($payment->amount)-1)}} هزار تومان به کیف پول شما اضافه شد</p>
+        </div>
+
+        <div class="space-x-3 space-x-reverse">
+            <button class="py-1.5 px-2 bg-sky-500 rounded-md again hidden" disabled onclick="redirect()">مجددا تلاش فرمایید</button>
         </div>
     </div>
 @endsection
@@ -91,6 +99,7 @@
                 method:'POST',
                 url: "{{route('panel.deliveryVoucherBank',[$invoice, $payment])}}",
                 data:dataValue,
+                timeout:60000,
                 success: function(response){
                     if(response.status!='undefined' && response.status)
                     {
@@ -103,12 +112,72 @@
                     else {
                         $("#voucher-pending").removeClass('hidden');
                         $("#voucher-pending").addClass('flex');
-                        $('#warning-text').html('هشدار')
+                        $('#warning-text').html('اتصال به سرور پرفکت مانی با شکست مواجه شد!')
+                        $('.loading').addClass('hidden')
                         $("#warning-img").attr('src',"{{asset('src/images/warning.png')}}")
-                        console.log('not found status');
+                        $(".again").removeClass('hidden');
+                        again();
+                        console.log(response);
                     }
-                }
+                },
+                error: function(error){
+                    $("#voucher-pending").removeClass('hidden');
+                    $("#voucher-pending").addClass('flex');
+                    $('#warning-text').html('اتصال به سرور پرفکت مانی با شکست مواجه شد!')
+                    $('.loading').addClass('hidden')
+                    $("#warning-img").attr('src',"{{asset('src/images/warning.png')}}")
+                    $(".again").removeClass('hidden');
+                    again();
+                },
             });
         }();
+
+
+        var countDownDate = new Date("{{\Carbon\Carbon::now()->toDateTimeString()}}")
+
+        var now = new Date("{{\Carbon\Carbon::now()->subMinutes(2)->toDateTimeString()}}")
+
+
+        // Update the count down every 1 second
+       function again()
+       {
+           var x = setInterval(function () {
+               now.setSeconds(now.getSeconds() + 1)
+
+
+               // Get today's date and time
+
+               // Find the distance between now and the count down date
+               var distance = countDownDate - now;
+               console.log(distance)
+               // Time calculations for days, hours, minutes and seconds
+
+               var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+               var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+               // console.log(minutes)
+               // Display the result in the element with id="demo"
+               var text = '';
+               if (minutes > 0) {
+                   text += 'مدت زمان باقی مانده تا تلاش مجدد ' + minutes + ' دقیقه و ' + seconds + ' ثانیه  '
+               } else {
+                   text = 'مدت زمان باقی مانده تا تلاش مجدد ' + seconds + ' ثانیه  '
+               }
+               document.querySelector(".again").innerHTML = text
+
+               // If the count down is finished, write some text
+               if (distance < 0) {
+                   clearInterval(x);
+                   let resend_btn = document.querySelector(".again")
+                   resend_btn.innerHTML = "ارسال درخواست مجددا";
+                   resend_btn.removeAttribute('disabled')
+               }
+           }, 1000);
+       }
+    </script>
+    <script>
+        function redirect()
+        {
+            window.location.href="{{route('panel.deliveryVoucherBankView',[$invoice, $payment])}}"
+        }
     </script>
 @endsection
