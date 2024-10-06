@@ -99,7 +99,7 @@
                 method:'POST',
                 url: "{{route('panel.deliveryVoucherBank',[$invoice, $payment])}}",
                 data:dataValue,
-                timeout:60000,
+                timeout:20000,
                 success: function(response){
                     if(response.status!='undefined' && response.status)
                     {
