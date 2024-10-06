@@ -84,7 +84,7 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سوابق قابل دسترس می باشد.";
                     $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
@@ -133,7 +133,7 @@ class TransmissionController extends Controller
                             'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                         ]
                     );
-                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سوابق قابل دسترس می باشد.";
                     $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.transfer.information', $transitionDelivery);
 
@@ -337,7 +337,7 @@ class TransmissionController extends Controller
                     'payment_batch_num' => $transition['PAYMENT_BATCH_NUM']
                 ]
             );
-            $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+            $message = "سلام انتقال کارت هدیه انجام شد اطلاعات بیشتر در قسمت سوابق قابل دسترس می باشد.";
             $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
             return redirect()->route('panel.transfer.information', $transitionDelivery);
 

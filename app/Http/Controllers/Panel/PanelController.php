@@ -120,7 +120,7 @@ class PanelController extends Controller
                         $request->session()->put('voucher_id', $voucher->id);
                         $request->session()->put('amount_voucher', $payment_amount);
                     }
-                    $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                    $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سوابق قابل دسترس می باشد.";
                     $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                     return redirect()->route('panel.delivery')->with(['voucher' => $voucher, 'payment_amount' => $payment_amount]);
 
@@ -459,7 +459,7 @@ class PanelController extends Controller
                     $payment_amount = $invoice->service_id_custom;
                 }
 
-                $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سفارشات قابل دسترس می باشد.";
+                $message = "سلام کارت هدیه  شما ایجاد شد اطلاعات بیشتر در قسمت سوابق قابل دسترس می باشد.";
                 $satiaService->send($message, $user->mobile, env('SMS_Number'), env('SMS_Username'), env('SMS_Password'));
                 return Response::json(['voucher' => $voucher, 'payment_amount' => $payment_amount, 'status' => true]);
 
