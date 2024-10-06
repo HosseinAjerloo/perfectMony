@@ -55,12 +55,12 @@
         </article>
     </section>
 
-<section class="flex items-center justify-center px-2 hidden" id="voucher-pending">
-    <div type="button" class="loading flex items-center space-x-3 space-x-reverse" >
-        <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>
-        <span class="text-lg font-bold flex items-center justify-center text-center">لطفا منتظر بمانید و از بروزرسانی و بارگیری مجدد صفحه خودداری فرمایید.</span>
-    </div>
-</section>
+{{--<section class="flex items-center justify-center px-2 hidden" id="voucher-pending">--}}
+{{--    <div type="button" class="loading flex items-center space-x-3 space-x-reverse" >--}}
+{{--        <i class="fas fa-spinner fa-spin   animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></i>--}}
+{{--        <span class="text-lg font-bold flex items-center justify-center text-center">لطفا منتظر بمانید و از بروزرسانی و بارگیری مجدد صفحه خودداری فرمایید.</span>--}}
+{{--    </div>--}}
+{{--</section>--}}
 @endsection
 @section('script-tag')
 
@@ -107,6 +107,8 @@
                         $("#voucher-serial").html(response.voucher.serial)
                         $("#voucher-code").html(response.voucher.code)
                         $("#voucher-amount").html(response.payment_amount)
+                        $(".loading").addClass('hidden')
+                        $(".warning-text").html('کارت هدیه پرفکت مانی بامشخصات ذیل برای شما ایجاد شد')
                         console.log(response);
                     }
                     else {

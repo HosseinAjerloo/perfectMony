@@ -666,7 +666,7 @@ class PanelController extends Controller
 
     public function rules()
     {
-        return view('panel.Rules.index');
+        return view('Panel.Rules.index');
     }
 
 
