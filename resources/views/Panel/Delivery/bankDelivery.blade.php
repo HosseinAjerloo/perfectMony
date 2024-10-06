@@ -8,7 +8,7 @@
             درحال ساخت کارت هدیه پرفکت مانی لطفا منتظر بمانید.
         </div>
         <div class="space-x-3 space-x-reverse">
-            <p class="text-sm text-center sm:text-lg font-bold" id="warning-text">مبلغ {{substr($payment->amount,0,strlen($payment->amount)-1)}} هزار تومان به کیف پول شما اضافه شد</p>
+            <p class="text-sm text-center sm:text-lg font-bold" id="warning-text">مبلغ {{substr($payment->amount,0,strlen($payment->amount)-1)}}  تومان به کیف پول شما اضافه شد</p>
         </div>
 
         <div class="space-x-3 space-x-reverse">
@@ -108,7 +108,7 @@
                         $("#voucher-code").html(response.voucher.code)
                         $("#voucher-amount").html(response.payment_amount)
                         $(".loading").addClass('hidden')
-                        $(".warning-text").html('کارت هدیه پرفکت مانی بامشخصات ذیل برای شما ایجاد شد')
+                        $("#warning-text").html('کارت هدیه پرفکت مانی بامشخصات ذیل برای شما ایجاد شد')
                         console.log(response);
                     }
                     else {
