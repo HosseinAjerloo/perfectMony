@@ -101,8 +101,16 @@ Route::fallback(function () {
 });
 
 Route::get('test', function () {
-        $ip=gethostbyname("perfectmoney.com");
-        dd($ip);
+//    $isValid = filter_var(gethostbyname("perfectmoney.com"), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+//    dd($isValid);
+//    $pingStatus=[];
+    for ($i = 0; $i <6 ; $i++) {
+                array_push($pingStatus,gethostbyname("perfectmoney"));
+                sleep(1);
+        }
+    dd($pingStatus);
+//        sleep(1);
+//        dd($ip);
 });
 
 
