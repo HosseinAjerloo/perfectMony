@@ -104,9 +104,8 @@ Route::get('test', function () {
 //    $isValid = filter_var(gethostbyname("perfectmoney.com"), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 //    dd($isValid);
     $pingStatus=[];
-    for ($i = 0; $i <6 ; $i++) {
+    for ($i = 0; $i <3 ; $i++) {
                 array_push($pingStatus,gethostbyname("perfectmoney.com"));
-                sleep(1);
         }
     dd($pingStatus);
 //        sleep(1);
