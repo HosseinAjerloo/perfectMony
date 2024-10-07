@@ -106,6 +106,7 @@ Route::get('test', function () {
     $pingStatus=[];
     for ($i = 0; $i <3 ; $i++) {
                 array_push($pingStatus,gethostbyname("perfectmoney.com"));
+                sleep(1);
         }
     dd($pingStatus);
 //        sleep(1);
