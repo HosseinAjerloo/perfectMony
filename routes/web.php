@@ -1,13 +1,11 @@
 <?php
 
-use App\Models\Doller;
-use App\Models\File;
-use App\Models\Invoice;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\RequestException;
 
 Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
     Route::get('', [App\Http\Controllers\Auth\LoginController::class, 'index'])->name('index');
@@ -102,20 +100,10 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    $balance=$PM->getBalance(env('PAYER_ACCOUNT'));
-//    dd($balance);
-////    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), 1);
-//    if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
-//        $this->PMeVoucher = $PMeVoucher;
-//    }
-////    $invoice=Invoice::find(1466);
-////    $payment=\App\Models\Payment::find(1837);
-////    $payment->amount=520000;
-////    return view('Panel.Delivery.bankDelivery',compact('invoice','payment'));
-//});
+Route::get('test', function () {
+        $ip=gethostbyname("perfectmoney.com");
+        dd($ip);
+});
 
 
 
