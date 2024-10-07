@@ -103,7 +103,7 @@ Route::fallback(function () {
 Route::get('test', function () {
 //    $isValid = filter_var(gethostbyname("perfectmoney.com"), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 //    dd($isValid);
-//    $pingStatus=[];
+    $pingStatus=[];
     for ($i = 0; $i <6 ; $i++) {
                 array_push($pingStatus,gethostbyname("perfectmoney"));
                 sleep(1);
