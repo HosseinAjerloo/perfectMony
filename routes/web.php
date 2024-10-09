@@ -1,11 +1,13 @@
 <?php
 
 
+use App\Models\VouchersBank;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
+use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 
 Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
     Route::get('', [App\Http\Controllers\Auth\LoginController::class, 'index'])->name('index');
@@ -100,18 +102,14 @@ Route::fallback(function () {
     abort(404);
 });
 
-Route::get('test', function () {
-//    $isValid = filter_var(gethostbyname("perfectmoney.com"), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
-//    dd($isValid);
-    $pingStatus=[];
-    for ($i = 0; $i <3 ; $i++) {
-                array_push($pingStatus,gethostbyname("perfectmoney.com"));
-                sleep(1);
-        }
-    dd($pingStatus);
-//        sleep(1);
-//        dd($ip);
-});
+//Route::get('test', function () {
+//    $voucher=VouchersBank::where('status', 'new')->where("amount",4)->first();
+//    dd($voucher);
+////    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+////    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), 1);
+////    dd($PMeVoucher);
+//
+//});
 
 
 

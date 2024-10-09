@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 
 use App\Models\Invoice;
 use App\Models\Voucher;
+use App\Models\VouchersBank;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -36,11 +37,21 @@ trait HasConfig
 
     protected function generateVoucher($amount)
     {
-        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
-        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
-            $this->PMeVoucher = $PMeVoucher;
+        $voucher=VouchersBank::where('status', 'new')->where("amount",$amount)->first();
+        if ($voucher)
+        {
+                $this->PMeVoucher['VOUCHER_NUM']=$voucher->serial;
+                $this->PMeVoucher['VOUCHER_CODE']=$voucher->code;
+                $voucher->update(['status'=>'used']);
         }
+        else{
+            $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+            $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
+            if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+                $this->PMeVoucher = $PMeVoucher;
+            }
+        }
+
     }
 
     protected function transmission($transmission, $amount)

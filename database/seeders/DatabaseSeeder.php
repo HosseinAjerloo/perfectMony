@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         {
             Bank::create($bank);
         }
+        User::create(User::users);
 
 
     }
