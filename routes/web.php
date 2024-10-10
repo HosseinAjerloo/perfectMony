@@ -107,7 +107,7 @@ Route::get('test', function () {
     $AccountID=env('PM_ACCOUNT_ID');
     $PassPhrase=env('PM_PASS');
     $ar = array();
-    $f = fopen("https://perfectmoney.com/acct/historycsv.asp?startmonth=10&startday=1&startyear=2024&endmonth=10&endday=30&endyear=2024&AccountID=$AccountID&PassPhrase=$PassPhrase", 'rb');
+    $f = fopen("https://perfectmoney.com/acct/historycsv.asp?startmonth=10&startday=10&startyear=2024&endmonth=10&endday=10&endyear=2024&AccountID=$AccountID&PassPhrase=$PassPhrase", 'rb');
     if ($f === false) {
         echo 'error openning url';
     }
