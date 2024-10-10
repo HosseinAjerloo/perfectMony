@@ -102,14 +102,44 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//    $voucher=VouchersBank::where('status', 'new')->where("amount",4)->first();
-//    dd($voucher);
-////    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-////    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), 1);
-////    dd($PMeVoucher);
-//
-//});
+Route::get('test', function () {
+
+    $AccountID=env('PM_ACCOUNT_ID');
+    $PassPhrase=env('PM_PASS');
+    $ar = array();
+    $f = fopen("https://perfectmoney.com/acct/historycsv.asp?startmonth=10&startday=1&startyear=2024&endmonth=10&endday=30&endyear=2024&AccountID=$AccountID&PassPhrase=$PassPhrase", 'rb');
+    if ($f === false) {
+        echo 'error openning url';
+    }
+    $lines = array();
+    while (!feof($f)) array_push($lines, trim(fgets($f)));
+    fclose($f);
+    if ($lines[0] != 'Time,Type,Batch,Currency,Amount,Fee,Payer Account,Payee Account,Payment ID,Memo') {
+
+        echo $lines[0];
+
+    } else {
+        $n = count($lines);
+        for ($i = 1; $i < $n; $i++) {
+
+            $item = explode(",", $lines[$i], 9);
+            if (count($item) != 9) continue;
+            $item_named['Time'] = $item[0];
+            $item_named['Type'] = $item[1];
+            $item_named['Batch'] = $item[2];
+            $item_named['Currency'] = $item[3];
+            $item_named['Amount'] = $item[4];
+            $item_named['Fee'] = $item[5];
+            $item_named['Payer Account'] = $item[6];
+            $item_named['Payee Account'] = $item[7];
+            $item_named['Memo'] = $item[8];
+            array_push($ar, $item_named);
+        }
+
+    }
+    dd($ar);
+
+});
 
 
 
