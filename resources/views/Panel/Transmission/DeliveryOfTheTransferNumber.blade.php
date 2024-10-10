@@ -17,7 +17,7 @@
                     </div>
                     <div class=" relative">
                         <div class="flex items-center space-x-3 space-x-reverse">
-                            <p>شماره حواله :</p>
+                            <p>کد رهگیری :</p>
                             <span class="text-sm sm:text-base bg-gray-500 px-6 py-1 rounded-md">{{$transitionDelivery->payment_batch_num??''}}</span>
                             <img src="{{asset('src/images/Group 422.png')}}" alt=""
                                  class="w-6 h-6 mt-1 copy cursor-pointer transition-all hover:scale-150">

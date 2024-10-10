@@ -99,7 +99,7 @@
                             </div>
                             <div class="flex items-center justify-between">
                                 <p class="text-sm font-semibold sm:text-base">
-                                    شماره حواله:
+                                    کد رهگیری:
                                 </p>
                                 <div class="flex items-center space-x-3 space-x-reverse">
                                     <span

@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Models\Ticket;
 use App\Models\VouchersBank;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
+use Illuminate\Support\Facades\Log;
 
 class VoucherBankArrangementJob implements ShouldQueue
 {
@@ -46,36 +48,46 @@ class VoucherBankArrangementJob implements ShouldQueue
      */
     public function handle(): void
     {
-//        $voucher->update([
-//            'status' => 'finished',
-//            'description' => 'ارتباط با سروریس پرفکت مانی موفقیت آمیز بود',
-//            "serial" => $this->PMeVoucher['VOUCHER_NUM'],
-//            'code' => $this->PMeVoucher['VOUCHER_CODE']
-//        ]);
-        $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-        foreach ($this->numberOFVouchers as $amount => $numberOFVoucher) {
-            $getNewVoucherInDatabaseTable = VouchersBank::where('status', 'new')->where("amount", $amount)->count();
 
-            $numberOfGenerate = $numberOFVoucher - $getNewVoucherInDatabaseTable;
-            if ($numberOfGenerate > 0) {
-                for ($i = 0; $i < $numberOfGenerate; $i++) {
-                    $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
-                    if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+        try {
+            $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+            foreach ($this->numberOFVouchers as $amount => $numberOFVoucher) {
+                $getNewVoucherInDatabaseTable = VouchersBank::where('status', 'new')->where("amount", $amount)->count();
 
-                        VouchersBank::create(
-                            [
-                                'serial' => $PMeVoucher['VOUCHER_NUM'],
-                                'code' => $PMeVoucher['VOUCHER_CODE'],
-                                'amount' => $amount,
-                                'status' => 'new',
-                                'description' => 'ایجاد ووچر به صورت اتوماتیک'
-                            ]
-                        );
+                $numberOfGenerate = $numberOFVoucher - $getNewVoucherInDatabaseTable;
+                if ($numberOfGenerate > 0) {
+                    for ($i = 0; $i < $numberOfGenerate; $i++) {
+                        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
+                        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+
+                            VouchersBank::create(
+                                [
+                                    'serial' => $PMeVoucher['VOUCHER_NUM'],
+                                    'code' => $PMeVoucher['VOUCHER_CODE'],
+                                    'amount' => $amount,
+                                    'status' => 'new',
+                                    'description' => 'ایجاد ووچر به صورت اتوماتیک'
+                                ]
+                            );
+                        }else{
+                                Ticket::created([
+                                    'subject'=>'خرابی در پرفکت مانی',
+                                    'user_id'=>1,
+                                    'status'=>'closed'
+                                ]);
+                        }
+
                     }
-
                 }
-            }
 
+            }
+        } catch (\Exception $e) {
+            Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
+            Ticket::created([
+                'subject'=>'خرابی در پرفکت مانی',
+                'user_id'=>1,
+                'status'=>'closed'
+            ]);
         }
     }
 }
