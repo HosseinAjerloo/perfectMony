@@ -104,12 +104,9 @@ Route::fallback(function () {
 
 Route::get('test', function () {
 
-    $AccountID=env('PM_ACCOUNT_ID');
-    $PassPhrase=env('PM_PASS');
-    $account=env('PAYER_ACCOUNT');
-    $responce = Http::timeout(1)->get("https://perfectmoney.com/acct/balance.asp?AccountID=$AccountID&PassPhrase=$PassPhrase");
-    $data = $responce->body();
-    dd($data,$responce->status());
+    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+    $PMeVoucher = $PM->getBalance();
+    dd($PMeVoucher);
 
 });
 
