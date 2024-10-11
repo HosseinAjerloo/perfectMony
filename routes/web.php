@@ -107,7 +107,7 @@ Route::get('test', function () {
     $AccountID=env('PM_ACCOUNT_ID');
     $PassPhrase=env('PM_PASS');
     $account=env('PAYER_ACCOUNT');
-    $responce = Http::timeout(60)->get("https://perfectmoney.com/acct/balance.asp?AccountID=$AccountID&PassPhrase=$PassPhrase");
+    $responce = Http::timeout(1)->get("https://perfectmoney.com/acct/balance.asp?AccountID=$AccountID&PassPhrase=$PassPhrase");
     $data = $responce->body();
     dd($data,$responce->status());
 
