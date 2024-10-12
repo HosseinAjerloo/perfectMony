@@ -19,7 +19,6 @@ class RoleSeeder extends Seeder
 
         $users = User::where("type", 'admin')->get();
         foreach ($users as $user) {
-            $user = \App\Models\User::find(1);
             $user->roles()->save(\App\Models\Role::find(1));
         }
     }
