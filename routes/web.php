@@ -102,13 +102,7 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    $PMeVoucher = $PM->getBalance();
-//    dd($PMeVoucher);
-//
-//});
+
 
 
 

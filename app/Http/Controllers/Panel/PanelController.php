@@ -471,6 +471,7 @@ class PanelController extends Controller
                 return Response::json(['status' => false]);
             }
         } catch (\Exception $e) {
+            Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
             return Response::json(['status' => false]);
         }
     }
