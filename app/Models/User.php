@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
-    use HasConfig,HasFactory, Notifiable, SoftDeletes;
+    use HasConfig, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -89,9 +89,14 @@ class User extends Authenticatable
             });
     }
 
-    public function scopeSearch(Builder $query,$search)
+    public function roles()
     {
-      return  $query->where('name','like',"%".$search['search']."%")->orWhere('family','like',"%".$search['search']."%")->orWhere('mobile','like',"%".$search['search']."%");
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id', 'id', 'id');
+    }
+
+    public function scopeSearch(Builder $query, $search)
+    {
+        return $query->where('name', 'like', "%" . $search['search'] . "%")->orWhere('family', 'like', "%" . $search['search'] . "%")->orWhere('mobile', 'like', "%" . $search['search'] . "%");
     }
 
 }

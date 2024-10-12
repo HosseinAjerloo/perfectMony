@@ -7,6 +7,7 @@ use App\Http\Requests\Panel\Purchase\PurchaseRequest;
 use App\Http\Requests\Panel\Purchase\PurchaseThroughTheBankRequest;
 use App\Http\Requests\Panel\WalletCharging\WalletChargingRequest;
 use App\Http\Traits\HasConfig;
+use App\Jobs\SendAppAlertsJob;
 use App\Models\Bank;
 use App\Models\Doller;
 use App\Models\FinanceTransaction;
@@ -206,6 +207,8 @@ class PanelController extends Controller
             }
 
         } catch (\Exception $exception) {
+            SendAppAlertsJob::dispatch('در خرید پرفکت مانی از طریق کیف پول خطایی به وجود آمد')->onQueue('perfectmoney');
+
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "عملیات خرید ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
         }
 
@@ -225,79 +228,86 @@ class PanelController extends Controller
 
     public function PurchaseThroughTheBank(PurchaseThroughTheBankRequest $request)
     {
-        $dollar = Doller::orderBy('id', 'desc')->first();
-        $inputs = $request->all();
-        $user = Auth::user();
-        $bank = Bank::find($inputs['bank']);
-        $inputs['user_id'] = $user->id;
-        $inputs['description'] = " خرید مستقیم ووچر از طریق $bank->name";
-        $balance = Auth::user()->getCreaditBalance();
+        try {
+            $dollar = Doller::orderBy('id', 'desc')->first();
+            $inputs = $request->all();
+            $user = Auth::user();
+            $bank = Bank::find($inputs['bank']);
+            $inputs['user_id'] = $user->id;
+            $inputs['description'] = " خرید مستقیم ووچر از طریق $bank->name";
+            $balance = Auth::user()->getCreaditBalance();
 
-        if (isset($inputs['service_id'])) {
-            $service = Service::find($inputs['service_id']);
-            $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
-        } elseif (isset($inputs['custom_payment'])) {
-            $inputs['service_id_custom'] = $inputs['custom_payment'];
-            $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
-        } else {
-            return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
-        }
-        $inputs['final_amount'] = $voucherPrice;
-        $inputs['type'] = 'service';
-        $inputs['status'] = 'requested';
-        $inputs['bank_id'] = $bank->id;
-        $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
-        $inputs['description'] = ' خرید کارت هدیه پرفکت مانی از طریق ' . $bank->name;
+            if (isset($inputs['service_id'])) {
+                $service = Service::find($inputs['service_id']);
+                $voucherPrice = $dollar->DollarRateWithAddedValue() * $service->amount;
+            } elseif (isset($inputs['custom_payment'])) {
+                $inputs['service_id_custom'] = $inputs['custom_payment'];
+                $voucherPrice = $dollar->DollarRateWithAddedValue() * $inputs['custom_payment'];
+            } else {
+                return redirect()->route('panel.purchase.view')->withErrors(['SelectInvalid' => "انتخاب شما معتبر نمیباشد"]);
+            }
+            $inputs['final_amount'] = $voucherPrice;
+            $inputs['type'] = 'service';
+            $inputs['status'] = 'requested';
+            $inputs['bank_id'] = $bank->id;
+            $inputs['time_price_of_dollars'] = $dollar->DollarRateWithAddedValue();
+            $inputs['description'] = ' خرید کارت هدیه پرفکت مانی از طریق ' . $bank->name;
 
-        $invoice = Invoice::create($inputs);
-        $objBank = new $bank->class;
-        $objBank->setTotalPrice($voucherPrice);
-        $payment = Payment::create(
-            [
-                'bank_id' => $bank->id,
-                'invoice_id' => $invoice->id,
-                'amount' => $voucherPrice,
-                'state' => 'requested',
+            $invoice = Invoice::create($inputs);
+            $objBank = new $bank->class;
+            $objBank->setTotalPrice($voucherPrice);
+            $payment = Payment::create(
+                [
+                    'bank_id' => $bank->id,
+                    'invoice_id' => $invoice->id,
+                    'amount' => $voucherPrice,
+                    'state' => 'requested',
 
-            ]
-        );
-        $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
-        $objBank->setOrderID($payment->id + Payment::transactionNumber);
-        $objBank->setBankUrl($bank->url);
-        $objBank->setTerminalId($bank->terminal_id);
-        $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
+                ]
+            );
+            $payment->update(['order_id' => $payment->id + Payment::transactionNumber]);
+            $objBank->setOrderID($payment->id + Payment::transactionNumber);
+            $objBank->setBankUrl($bank->url);
+            $objBank->setTerminalId($bank->terminal_id);
+            $objBank->setUrlBack(route('panel.Purchase-through-the-bank'));
 
-        $status = $objBank->payment();
-        $financeTransaction = FinanceTransaction::create([
-            'user_id' => $user->id,
-            'amount' => $payment->amount,
-            'type' => "bank",
-            "creadit_balance" => $balance,
-            'description' => " ارتباط با بانک $bank->name",
-            'payment_id' => $payment->id,
-        ]);
-        if (!$status) {
-            $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد "]);
-            $financeTransaction->update(['description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ", 'status' => 'fail']);
+            $status = $objBank->payment();
+            $financeTransaction = FinanceTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $payment->amount,
+                'type' => "bank",
+                "creadit_balance" => $balance,
+                'description' => " ارتباط با بانک $bank->name",
+                'payment_id' => $payment->id,
+            ]);
+            if (!$status) {
+                $invoice->update(['status' => 'failed', 'description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد "]);
+                $financeTransaction->update(['description' => "به دلیل عدم ارتباط با بانک $bank->name سفارش شما لغو شد ", 'status' => 'fail']);
+                return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
+            }
+            $url = $objBank->getBankUrl();
+            $token = $status;
+
+            session()->put('payment', $payment->id);
+            session()->put('financeTransaction', $financeTransaction->id);
+            Log::channel('bankLog')->emergency(PHP_EOL . 'Connection with the bank payment gateway '
+                . PHP_EOL .
+                'Name of the bank: ' . $bank->name
+                . PHP_EOL .
+                'payment price: ' . $voucherPrice
+                . PHP_EOL .
+                'payment date: ' . Carbon::now()->toDateTimeString()
+                . PHP_EOL .
+                'user ID: ' . $user->id
+                . PHP_EOL
+            );
+            return view('welcome', compact('token', 'url'));
+        }catch (\Exception $e)
+        {
+            SendAppAlertsJob::dispatch('در ارتباط بابانک برای خرید پرفکت مانی خطایی به وجود آمد لطفا پیگیری شود')->onQueue('perfectmoney');
+            Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
             return redirect()->route('panel.purchase.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
-        $url = $objBank->getBankUrl();
-        $token = $status;
-
-        session()->put('payment', $payment->id);
-        session()->put('financeTransaction', $financeTransaction->id);
-        Log::channel('bankLog')->emergency(PHP_EOL . 'Connection with the bank payment gateway '
-            . PHP_EOL .
-            'Name of the bank: ' . $bank->name
-            . PHP_EOL .
-            'payment price: ' . $voucherPrice
-            . PHP_EOL .
-            'payment date: ' . Carbon::now()->toDateTimeString()
-            . PHP_EOL .
-            'user ID: ' . $user->id
-            . PHP_EOL
-        );
-        return view('welcome', compact('token', 'url'));
     }
 
 //
@@ -377,6 +387,8 @@ class PanelController extends Controller
             return redirect()->route('panel.deliveryVoucherBankView', [$invoice, $payment]);
         } catch (\Exception $e) {
             Log::emergency("panel Controller :" . $e->getMessage());
+            SendAppAlertsJob::dispatch('در خرید پرفکت مانی از درگاه بانکی خطایی به وجود آمد لطفا درگاه و پرفکت مانی را چک کنید(توجه این خطا در برگشت از بانک رخ داده است)')->onQueue('perfectmoney');
+
             return redirect()->route('panel.purchase.view')->withErrors(['error' => "خطایی رخ داد از صبر و شکیبایی شما مچکریم لطفا جهت پیگیری در خواست تیکت ثبت کنید"]);
 
         }
@@ -472,6 +484,8 @@ class PanelController extends Controller
             }
         } catch (\Exception $e) {
             Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
+            SendAppAlertsJob::dispatch('در خرید پرفکت مانی ازطریق جاوااسکریپت خطایی به وجود آمد لطفا سرویس پرفکت مانی چک شود')->onQueue('perfectmoney');
+
             return Response::json(['status' => false]);
         }
     }
@@ -651,6 +665,7 @@ class PanelController extends Controller
             return redirect()->route('panel.index')->with(['success' => 'پرداخت باموفقیت انجام شد و مبلغ کیف پول شما فزایش داده شد']);
         } catch (\Exception $e) {
             Log::emergency("panel Controller :" . $e->getMessage());
+            SendAppAlertsJob::dispatch('شارژکیف پول به مشکل خورده است لطفا درگاه بانکی  وسایر موارد چک شود')->onQueue('perfectmoney');
             return redirect()->route('panel.index')->withErrors(['error' => "خطایی رخ داد از صبر و شکیبایی شما مچکریم لطفا جهت پیگیری در خواست تیکت ثبت کنید"]);
 
         }

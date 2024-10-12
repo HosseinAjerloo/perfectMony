@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Models\Role;
 use App\Models\VouchersBank;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -102,7 +103,14 @@ Route::fallback(function () {
     abort(404);
 });
 
-
+//Route::get('test', function () {
+//
+//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+//    $PMeVoucher = $PM->getBalance();
+//    dd($PMeVoucher);
+//
+//
+//});
 
 
 

@@ -6,4 +6,5 @@ use \App\Jobs\VoucherBankArrangementJob;
 \Illuminate\Support\Facades\Schedule::command('exchange-rate-update')->hourly()->runInBackground();
 \Illuminate\Support\Facades\Schedule::job(new VoucherBankArrangementJob)->everyFiveMinutes();
 \Illuminate\Support\Facades\Schedule::command('queue:work --stop-when-empty');
+\Illuminate\Support\Facades\Schedule::command('queue:work --stop-when-empty --queue perfectmoney')->everyFiveMinutes();
 

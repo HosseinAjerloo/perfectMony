@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Panel\Purchase\PurchaseRequest;
 use App\Http\Requests\Panel\Transmission\TransmissionRequest;
 use App\Http\Traits\HasConfig;
+use App\Jobs\SendAppAlertsJob;
 use App\Models\Bank;
 use App\Models\Doller;
 use App\Models\FinanceTransaction;
@@ -146,6 +147,8 @@ class TransmissionController extends Controller
             }
         } catch
         (\Exception $exception) {
+            SendAppAlertsJob::dispatch('در انتقال وچچر از طریف کیف پول خطایی رخ داد سرویس پرفکت مانی و سایر موارد چک شود')->onQueue('perfectmoney');
+
             return redirect()->route('panel.transmission.view')->withErrors(['error' => "عملیات انتقال ووچر ناموفق بود در صورت کسر موجودی از کیف پول شما با پشتیبانی تماس حاصل فرمایید."]);
         }
 
@@ -233,6 +236,8 @@ class TransmissionController extends Controller
             return view('welcome', compact('token', 'url'));
         } catch (\Exception $e) {
             Log::emergency(PHP_EOL . $e->getMessage() . PHP_EOL);
+            SendAppAlertsJob::dispatch('در ارتباط با درگاه پرداخت برای انتقال ووچر خطایی رخ داده است لطفا پیگیری کنید')->onQueue('perfectmoney');
+
             return redirect()->route('panel.transmission.view')->withErrors(['error' => 'ارتباط با بانک فراهم نشد لطفا چند دقیقه بعد تلاش فرماید.']);
         }
     }
@@ -365,6 +370,7 @@ class TransmissionController extends Controller
             }
         } catch (\Exception $e) {
             Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
+            SendAppAlertsJob::dispatch('در انتقال ووچر از درگاه باتکی خطایی رخ داده است لطفا پیگیری شود.')->onQueue('perfectmoney');
             return  redirect()->route('panel.index')->withErrors(['error'=>'یک خطای غیر منتظره رخ داد لفطا از طریق پشتیبانی تیکت برنید']);
         }
     }
