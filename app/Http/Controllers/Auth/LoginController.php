@@ -67,6 +67,7 @@ class LoginController extends Controller
                 Auth::loginUsingId($user->id);
                 Session::remove('loginBySms');
                 Session::remove('otp');
+                Session::remove('user');
                 return redirect()->intended(route('panel.index'));
             } else {
                 $request->request->add(['mobile' => $user->mobile]);
@@ -139,6 +140,7 @@ class LoginController extends Controller
         if (!$validPassword)
             return redirect()->back()->withErrors(['passwordNotMatch' => 'کلمه عبور وارد شده صحیح نمیباشد']);
         Auth::loginUsingId($user->id);
+        Session::remove('user');
         return redirect()->intended(route('panel.index'));
     }
 
@@ -151,6 +153,7 @@ class LoginController extends Controller
         if (Session::get('otp')) {
             Auth::loginUsingId($user->id);
             Session::remove('otp');
+            Session::remove('user');
             return redirect()->intended(route('panel.index'));
         }
         Session::put('loginBySms', true);
