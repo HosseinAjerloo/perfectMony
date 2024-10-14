@@ -67,7 +67,6 @@ class LoginController extends Controller
                 Auth::loginUsingId($user->id);
                 Session::remove('loginBySms');
                 Session::remove('otp');
-                Session::remove('user');
                 return redirect()->intended(route('panel.index'));
             } else {
                 $request->request->add(['mobile' => $user->mobile]);
@@ -106,13 +105,15 @@ class LoginController extends Controller
     public function registerPassword(RegisterPasswordRequest $registerPasswordRequest)
     {
         $inputs = $registerPasswordRequest->all();
-        if (Session::has('user'))
-        {
-            $user = User::find(Session::get('user'));
-        }
-        elseif ($registerPasswordRequest->has('mobile'))
+        if ($registerPasswordRequest->has('mobile'))
         {
             $user = User::where('mobile', $inputs['mobile'])->first();
+
+        }
+        elseif (Session::has('user') )
+        {
+            $user = User::find(Session::get('user'));
+
         }
         else{
             return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
@@ -139,7 +140,6 @@ class LoginController extends Controller
         if (!$validPassword)
             return redirect()->back()->withErrors(['passwordNotMatch' => 'کلمه عبور وارد شده صحیح نمیباشد']);
         Auth::loginUsingId($user->id);
-        Session::remove('user');
         return redirect()->intended(route('panel.index'));
     }
 
@@ -152,7 +152,6 @@ class LoginController extends Controller
         if (Session::get('otp')) {
             Auth::loginUsingId($user->id);
             Session::remove('otp');
-            Session::remove('user');
             return redirect()->intended(route('panel.index'));
         }
         Session::put('loginBySms', true);
