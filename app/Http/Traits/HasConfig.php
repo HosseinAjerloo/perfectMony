@@ -4,11 +4,13 @@ namespace App\Http\Traits;
 
 
 use App\Models\Invoice;
+use App\Models\User;
 use App\Models\Voucher;
 use App\Models\VouchersBank;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 trait HasConfig
 {
@@ -94,6 +96,8 @@ trait HasConfig
     {
         return redirect()->route($this->redirectTo)->withErrors($this->message);
     }
+
+
 
 
 }
