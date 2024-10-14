@@ -185,7 +185,7 @@ class LoginController extends Controller
             return redirect()->route('login.simple')->withErrors(['invalidOtp' => 'لینک وارد شده معتبر نمیباشد']);
 
         if (!Session::has('user'))
-            Session::put(['user'=>User::where('mobile', $otp->mobile)->first()]);
+            Session::put(['user'=>User::where('mobile', $otp->mobile)->first()->id]);
 
         $otp->update(['seen_at' => date('Y-m-d H:i:s')]);
         return view('Auth.forgotPassword', compact('otp'));
