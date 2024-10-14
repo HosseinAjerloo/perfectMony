@@ -108,7 +108,7 @@ class LoginController extends Controller
 
         if (Session::has('user'))
         {
-            $user = Session::get('user');
+            $user = User::find(Session::get('user'));
         }
         elseif ($registerPasswordRequest->has('mobile'))
         {
@@ -133,7 +133,7 @@ class LoginController extends Controller
         if (!Session::has('user'))
             return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
 
-        $user = Session::get('user');
+        $user = User::find(Session::get('user'));
         $inputs = $simpleLoginPost->all();
         $validPassword = password_verify($inputs['password'], $user->password);
         if (!$validPassword)
@@ -147,7 +147,7 @@ class LoginController extends Controller
         if (!Session::has('user'))
             return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
 
-        $user = Session::get('user');
+        $user = User::find(Session::get('user'));
         if (Session::get('otp')) {
             Auth::loginUsingId($user->id);
             Session::remove('otp');
@@ -169,7 +169,7 @@ class LoginController extends Controller
         if (!Session::has('user'))
             return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
 
-        $user = Session::get('user');
+        $user = User::find(Session::get('user'));
         $request->merge(['mobile' => $user->mobile]);
         $message = 'باسلام جهت تغییر کلمه عبور خود روی لینک زیر کلیک کنید' . PHP_EOL;
         $this->generateCode($request, $message);

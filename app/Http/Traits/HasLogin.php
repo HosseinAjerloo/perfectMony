@@ -34,7 +34,7 @@ trait HasLogin
         $hasUser = $this->hasUser($request);
         if ($hasUser->user) {
             $isSettPassword = $hasUser->isSetPassword();
-            Session::put(['user' => $hasUser->user]);
+            Session::put(['user' => $hasUser->user->id]);
             if (!$isSettPassword) {
                 return redirect()->route('login.setPassword');
             } else {
