@@ -184,7 +184,7 @@ class LoginController extends Controller
         if (!empty($otp->seen))
             return redirect()->route('login.simple')->withErrors(['invalidOtp' => 'لینک وارد شده معتبر نمیباشد']);
 
-        $otp->update(['seen' => date('Y-m-d H:i:s')]);
+        $otp->update(['seen_at' => date('Y-m-d H:i:s')]);
         return view('Auth.forgotPassword', compact('otp'));
     }
 }
