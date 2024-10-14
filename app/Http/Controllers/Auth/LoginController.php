@@ -104,10 +104,20 @@ class LoginController extends Controller
 
     public function registerPassword(RegisterPasswordRequest $registerPasswordRequest)
     {
-        if (!Session::has('user'))
-            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
-        $user = Session::get('user');
         $inputs = $registerPasswordRequest->all();
+
+        if (Session::has('user'))
+        {
+            $user = Session::get('user');
+        }
+        elseif ($registerPasswordRequest->has('mobile'))
+        {
+            $user = User::where('mobile', $inputs['mobile'])->first();
+        }
+        else{
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+        }
+
         $password = password_hash($inputs['password'], PASSWORD_DEFAULT);
         $result = $user->update(['password' => $password]);
         return $result ? redirect()->route('login.simple')->with(['success' => 'کلمه عبور شما تنظیم شد لطفا برای ورود باکلمه عبور خود اقدام فرمایید']) : redirect()->route('login.index')->withErrors(['failChangePassword' => 'عملیات تنظیم کلمه عبور باشکست مواجه شد لطفا چمد دقیقه دیگه تلاش کنید.']);
@@ -160,19 +170,19 @@ class LoginController extends Controller
             return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
 
         $user = Session::get('user');
-        $request->merge(['mobile'=>$user->mobile]);
-        $message='باسلام جهت تغییر کلمه عبور خود روی لینک زیر کلیک کنید'.PHP_EOL;
-        $this->generateCode($request,$message);
-        return redirect()->route('login.simple')->with(['success'=>"لطفا از طریق لینک پیامک شده به خط شما تغییر کلمه عبور را انجام دهید"]);
+        $request->merge(['mobile' => $user->mobile]);
+        $message = 'باسلام جهت تغییر کلمه عبور خود روی لینک زیر کلیک کنید' . PHP_EOL;
+        $this->generateCode($request, $message);
+        return redirect()->route('login.simple')->with(['success' => "لطفا از طریق لینک پیامک شده به خط شما تغییر کلمه عبور را انجام دهید"]);
 
     }
 
-    public function forgotPasswordToken(Request $request,Otp $otp)
+    public function forgotPasswordToken(Request $request, Otp $otp)
     {
         if (!empty($otp->seen))
-            return redirect()->route('login.simple')->withErrors(['invalidOtp'=>'لینک وارد شده معتبر نمیباشد']);
+            return redirect()->route('login.simple')->withErrors(['invalidOtp' => 'لینک وارد شده معتبر نمیباشد']);
 
-        $otp->update(['seen'=>date('Y-m-d H:i:s')]);
-        return view('Auth.forgotPassword',compact('otp'));
+        $otp->update(['seen' => date('Y-m-d H:i:s')]);
+        return view('Auth.forgotPassword', compact('otp'));
     }
 }
