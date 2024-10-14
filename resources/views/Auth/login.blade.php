@@ -18,7 +18,7 @@
             @csrf
             <input type="text" placeholder="*********09" name="mobile"
                    class="px-4 py-2 rounded-md ring-8 ring-gray-400 ring-opacity-35 placeholder:font-yekan outline-none w-full placeholder:text-center placeholder:text-gray-700 text-gray-900 text-center">
-            <button class="py-2 px-4 rounded-md font-semibold bg-sky-400  " type="submit">دریافت پیامک</button>
+            <button class="py-2 px-4 rounded-md font-semibold bg-sky-400  " type="submit">مرحله بعد</button>
         </form>
     </article>
 @endsection

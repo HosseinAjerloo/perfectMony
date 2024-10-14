@@ -10,14 +10,25 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
 use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 
-Route::middleware('guest')->name('login.')->prefix('login')->group(function () {
-    Route::get('', [App\Http\Controllers\Auth\LoginController::class, 'index'])->name('index');
-    Route::post('', [App\Http\Controllers\Auth\LoginController::class, 'sendCode'])->name('sendCode');
-    Route::get('dologin/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'dologin'])->name('dologin');
-    Route::post('dologin/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('dologin.post');
-    Route::post('resend/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'resend'])->name('resend');
+Route::middleware('guest')->group(function () {
+    Route::name('login.')->prefix('login')->group(function (){
+        Route::get('', [App\Http\Controllers\Auth\LoginController::class, 'index'])->name('index');
+        Route::post('', [App\Http\Controllers\Auth\LoginController::class, 'sendCode'])->name('sendCode');
+        Route::get('dologin/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'dologin'])->name('dologin');
+        Route::post('dologin/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('dologin.post');
+        Route::post('resend/{otp:token}', [App\Http\Controllers\Auth\LoginController::class, 'resend'])->name('resend');
+        Route::post('register/password',[App\Http\Controllers\Auth\LoginController::class,'registerPassword'])->name('register-password');
+        Route::get('simple-login',[App\Http\Controllers\Auth\LoginController::class,'simpleLogin'])->name('simple');
+        Route::post('simple-login',[App\Http\Controllers\Auth\LoginController::class,'simpleLoginPost'])->name('simple-post');
+        Route::get('set-password',[App\Http\Controllers\Auth\LoginController::class,'setPassword'])->name('setPassword');
+        Route::get("loginBySms",[App\Http\Controllers\Auth\LoginController::class,'loginBySms'])->name('login-BySms');
+    });
+    Route::get('forgot-password',[App\Http\Controllers\Auth\LoginController::class,'forgotPassword'])->name('forgotPassword');
+    Route::get('forgot-password/{otp:token}',[App\Http\Controllers\Auth\LoginController::class,'forgotPasswordToken'])->name('forgotPassword.token');
+
 });
 Route::get('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
 
 
 Route::middleware(['auth'])->group(function () {
@@ -103,14 +114,11 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    $PMeVoucher = $PM->getBalance();
-//    dd($PMeVoucher);
-//
-//
-//});
+Route::get('test', function () {
+
+
+
+})->name('test');
 
 
 

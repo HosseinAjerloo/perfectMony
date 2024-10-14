@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterPasswordRequest;
 use App\Http\Requests\Auth\SendCodeWithSmsRequest;
+use App\Http\Requests\Auth\SimpleLoginPost;
 use App\Http\Traits\HasLogin;
 use App\Models\Otp;
 use App\Models\User;
@@ -11,6 +13,7 @@ use App\Services\SmsService\SatiaService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
@@ -25,58 +28,10 @@ class LoginController extends Controller
         return view('Auth.login');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 
     public function sendCode(SendCodeWithSmsRequest $request)
     {
-        $otp = $this->generateCode($request);
-        return redirect()->route('login.dologin', $otp->token);
+        return $this->redirectSegmentation($request);
     }
 
 
@@ -105,9 +60,19 @@ class LoginController extends Controller
             $user = User::firstOrCreate(['mobile' => $code->mobile], [
                 'mobile' => $code->mobile
             ]);
-            Auth::loginUsingId($user->id);
-            $code->update(['seen_at'=>date('Y/m/d H:i:s',time())]);
-            return redirect()->intended();
+
+            $code->update(['seen_at' => date('Y/m/d H:i:s', time())]);
+            Session::put(['otp' => true]);
+            if (Session::has('loginBySms')) {
+                Auth::loginUsingId($user->id);
+                Session::remove('loginBySms');
+                Session::remove('otp');
+                return redirect()->intended(route('panel.index'));
+            } else {
+                $request->request->add(['mobile' => $user->mobile]);
+                return $this->redirectSegmentation($request);
+            }
+
 
         } else {
             return redirect()->route('login.dologin', $otp->token)->withErrors(['expiration_at' => "کد وارد شده صحیح نمیباشد "]);
@@ -135,5 +100,79 @@ class LoginController extends Controller
         }
         return redirect()->intended(route('login.index'));
 
+    }
+
+    public function registerPassword(RegisterPasswordRequest $registerPasswordRequest)
+    {
+        if (!Session::has('user'))
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+        $user = Session::get('user');
+        $inputs = $registerPasswordRequest->all();
+        $password = password_hash($inputs['password'], PASSWORD_DEFAULT);
+        $result = $user->update(['password' => $password]);
+        return $result ? redirect()->route('login.simple')->with(['success' => 'کلمه عبور شما تنظیم شد لطفا برای ورود باکلمه عبور خود اقدام فرمایید']) : redirect()->route('login.index')->withErrors(['failChangePassword' => 'عملیات تنظیم کلمه عبور باشکست مواجه شد لطفا چمد دقیقه دیگه تلاش کنید.']);
+    }
+
+    public function simpleLogin(Request $request)
+    {
+        return view('Auth.simpleLogin');
+    }
+
+    public function simpleLoginPost(SimpleLoginPost $simpleLoginPost)
+    {
+        if (!Session::has('user'))
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+
+        $user = Session::get('user');
+        $inputs = $simpleLoginPost->all();
+        $validPassword = password_verify($inputs['password'], $user->password);
+        if (!$validPassword)
+            return redirect()->back()->withErrors(['passwordNotMatch' => 'کلمه عبور وارد شده صحیح نمیباشد']);
+        Auth::loginUsingId($user->id);
+        return redirect()->intended(route('panel.index'));
+    }
+
+    public function loginBySms(Request $request)
+    {
+        if (!Session::has('user'))
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+
+        $user = Session::get('user');
+        if (Session::get('otp')) {
+            Auth::loginUsingId($user->id);
+            Session::remove('otp');
+            return redirect()->intended(route('panel.index'));
+        }
+        Session::put('loginBySms', true);
+        $request->merge(['mobile' => $user->mobile]);
+        $otp = $this->generateCode($request);
+        return redirect()->route('login.dologin', $otp->token);
+    }
+
+    public function setPassword()
+    {
+        return view('Auth.registerPassword');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        if (!Session::has('user'))
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+
+        $user = Session::get('user');
+        $request->merge(['mobile'=>$user->mobile]);
+        $message='باسلام جهت تغییر کلمه عبور خود روی لینک زیر کلیک کنید'.PHP_EOL;
+        $this->generateCode($request,$message);
+        return redirect()->route('login.simple')->with(['success'=>"لطفا از طریق لینک پیامک شده به خط شما تغییر کلمه عبور را انجام دهید"]);
+
+    }
+
+    public function forgotPasswordToken(Request $request,Otp $otp)
+    {
+        if (!empty($otp->seen))
+            return redirect()->route('login.simple')->withErrors(['invalidOtp'=>'لینک وارد شده معتبر نمیباشد']);
+
+        $otp->update(['seen'=>date('Y-m-d H:i:s')]);
+        return view('Auth.forgotPassword',compact('otp'));
     }
 }

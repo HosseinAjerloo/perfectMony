@@ -6,6 +6,7 @@
 
 <main>
     @include('Alert.Toast.warning')
+    @include('Alert.Toast.success')
     <section class="py-5 px-3 flex justify-center items-center container md:mx-auto">
 
         @yield('message-box')
