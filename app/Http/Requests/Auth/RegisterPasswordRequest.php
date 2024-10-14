@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterPasswordRequest extends FormRequest
@@ -22,9 +23,12 @@ class RegisterPasswordRequest extends FormRequest
      */
     public function rules(): array
     {
+        $routes=Route::current();
+
         return [
             "password"=>[Password::min(8)->mixedCase()->uncompromised(),'confirmed'],
             "password_confirmation"=>'required',
+            'mobile'=>'sometimes|exists:users,mobile'
         ];
     }
 }

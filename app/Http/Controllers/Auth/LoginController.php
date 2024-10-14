@@ -106,7 +106,6 @@ class LoginController extends Controller
     public function registerPassword(RegisterPasswordRequest $registerPasswordRequest)
     {
         $inputs = $registerPasswordRequest->all();
-
         if (Session::has('user'))
         {
             $user = User::find(Session::get('user'));
