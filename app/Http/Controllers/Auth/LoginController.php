@@ -106,16 +106,12 @@ class LoginController extends Controller
     public function registerPassword(RegisterPasswordRequest $registerPasswordRequest)
     {
         $inputs = $registerPasswordRequest->all();
-        if (Session::has('user'))
-        {
+        if (Session::has('user')) {
             $user = User::find(Session::get('user'));
-        }
-        elseif ($registerPasswordRequest->has('mobile'))
-        {
+        } elseif ($registerPasswordRequest->has('mobile')) {
             $user = User::where('mobile', $inputs['mobile'])->first();
-        }
-        else{
-            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+        } else {
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'اطلاعات وارد شده اشتباه است لطفا اطلاعات را دقیق تر وارد کنید!']);
         }
 
         $password = password_hash($inputs['password'], PASSWORD_DEFAULT);
@@ -131,7 +127,7 @@ class LoginController extends Controller
     public function simpleLoginPost(SimpleLoginPost $simpleLoginPost)
     {
         if (!Session::has('user'))
-            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'اطلاعات وارد شده اشتباه است لطفا اطلاعات را دقیق تر وارد کنید!']);
 
         $user = User::find(Session::get('user'));
         $inputs = $simpleLoginPost->all();
@@ -146,7 +142,7 @@ class LoginController extends Controller
     public function loginBySms(Request $request)
     {
         if (!Session::has('user'))
-            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'اطلاعات وارد شده اشتباه است لطفا اطلاعات را دقیق تر وارد کنید!']);
 
         $user = User::find(Session::get('user'));
         if (Session::get('otp')) {
@@ -169,7 +165,7 @@ class LoginController extends Controller
     public function forgotPassword(Request $request)
     {
         if (!Session::has('user'))
-            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'تداخلی به وجودآمد از صبر و شکیبایی شما سپاسگزاریم!']);
+            return redirect()->route('login.index')->withErrors(['ErrorLogin' => 'اطلاعات وارد شده اشتباه است لطفا اطلاعات را دقیق تر وارد کنید!']);
 
         $user = User::find(Session::get('user'));
         $request->merge(['mobile' => $user->mobile]);
@@ -185,7 +181,7 @@ class LoginController extends Controller
             return redirect()->route('login.simple')->withErrors(['invalidOtp' => 'لینک وارد شده معتبر نمیباشد']);
 
         if (!Session::has('user'))
-            Session::put(['user'=>User::where('mobile', $otp->mobile)->first()->id]);
+            Session::put(['user' => User::where('mobile', $otp->mobile)->first()->id]);
 
         $otp->update(['seen_at' => date('Y-m-d H:i:s')]);
         return view('Auth.forgotPassword', compact('otp'));
