@@ -58,7 +58,7 @@ class transmissionsBankArrangementJob implements ShouldQueue
                 if ($numberOfGenerate > 0) {
 
                     for ($i = 0; $i < $numberOfGenerate; $i++) {
-                        $PMeVoucher = $PM->transferFund(env('ORIGIN_OF_TRANSFER'), env('PAYER_ACCOUNT'), $amount);
+                        $PMeVoucher = $PM->transferFund(env('ORIGIN_OF_TRANSFER'), 'U42822981', $amount);
                         if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
 
                             TransmissionsBank::create(

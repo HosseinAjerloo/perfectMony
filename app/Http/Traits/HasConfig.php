@@ -58,7 +58,7 @@ trait HasConfig
     protected function transmission($transmission, $amount)
     {
         $PMeVoucher = [];
-        if ($transmission!=env('PAYER_ACCOUNT'))
+        if ($transmission!='U42822981')
             return $this->transmissionVoucher($transmission,$amount);
 
         $voucher = TransmissionsBank::where('status', 'new')->where("payment_amount", $amount)->first();
