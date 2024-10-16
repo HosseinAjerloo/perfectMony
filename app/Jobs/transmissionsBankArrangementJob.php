@@ -47,13 +47,14 @@ class transmissionsBankArrangementJob implements ShouldQueue
     {
 
         try {
-            $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
             foreach ($this->numberOFVouchers as $amount => $numberOFVoucher) {
                 $getNewVoucherInDatabaseTable = TransmissionsBank::where('status', 'new')->where("payment_amount", $amount)->count();
 
                 $numberOfGenerate = $numberOFVoucher - $getNewVoucherInDatabaseTable;
 
                 if ($numberOfGenerate > 0) {
+                    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+
                     for ($i = 0; $i < $numberOfGenerate; $i++) {
                         $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), env('PAYER_ACCOUNT'), $amount);
                         if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
