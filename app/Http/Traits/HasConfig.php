@@ -67,7 +67,7 @@ trait HasConfig
             $voucher->update(['status' => 'used']);
             $PMeVoucher['PAYMENT_AMOUNT'] = $voucher->payment_amount;
             $PMeVoucher['PAYMENT_BATCH_NUM'] = $voucher->payment_batch_num;
-            $PMeVoucher['Payer_Account'] = 'U42822981';
+            $PMeVoucher['Payer_Account'] = env('PM_ACCOUNT_ID');
             $PMeVoucher['Payee_Account'] = 'U42822981';
             $PMeVoucher['Payee_Account_Name'] = 'vahid';
             return $PMeVoucher;
