@@ -81,7 +81,7 @@ trait HasConfig
     protected function transmissionVoucher($transmission, $amount)
     {
         $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-        $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), $transmission, $amount);
+        $PMeVoucher = $PM->transferFund(env('ORIGIN_OF_TRANSFER'), $transmission, $amount);
         if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
             return $PMeVoucher;
         } else {

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 class transmissionsBankArrangementJob implements ShouldQueue
 {
     use Queueable;
+
     public $timeout = 0;
     protected $numberOFVouchers =
         [
@@ -32,6 +33,7 @@ class transmissionsBankArrangementJob implements ShouldQueue
             25 => 1
 
         ];
+
     /**
      * Create a new job instance.
      */
@@ -47,16 +49,16 @@ class transmissionsBankArrangementJob implements ShouldQueue
     {
 
         try {
+            $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
             foreach ($this->numberOFVouchers as $amount => $numberOFVoucher) {
                 $getNewVoucherInDatabaseTable = TransmissionsBank::where('status', 'new')->where("payment_amount", $amount)->count();
 
                 $numberOfGenerate = $numberOFVoucher - $getNewVoucherInDatabaseTable;
 
                 if ($numberOfGenerate > 0) {
-                    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 
                     for ($i = 0; $i < $numberOfGenerate; $i++) {
-                        $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), env('PAYER_ACCOUNT'), $amount);
+                        $PMeVoucher = $PM->transferFund(env('ORIGIN_OF_TRANSFER'), env('PAYER_ACCOUNT'), $amount);
                         if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
 
                             TransmissionsBank::create(
@@ -68,7 +70,7 @@ class transmissionsBankArrangementJob implements ShouldQueue
                                 ]
                             );
                             sleep(3);
-                        }else{
+                        } else {
                             Log::emergency(json_encode($PMeVoucher));
                         }
 
@@ -77,11 +79,11 @@ class transmissionsBankArrangementJob implements ShouldQueue
 
             }
         } catch (\Exception $e) {
-            Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
+            Log::emergency(PHP_EOL . $e->getMessage() . PHP_EOL);
             Ticket::create([
-                'subject'=>'خرابی در پرفکت مانی',
-                'user_id'=>1,
-                'status'=>'closed'
+                'subject' => 'خرابی در پرفکت مانی',
+                'user_id' => 1,
+                'status' => 'closed'
             ]);
         }
 
