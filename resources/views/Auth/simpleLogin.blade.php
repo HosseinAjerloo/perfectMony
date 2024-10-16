@@ -22,7 +22,7 @@
 
             <div class="py-5 px-3  flex justify-center items-center space-x-2 space-x-reverse flex-col">
                 <div class="py-5 px-3  flex justify-center items-center space-x-2 space-x-reverse">
-                    <button class="py-2 px-4 rounded-md font-semibold bg-sky-400  " type="submit">ورود به سایناارز
+                    <button class="py-2 px-4 rounded-md font-semibold bg-sky-400  " type="submit">ورود به ساینا ارز
                     </button>
                     <a href="{{route('forgotPassword')}}" class=" py-2 px-4 rounded-md font-semibold bg-sky-400 ">فراموشی رمز عبور</a>
                 </div>
