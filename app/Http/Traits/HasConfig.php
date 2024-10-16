@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 
 use App\Models\Invoice;
+use App\Models\TransmissionsBank;
 use App\Models\User;
 use App\Models\Voucher;
 use App\Models\VouchersBank;
@@ -39,14 +40,12 @@ trait HasConfig
 
     protected function generateVoucher($amount)
     {
-        $voucher=VouchersBank::where('status', 'new')->where("amount",$amount)->first();
-        if ($voucher)
-        {
-                $this->PMeVoucher['VOUCHER_NUM']=$voucher->serial;
-                $this->PMeVoucher['VOUCHER_CODE']=$voucher->code;
-                $voucher->update(['status'=>'used']);
-        }
-        else{
+        $voucher = VouchersBank::where('status', 'new')->where("amount", $amount)->first();
+        if ($voucher) {
+            $this->PMeVoucher['VOUCHER_NUM'] = $voucher->serial;
+            $this->PMeVoucher['VOUCHER_CODE'] = $voucher->code;
+            $voucher->update(['status' => 'used']);
+        } else {
             $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
             $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
             if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
@@ -58,6 +57,29 @@ trait HasConfig
 
     protected function transmission($transmission, $amount)
     {
+        $PMeVoucher = [];
+        if ($transmission!=env('PAYER_ACCOUNT'))
+            return $this->transmissionVoucher($transmission,$amount);
+
+        $voucher = TransmissionsBank::where('status', 'new')->where("payment_amount", $amount)->first();
+        if ($voucher) {
+
+            $voucher->update(['status' => 'used']);
+            $PMeVoucher['PAYMENT_AMOUNT'] = $voucher->payment_amount;
+            $PMeVoucher['PAYMENT_BATCH_NUM'] = $voucher->payment_batch_num;
+            $PMeVoucher['Payer_Account'] = env('PM_ACCOUNT_ID');
+            $PMeVoucher['Payee_Account'] = env('PM_ACCOUNT_ID');
+            $PMeVoucher['Payee_Account_Name'] = 'vahid';
+            return $PMeVoucher;
+        } else {
+            return $this->transmissionVoucher($transmission,$amount);
+        }
+
+
+    }
+
+    protected function transmissionVoucher($transmission, $amount)
+    {
         $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
         $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), $transmission, $amount);
         if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
@@ -66,7 +88,6 @@ trait HasConfig
             Log::emergency('The transfer did not take place, the reason for its failure: ' . json_encode($PMeVoucher));
             return false;
         }
-
     }
 
     protected function purchasePermit($invoice, $payment)
@@ -96,8 +117,6 @@ trait HasConfig
     {
         return redirect()->route($this->redirectTo)->withErrors($this->message);
     }
-
-
 
 
 }

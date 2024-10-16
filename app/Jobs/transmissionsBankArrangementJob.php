@@ -3,19 +3,16 @@
 namespace App\Jobs;
 
 use App\Models\Ticket;
-use App\Models\VouchersBank;
+use App\Models\TransmissionsBank;
+use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-
-use AyubIRZ\PerfectMoneyAPI\PerfectMoneyAPI;
 use Illuminate\Support\Facades\Log;
 
-class VoucherBankArrangementJob implements ShouldQueue
+class transmissionsBankArrangementJob implements ShouldQueue
 {
     use Queueable;
-
     public $timeout = 0;
-
     protected $numberOFVouchers =
         [
             1 => 10,
@@ -35,12 +32,12 @@ class VoucherBankArrangementJob implements ShouldQueue
             25 => 1
 
         ];
-
     /**
      * Create a new job instance.
      */
     public function __construct()
     {
+        //
     }
 
     /**
@@ -52,26 +49,26 @@ class VoucherBankArrangementJob implements ShouldQueue
         try {
             $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
             foreach ($this->numberOFVouchers as $amount => $numberOFVoucher) {
-                $getNewVoucherInDatabaseTable = VouchersBank::where('status', 'new')->where("amount", $amount)->count();
+                $getNewVoucherInDatabaseTable = TransmissionsBank::where('status', 'new')->where("payment_amount", $amount)->count();
 
                 $numberOfGenerate = $numberOFVoucher - $getNewVoucherInDatabaseTable;
+
                 if ($numberOfGenerate > 0) {
                     for ($i = 0; $i < $numberOfGenerate; $i++) {
-                        $PMeVoucher = $PM->createEV(env('PAYER_ACCOUNT'), $amount);
-                        if (is_array($PMeVoucher) and isset($PMeVoucher['VOUCHER_NUM']) and isset($PMeVoucher['VOUCHER_CODE'])) {
+                        $PMeVoucher = $PM->transferFund(env('PAYER_ACCOUNT'), env('PAYER_ACCOUNT'), $amount);
+                        if (is_array($PMeVoucher) and isset($PMeVoucher['PAYMENT_BATCH_NUM']) and isset($PMeVoucher['Payee_Account'])) {
 
-                            VouchersBank::create(
+                            TransmissionsBank::create(
                                 [
-                                    'serial' => $PMeVoucher['VOUCHER_NUM'],
-                                    'code' => $PMeVoucher['VOUCHER_CODE'],
-                                    'amount' => $amount,
+                                    'payment_amount' => $amount,
+                                    'payment_batch_num' => $PMeVoucher['PAYMENT_BATCH_NUM'],
                                     'status' => 'new',
-                                    'description' => 'ایجاد ووچر به صورت اتوماتیک'
+                                    'description' => 'انتقال ووچر به صورت اتوماتیک'
                                 ]
                             );
+                            sleep(3);
                         }else{
                             Log::emergency(json_encode($PMeVoucher));
-
                         }
 
                     }
@@ -86,5 +83,6 @@ class VoucherBankArrangementJob implements ShouldQueue
                 'status'=>'closed'
             ]);
         }
+
     }
 }
