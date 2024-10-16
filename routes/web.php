@@ -114,12 +114,12 @@ Route::fallback(function () {
     abort(404);
 });
 
-Route::get('test', function () {
-    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-    dd($PM->getBalance());
-        dd(\App\Models\TransmissionsBank::all());
-
-})->name('test');
+//Route::get('test', function () {
+//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+//    dd($PM->getBalance());
+//        dd(\App\Models\TransmissionsBank::all());
+//
+//})->name('test');
 
 
 
