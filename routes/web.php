@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     });
-    Route::get('transfer',[App\Http\Controllers\Panel\TransmissionController::class, 'transfer']);
+//    Route::get('transfer',[App\Http\Controllers\Panel\TransmissionController::class, 'transfer'])->name('');
 
     Route::post('back/Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'backPurchaseThroughTheBank'])->name('panel.Purchase-through-the-bank')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
     Route::get('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');

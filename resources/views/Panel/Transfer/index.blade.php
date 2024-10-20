@@ -1,13 +1,5 @@
 @extends('Panel.layout.master')
 
-@section('message-box')
-    <h1 class=" border-2 border-2-white rounded-md py-3 px-3 text-sm sm:text-base font-semibold text-center ">
-        ضمن تشکر از انتخاب <span class="text-sky-500  font-semibold"> ساینا ارز  </span> <span
-            class="text-rose-600  font-bold text-xl">نکته </span><span
-            class="underline underline-offset-8 decoration-rose-500 decoration-2 decoration-wavy">پذیرنده اصلی شما هلوگیت میباشد</span>
-
-    </h1>
-@endsection
 
 @section('container')
     <div class=" flex items-center justify-center w-full p-8 ">
@@ -20,14 +12,17 @@
                     <div class="text-right text-gray-400 px-2">
                         <h1>قیمت : <span class="text-rose-500/70">USD 1</span></h1>
                         <h1>قیمت به تومان : <span class="text-rose-500/70">60،000</span></h1>
-                        <h1>سایت ارجاع دهنده : <span class="text-rose-500/70">هلوگیت</span></h1>
+                        <h1>آدرس حساب مقصد : <span class="text-rose-500/70">U42822981</span></h1>
                     </div>
                     <p class="text-gray-400 px-2 py-1.5 text-right">
-                        <span class="text-rose-600">اطلاعیه</span>:کاربر گرامی سایت ساینا ارز به صورت واسط بین شما و
-                        سایت
-                        مورد نظر فعالیت میکند و پذیرنده اصلی شما سایت متناظر است.
+                        <span class="text-rose-600">اطلاعیه </span>:
+                        شما درحال انجام حواله با اطلاعات فوق هستید جهت ادامه بر روی دیکمه زیر کلیک کنید
                     </p>
-                    <button class="px-2 py-1.5 bg-sky-600 text-white p-4 rounded-md text-center w-full">ادامه</button>
+                    <form action="">
+                        <input type="hidden" name="transmission" >
+                        <input type="hidden" name="custom_payment" >
+                        <button class="px-2 py-1.5 bg-sky-600 text-white p-4 rounded-md text-center w-full">ادامه</button>
+                    </form>
                 </div>
 
             </div>
