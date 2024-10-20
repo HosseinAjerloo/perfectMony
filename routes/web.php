@@ -122,7 +122,6 @@ Route::get('test', function (){
     $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 
 
-
 })->name('test');
 
 
