@@ -11,7 +11,7 @@
 
 @section('container')
     <div class=" flex items-center justify-center w-full p-8 ">
-        <div class="rounded-md bg-white border-sky-700  min-w-full sm:w-4/12 sm:min-w-0 p-1">
+        <div class="rounded-md bg-white border-sky-700  min-w-full sm:w-4/12 sm:min-w-0 ">
             <div class="p-2 rounded-md shadow shadow-gray-400 ">
                 <img src="{{asset('src/images/vucher.jpg')}}" alt="" class="rounded-md">
                 <div class=" shadow-lg rounded-md mt-2">
