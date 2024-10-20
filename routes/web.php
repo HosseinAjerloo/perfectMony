@@ -59,7 +59,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     });
-//    Route::get('transfer',[App\Http\Controllers\Panel\TransmissionController::class, 'transfer'])->name('');
+    Route::get('transfer',[App\Http\Controllers\Panel\TransmissionController::class, 'transfer'])->name('panel.transfer.external');
 
     Route::post('back/Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'backPurchaseThroughTheBank'])->name('panel.Purchase-through-the-bank')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
     Route::get('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
@@ -117,12 +117,7 @@ Route::fallback(function () {
     abort(404);
 });
 
-Route::get('test', function (){
-    return view('Panel.Transfer.index');
-    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
 
-
-})->name('test');
 
 
 

@@ -20,6 +20,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
+use function Laravel\Prompts\error;
 
 class TransmissionController extends Controller
 {
@@ -369,9 +372,9 @@ class TransmissionController extends Controller
                 return redirect()->route('panel.transfer.fail');
             }
         } catch (\Exception $e) {
-            Log::emergency(PHP_EOL.$e->getMessage().PHP_EOL);
+            Log::emergency(PHP_EOL . $e->getMessage() . PHP_EOL);
             SendAppAlertsJob::dispatch('در انتقال ووچر از درگاه باتکی خطایی رخ داده است لطفا پیگیری شود.')->onQueue('perfectmoney');
-            return  redirect()->route('panel.index')->withErrors(['error'=>'یک خطای غیر منتظره رخ داد لفطا از طریق پشتیبانی تیکت برنید']);
+            return redirect()->route('panel.index')->withErrors(['error' => 'یک خطای غیر منتظره رخ داد لفطا از طریق پشتیبانی تیکت برنید']);
         }
     }
 
@@ -389,6 +392,38 @@ class TransmissionController extends Controller
         $invoice = $invoice->where("user_id", Auth::user()->id)->orderBy('id', 'desc')->first();
 
         return view('Panel.Transmission.DeliveryFail', compact('invoice'));
+
+    }
+
+    public function transfer(Request $request)
+    {
+        $request->request->add(['amount' => $request->get('amount')]);
+        $request->request->add(['account' => $request->get('account')]);
+        $validation = Validator::make($request->all(),
+            [
+                'amount' => 'required|numeric|max:20|min:1',
+                'account' => 'required|min:9|max:9'
+            ],
+            [
+                'amount.required' => 'وارد کردن مبلغ حواله الزامی است',
+                'amount.numeric' => 'مبلغ حواله باید به صورت عددی باشد',
+                'amount.max' => 'مبلغ حواله نباید بزرگ تر از 20 باشد',
+                'amount.min' => 'مبلغ حواله نباید کوچک  تر از 1 باشد',
+                'account.required' => 'وارد کردن شماره حساب حواله الزامی است',
+                'account.max' => 'حداکثر طول شماره حساب حواله باید 9 کاراکتر باشد',
+                'account.min' => 'حداقل طول شماره حساب حواله باید 9 کاراکتر باشد',
+            ]
+        );
+        $inputs = $request->all();
+        if (!$validation->fails()) {
+            $dollar = Doller::orderBy('id', 'desc')->first();
+            $inputs['rial'] = $dollar->DollarRateWithAddedValue() * $inputs['amount'];
+            $inputs['rial'] = numberFormat(substr($inputs['rial'], 0, strlen($inputs['rial']) - 1));
+            return view('Panel.Transfer.index',compact('inputs'));
+        }
+
+        return view('Panel.Transfer.index', compact('inputs'))->withErrors($validation->errors());
+
 
     }
 }
