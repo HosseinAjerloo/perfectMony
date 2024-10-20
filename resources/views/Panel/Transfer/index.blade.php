@@ -22,7 +22,7 @@
                         <h1>قیمت به تومان : <span class="text-rose-500/70">60،000</span></h1>
                         <h1>سایت ارجاع دهنده : <span class="text-rose-500/70">هلوگیت</span></h1>
                     </div>
-                    <p class="text-gray-400 px-2 py-1.5 text-balance">
+                    <p class="text-gray-400 px-2 py-1.5 text-right">
                         <span class="text-rose-600">اطلاعیه</span>:کاربر گرامی سایت ساینا ارز به صورت واسط بین شما و
                         سایت
                         مورد نظر فعالیت میکند و پذیرنده اصلی شما سایت متناظر است.
