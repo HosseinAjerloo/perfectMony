@@ -11,7 +11,8 @@ export default {
             },
             colors:{
                 black_blur:'rgba(0,0,0, 0.7)'
-            }
+            },
+
         },
     },
     plugins: [],

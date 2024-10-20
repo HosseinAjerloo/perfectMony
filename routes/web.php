@@ -59,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     });
+    Route::get('transfer',[App\Http\Controllers\Panel\TransmissionController::class, 'transfer']);
+
     Route::post('back/Purchase-through-the-bank', [App\Http\Controllers\Panel\PanelController::class, 'backPurchaseThroughTheBank'])->name('panel.Purchase-through-the-bank')->withoutMiddleware(Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
     Route::get('wallet-charging', [App\Http\Controllers\Panel\PanelController::class, 'walletCharging'])->name('panel.wallet.charging');
     Route::get('wallet-charging-Preview', [App\Http\Controllers\Panel\PanelController::class, 'walletChargingPreview'])->name('panel.wallet.charging-Preview');
@@ -86,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ticket-add-submit', [App\Http\Controllers\Panel\TicketController::class, 'ticketAddSubmit'])->name('panel.ticket-add-submit');
     Route::get('download/{file}', [App\Http\Controllers\Panel\TicketController::class, 'download'])->name('panel.ticket.download');
     Route::get('faq', [App\Http\Controllers\Panel\FaqController::class, 'index'])->name('panel.faq');
+
 });
 
 // Admin
@@ -114,12 +117,13 @@ Route::fallback(function () {
     abort(404);
 });
 
-//Route::get('test', function () {
-//    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
-//    dd($PM->getBalance());
-//        dd(\App\Models\TransmissionsBank::all());
-//
-//})->name('test');
+Route::get('test', function (){
+    return view('Panel.Transfer.index');
+    $PM = new PerfectMoneyAPI(env('PM_ACCOUNT_ID'), env('PM_PASS'));
+
+
+
+})->name('test');
 
 
 

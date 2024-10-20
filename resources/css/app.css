@@ -6,15 +6,11 @@
     src: url('../../public/src/fonts/Vazir.woff');
     src: url('../../public/src/fonts/Vazir.woff2');
 }
-@font-face {
-    font-family: iranSans;
-    src: url('../../public/src/fonts/IranianSans.ttf');
-}
-@font-face {
-    font-family: yekan;
-    src: url('../../public/src/fonts/Yekan.ttf');
+*{
+    font-family: 'vazir';
 }
 body{
+    font-family: 'vazir';
     direction: rtl;
 }
 
