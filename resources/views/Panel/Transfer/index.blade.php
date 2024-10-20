@@ -13,7 +13,7 @@
     <div class=" flex items-center justify-center w-full p-8 ">
         <div class="rounded-md bg-white border-sky-700  min-w-full sm:w-4/12 sm:min-w-0 ">
             <div class="p-2 rounded-md shadow shadow-gray-400 ">
-                <img src="{{asset('src/images/vucher.jpg')}}" alt="" class="rounded-md">
+                <img src="{{asset('src/images/vucher2.png')}}" alt="" class="rounded-md">
                 <div class=" shadow-lg rounded-md mt-2">
                     <h1 class="font-thin text-lg px-2 py-1.5 flex items-center text-gray-600"><i
                             class="fas fa-shopping-cart ml-2 text-gray-400"></i>نوع سفارش:حواله پرفکت مانی</h1>
